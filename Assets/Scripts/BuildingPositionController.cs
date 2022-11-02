@@ -6,8 +6,10 @@ public class BuildingPositionController : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] Color selectedColor;
+    [SerializeField] Color notBuildColor;
     Color normalColor;
     Renderer renderer;
+    [SerializeField] bool canUse = true;
     void Start()
     {
         renderer = this.GetComponent<Renderer>();
@@ -19,12 +21,33 @@ public class BuildingPositionController : MonoBehaviour
     {
         
     }
-    private void OnMouseOver()
+    public bool JudgeCanBeBuilded()
     {
-        renderer.material.color = selectedColor;
+        return canUse;
     }
-    private void OnMouseExit()
+    public void ChangeColor(bool selected)
     {
-        renderer.material.color = normalColor;
+        renderer.material.color = selected ? selectedColor : normalColor;
+    }/*
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("buildingJudgePlane"))
+        {
+            if (canUse)
+            {
+                renderer.material.color = selectedColor;
+            }
+            else
+            {
+                renderer.material.color = notBuildColor;
+            }
+        }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.transform.CompareTag("buildingJudgePlane"))
+        {
+            renderer.material.color = normalColor;
+        }
+    }*/
 }
