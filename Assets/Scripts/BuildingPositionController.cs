@@ -28,7 +28,13 @@ public class BuildingPositionController : MonoBehaviour
     public void ChangeColor(bool selected)
     {
         renderer.material.color = selected ? selectedColor : normalColor;
-    }/*
+    }
+    public void SetUseSituation(bool use)
+    {
+        renderer.material.color = normalColor;
+        canUse = !use;
+    }
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.CompareTag("buildingJudgePlane"))

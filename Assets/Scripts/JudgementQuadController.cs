@@ -7,8 +7,9 @@ public class JudgementQuadController : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] Color positionNoColor;
     //[SerializeField] Color normalColor;
-    GameObject preTarget = null;
+    GameObject currentTarget = null;
     Renderer renderer;
+    bool positionOK = false;
     void Start()
     {
         renderer = this.GetComponent<Renderer>();
@@ -29,26 +30,50 @@ public class JudgementQuadController : MonoBehaviour
             {
                 if(hit.transform.GetComponent<BuildingPositionController>().JudgeCanBeBuilded())
                 {
-                    if(preTarget != null && preTarget != hit.transform.gameObject)
+                    if(currentTarget != null && currentTarget != hit.transform.gameObject)
                     {
-                        preTarget.GetComponent<BuildingPositionController>().ChangeColor(false);
+                        currentTarget.GetComponent<BuildingPositionController>().ChangeColor(false);
                     }
-                    preTarget = hit.transform.gameObject;
-                    preTarget.GetComponent<BuildingPositionController>().ChangeColor(true);
+                    currentTarget = hit.transform.gameObject;
+                    positionOK = true;
+                    if (transform.GetComponentInParent<BuildingController>().AllPositionOK())
+                    {
+                        currentTarget.GetComponent<BuildingPositionController>().ChangeColor(true);
+                    }
+                    
+                }
+                else
+                {
+                    if (currentTarget != null)
+                    {
+                        currentTarget.GetComponent<BuildingPositionController>().ChangeColor(false);
+                        currentTarget = null;
+                    }
+                    positionOK = false;
+                    renderer.enabled = true;
                 }
             }
             else
             {
-                if (preTarget != null)
+                if (currentTarget != null)
                 {
-                    preTarget.GetComponent<BuildingPositionController>().ChangeColor(false);
-                    preTarget = null;
+                    currentTarget.GetComponent<BuildingPositionController>().ChangeColor(false);
+                    currentTarget = null;
                 }
                 renderer.enabled = true;
+                positionOK = false;
                 //renderer.material.color = positionNoColor;
                 
             }
         }
 
+    }
+    public bool CheckPositionStatus()
+    {
+        return positionOK;
+    }
+    public GameObject GetCurrentTarget()
+    {
+        return currentTarget;
     }
 }
