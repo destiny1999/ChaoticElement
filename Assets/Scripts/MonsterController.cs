@@ -60,4 +60,5 @@ public class MonsterSetting
     public int specialEffectCode;
     public int killBonus;
     public int areaIndex;
+    public int punish;
 }

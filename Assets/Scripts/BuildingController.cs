@@ -49,10 +49,20 @@ public class BuildingController : MonoBehaviour
 [Serializable]
 public class BuildingSetting
 {
-    public int unitX;
-    public int unitY;
+    public float attackSpeed;
+    public float damage;
+    public int effectIndex;
+    public float effectValue;
     public int cost;
+    public int sale;
     public string createButtonString;
-    public GameObject building;
     public float createTime;
+    public int buildingLevel;
+}
+[Serializable]
+public class BuildingCreateInfo
+{
+    public GameObject building;
+    public int cost;
+    public string createString;
 }

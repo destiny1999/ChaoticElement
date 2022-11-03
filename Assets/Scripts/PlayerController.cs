@@ -8,23 +8,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float hp;
     [SerializeField][Tooltip("money")] float mp;
     //[SerializeField] GameObject judgementQuad;
-    Dictionary<string, BuildingSetting> buildingSizeDictionary = new Dictionary<string, BuildingSetting>();
-    [SerializeField] List<BuildingSetting> buildingSizeSetting = new List<BuildingSetting>();
-
+    //Dictionary<string, BuildingSetting> buildingSizeDictionary = new Dictionary<string, BuildingSetting>();
+    //[SerializeField] List<BuildingSetting> buildingCreateSetting = new List<BuildingSetting>();
+    [SerializeField] List<BuildingCreateInfo> buildingCreateInfos;
+    Dictionary<string, BuildingCreateInfo> buildingCreateInfoDictionry = new Dictionary<string, BuildingCreateInfo>();
     [SerializeField] bool prepareCreate = false;
     [SerializeField] bool preparePut = false;
     //[SerializeField] bool waitToPut = false;
     [SerializeField] GameObject targetBuilding = null;
 
-    HashSet<string> buildingCreateStringSet = new HashSet<string>();
+    //HashSet<string> buildingCreateStringSet = new HashSet<string>();
     [SerializeField] Transform monsterCreatePosition;
+    int challengeScore = 0;
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i<buildingSizeSetting.Count; i++)
+
+        for(int i = 0; i<buildingCreateInfos.Count; i++)
         {
-            buildingSizeDictionary.Add(buildingSizeSetting[i].createButtonString, buildingSizeSetting[i]);
-            buildingCreateStringSet.Add(buildingSizeSetting[i].createButtonString);
+            buildingCreateInfoDictionry.Add(buildingCreateInfos[i].createString,
+                                            buildingCreateInfos[i]);
         }
     }
 
@@ -39,19 +42,12 @@ public class PlayerController : MonoBehaviour
         {
             if (!preparePut)
             {
-                string inputString = Input.inputString.ToUpper();
+
                 
-                if (buildingCreateStringSet.Contains(inputString))
+                if(Input.GetKeyDown(KeyCode.Q))
                 {
-                    if (buildingSizeDictionary[inputString].cost <= mp)
-                    {
-                        mp -= buildingSizeDictionary[inputString].cost;
-                        GameObject newBuilding = Instantiate(buildingSizeDictionary[inputString].building);
-                        targetBuilding = newBuilding;
-                        preparePut = true;
-                        StartCoroutine(MoveAndBuild(newBuilding));
-                        
-                    }
+                    StartCoroutine(WaitForSelectCreateElementLevel());
+                    
                 }
             }
             
@@ -68,6 +64,31 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+    IEnumerator WaitForSelectCreateElementLevel()
+    {
+        bool selected = false;
+        string s = "";
+        while (!selected)
+        {
+            string inputString = Input.inputString.ToUpper();
+            if(buildingCreateInfoDictionry.ContainsKey(inputString))
+            {
+                if (buildingCreateInfoDictionry[inputString].cost <= mp)
+                {
+                    s = inputString;
+                    mp -= buildingCreateInfoDictionry[inputString].cost;
+                    break;
+                    
+                }
+            }
+            yield return null;
+        }
+
+        GameObject newBuilding = Instantiate(buildingCreateInfoDictionry[s].building);
+        targetBuilding = newBuilding;
+        preparePut = true;
+        StartCoroutine(MoveAndBuild(newBuilding));
     }
     void PutBuilding()
     {
@@ -130,6 +151,22 @@ public class PlayerController : MonoBehaviour
     public void AddMp(float value)
     {
         mp += value;
+    }
+    public void AddScore(int value)
+    {
+        challengeScore += value;
+    }
+    public void SubHP(int value)
+    {
+        hp -= value;
+
+        //maybe should show some info let player know hp be reduced
+
+        // over
+        if (hp <= 0)
+        {
+            Debug.Log("finished");
+        }
     }
     public Transform GetMonsterCreatePosition()
     {

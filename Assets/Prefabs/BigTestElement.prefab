@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 505734462589366526}
   - component: {fileID: 2987026082667285846}
   m_Layer: 0
-  m_Name: IceElement
+  m_Name: BigTestElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

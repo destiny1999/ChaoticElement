@@ -72,17 +72,26 @@ public class GameManager : MonoBehaviour
         if(monsterSetting.hp <= 0)
         {
             players[monsterSetting.areaIndex].GetComponent<PlayerController>().
-            AddMp(monsterSetting.killBonus);
+                AddMp(monsterSetting.killBonus);
+            players[monsterSetting.areaIndex].GetComponent<PlayerController>().
+                AddScore(monsterSetting.killBonus);
         }
-
+        else
+        {
+            players[monsterSetting.areaIndex].GetComponent<PlayerController>().
+                SubHP(monsterSetting.punish);
+        }
         if(gameMode == GameMode.challenge)
         {
+
             // create next level monster
             GameObject newPowerfulMonster = Instantiate(challengeMonster);
             newPowerfulMonster.SetActive(false);
             MonsterSetting newMonsterSetting = new MonsterSetting();
-            newMonsterSetting.hp = monsterSetting.orignalHP * 1.1f;
-            newMonsterSetting.moveSpeed = monsterSetting.moveSpeed * 1.01f;
+            newMonsterSetting.hp = monsterSetting.orignalHP * 1.5f;
+            newMonsterSetting.moveSpeed = Mathf.Clamp(monsterSetting.moveSpeed * 1.1f,
+                                                       monsterSetting.moveSpeed,
+                                                       5f);
             newMonsterSetting.killBonus = monsterSetting.killBonus + 1;
             Transform targetTransform = players[monsterSetting.areaIndex].
                                             GetComponent<PlayerController>().GetMonsterCreatePosition();
