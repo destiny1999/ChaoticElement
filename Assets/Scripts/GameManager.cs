@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject challengeMonster;
     [SerializeField] List<LevelSetting> levelSettings;
     [SerializeField] List<GameObject> players;
+    [SerializeField] List<GameObject> allBuildings;
+    [SerializeField] GameObject monsterManager;
     public static GameManager Instance;
     int wave = 0;
     private void Awake()
@@ -55,6 +57,7 @@ public class GameManager : MonoBehaviour
         int areaIndex = monster.GetComponent<MonsterController>().GetMonsterSetting().areaIndex;
         newMonster.transform.position = players[areaIndex].GetComponent<PlayerController>().
                                             GetMonsterCreatePosition().position;
+        newMonster.transform.SetParent(monsterManager.transform);
         newMonster.SetActive(true);
         float time = 0.5f;
         while(time > 0)
@@ -101,6 +104,11 @@ public class GameManager : MonoBehaviour
                 SetMonsterSetting(newMonsterSetting);
             newPowerfulMonster.SetActive(true);
         }
+    }
+    
+    public GameObject GetBuildingGameObject(int buildingIndex)
+    {
+        return allBuildings[buildingIndex];
     }
 }
 [Serializable]

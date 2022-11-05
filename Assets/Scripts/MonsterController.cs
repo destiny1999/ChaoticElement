@@ -50,6 +50,18 @@ public class MonsterController : MonoBehaviour
     {
         monsterSetting = setting;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("bullet"))
+        {
+            float damage = other.transform.GetComponent<BulletController>().bulletSetting.damage;
+            float effectIndex = other.transform.GetComponent<BulletController>().bulletSetting.effectIndex;
+            float effectValue = other.transform.GetComponent<BulletController>().bulletSetting.effectValue;
+            GetHurt(damage);
+            Destroy(other.gameObject);
+        }
+    }
 }
 [Serializable]
 public class MonsterSetting

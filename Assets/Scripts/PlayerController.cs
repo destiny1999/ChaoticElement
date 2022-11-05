@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     //HashSet<string> buildingCreateStringSet = new HashSet<string>();
     [SerializeField] Transform monsterCreatePosition;
+    [SerializeField] GameObject buildingManager;
     int challengeScore = 0;
     // Start is called before the first frame update
     void Start()
@@ -122,10 +123,20 @@ public class PlayerController : MonoBehaviour
         float centerX = (minX + maxX) / 2;
         float centerZ = (minZ + maxZ) / 2;
         Vector3 position = new Vector3(centerX, 0, centerZ);
-        targetBuilding.transform.position = position;
+        //targetBuilding.transform.position = position;
+        Destroy(targetBuilding.gameObject);
+        //create Random elements building
+        CreateRandomBuilding(position);
 
         // reset create building status
         prepareCreate = false;
+    }
+    void CreateRandomBuilding(Vector3 createPosition)
+    {
+        int randomIndex = UnityEngine.Random.Range(0, 4);
+        GameObject building =Instantiate(GameManager.Instance.GetBuildingGameObject(randomIndex));
+        building.transform.position = createPosition;
+        building.transform.SetParent(buildingManager.transform);
     }
     IEnumerator MoveAndBuild(GameObject building)
     {
