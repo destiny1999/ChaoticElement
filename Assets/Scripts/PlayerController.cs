@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float hp;
@@ -123,7 +123,6 @@ public class PlayerController : MonoBehaviour
         float centerX = (minX + maxX) / 2;
         float centerZ = (minZ + maxZ) / 2;
         Vector3 position = new Vector3(centerX, 0, centerZ);
-        //targetBuilding.transform.position = position;
         Destroy(targetBuilding.gameObject);
         //create Random elements building
         CreateRandomBuilding(position);
@@ -137,6 +136,14 @@ public class PlayerController : MonoBehaviour
         GameObject building =Instantiate(GameManager.Instance.GetBuildingGameObject(randomIndex));
         building.transform.position = createPosition;
         building.transform.SetParent(buildingManager.transform);
+        // close building's judgement quad.
+        Transform[] judgementQuad = building.transform.GetComponentsInChildren<Transform>().
+                                        Where(quad => quad.transform.
+                                                        CompareTag("buildingJudgePlane")).ToArray();
+        foreach(Transform quad in judgementQuad)
+        {
+            quad.gameObject.SetActive(false);
+        }
     }
     IEnumerator MoveAndBuild(GameObject building)
     {

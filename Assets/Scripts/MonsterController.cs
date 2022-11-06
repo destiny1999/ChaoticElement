@@ -36,6 +36,7 @@ public class MonsterController : MonoBehaviour
     }
     void GetHurt(float value)
     {
+        monsterSetting.hp -= value;
         if(monsterSetting.hp <= 0)
         {
             GameManager.Instance.SendKillStatus(monsterSetting);

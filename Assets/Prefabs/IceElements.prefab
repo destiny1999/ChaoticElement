@@ -52,7 +52,7 @@ MonoBehaviour:
   - {fileID: 2300718934672354611}
   buildingSetting:
     attackCD: 1
-    bulletSpeed: 1
+    bulletSpeed: 10
     damage: 5
     effectIndex: 1
     effectValue: 0.01

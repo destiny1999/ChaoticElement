@@ -12,6 +12,7 @@ public class BuildingController : MonoBehaviour
     GameObject targetEnemy = null;
     [SerializeField] GameObject bullet;
     [SerializeField] Transform bulletCreatePosition;
+    bool attacking = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,11 +22,15 @@ public class BuildingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(targetQueue.Count > 0)
+        if(targetQueue.Count > 0 && !attacking)
         {
             targetEnemy = targetQueue.Peek();
-            transform.LookAt(targetEnemy.transform);
-            StartCoroutine(AttackEnemy());
+            if(targetEnemy != null)
+            {
+                attacking = true;
+                StartCoroutine(AttackEnemy());
+            }
+            
         }
     }
     IEnumerator AttackEnemy()
@@ -33,8 +38,8 @@ public class BuildingController : MonoBehaviour
         float attackTime = buildingSetting.attackCD;
         while(targetEnemy != null)
         {
+            transform.LookAt(targetEnemy.transform);
             attackTime -= Time.deltaTime;
-            print("attack time " + attackTime);
             if(attackTime <= 0)
             {
                 GameObject newbullet = Instantiate(bullet);
@@ -50,6 +55,7 @@ public class BuildingController : MonoBehaviour
             }
             yield return null;
         }
+        attacking = false;
     }
     public bool AllPositionOK()
     {
@@ -81,10 +87,6 @@ public class BuildingController : MonoBehaviour
     public void EnableAttackDetectRange()
     {
         attackDetectRange.SetActive(true);
-    }
-    public void OnCollisionEnter(Collision collision)
-    {
-        
     }
     public void OnTriggerEnter(Collider other)
     {
