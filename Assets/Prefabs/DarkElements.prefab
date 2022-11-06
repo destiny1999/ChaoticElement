@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3397346939717335432}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: AttackDetectRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 7742658749122746981}
   - component: {fileID: 83598811722836187}
   - component: {fileID: 3283045617680893539}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DarkElements
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6878987910284853293}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BulletCreatePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 5832491406393650673}
   - component: {fileID: 3738960839751502658}
   - component: {fileID: 3689832833467235291}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,6 +302,10 @@ PrefabInstance:
     - target: {fileID: 4198747530820217802, guid: c6b5095851ca94c478b202fa5323b373, type: 3}
       propertyPath: m_Name
       value: JudgementQuad
+      objectReference: {fileID: 0}
+    - target: {fileID: 4198747530820217802, guid: c6b5095851ca94c478b202fa5323b373, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6b5095851ca94c478b202fa5323b373, type: 3}

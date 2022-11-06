@@ -26,12 +26,13 @@ public class BulletController : MonoBehaviour
                             bulletSetting.speed * Time.deltaTime);
         }
     }
-    public void SetBulletInfo(float damage, int index, float effectValue, float speed)
+    public void SetBulletInfo(float damage, int index, float effectValue, float speed, Color color)
     {
         bulletSetting.damage = damage;
         bulletSetting.effectIndex = index;
         bulletSetting.effectValue = effectValue;
         bulletSetting.speed = speed;
+        this.GetComponent<Renderer>().material.color = color;
     }
     public void SetTargetEnemy(GameObject target)
     {

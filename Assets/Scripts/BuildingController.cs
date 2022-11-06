@@ -30,7 +30,11 @@ public class BuildingController : MonoBehaviour
                 attacking = true;
                 StartCoroutine(AttackEnemy());
             }
-            
+            else
+            {
+                targetQueue.Dequeue();
+                transform.rotation = Quaternion.identity;
+            }
         }
     }
     IEnumerator AttackEnemy()
@@ -44,11 +48,14 @@ public class BuildingController : MonoBehaviour
             {
                 GameObject newbullet = Instantiate(bullet);
                 newbullet.transform.position = bulletCreatePosition.position;
+                Color bulletColor = this.transform.Find("Building").GetComponent<Renderer>().material.color;
                 newbullet.GetComponent<BulletController>().
                     SetBulletInfo(buildingSetting.damage,
                                     buildingSetting.effectIndex,
                                     buildingSetting.effectValue,
-                                    buildingSetting.bulletSpeed);
+                                    buildingSetting.bulletSpeed,
+                                    bulletColor
+                                    );
                 newbullet.GetComponent<BulletController>().SetTargetEnemy(targetEnemy);
 
                 attackTime = buildingSetting.attackCD;
