@@ -10,10 +10,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject challengeMonster;
     [SerializeField] List<LevelSetting> levelSettings;
     [SerializeField] List<GameObject> players;
-    [SerializeField] List<GameObject> allBuildings;
+    //[SerializeField] List<GameObject> allBuildings;
+    [SerializeField] List<EachLevelBuildings> allElementsBuildings;
     [SerializeField] GameObject monsterManager;
     public static GameManager Instance;
     int wave = 0;
+    [SerializeField] List<EachLevelCombineInfo> allLevelCombineInfo;
     private void Awake()
     {
         Instance = this;
@@ -106,9 +108,41 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public GameObject GetBuildingGameObject(int buildingIndex)
+    public GameObject GetBuildingGameObject(int level, int buildingIndex)
     {
-        return allBuildings[buildingIndex];
+        return allElementsBuildings[level].buildings[buildingIndex];
+    }
+    public GameObject GetSelfPlayer(int areaIndex)
+    {
+        return players[areaIndex];
+    }
+    public int GetLevelBuildingNums(int index)
+    {
+        return allElementsBuildings[index].buildings.Count;
+    }
+    public GameObject GetNewLevelUpBuilding(int currentLevel, int code1, int code2)
+    {
+        EachLevelCombineInfo targetLevel = allLevelCombineInfo[currentLevel-1];
+        int targetCode = -1;
+        bool get = false;
+        for(int i = 0; i<targetLevel.eachLevelCombineInfo.Count; i++)
+        {
+            if (targetLevel.eachLevelCombineInfo[i].code1 == code1)
+            {
+                for(int j = 0; j < targetLevel.eachLevelCombineInfo[i].canCombineInfo.Count; j++)
+                {
+                    if (targetLevel.eachLevelCombineInfo[i].canCombineInfo[j].code2 == code2)
+                    {
+                        targetCode = targetLevel.eachLevelCombineInfo[i].canCombineInfo[j].targetCode;
+                        get = true;
+                        break;
+                    }
+                }
+                if (get) break;
+            }
+        }
+        GameObject targetBuilding = allElementsBuildings[currentLevel].buildings[targetCode];
+        return targetBuilding;
     }
 }
 [Serializable]
@@ -116,4 +150,26 @@ public class LevelSetting
 {
     public int monsterNums;
     public GameObject monster;
+}
+[Serializable]
+public class EachLevelBuildings
+{
+    public List<GameObject> buildings;
+}
+[Serializable]
+public class CombineInfo
+{
+    public int code2;
+    public int targetCode;
+}
+[Serializable]
+public class CombineForm
+{
+    public int code1;
+    public List<CombineInfo> canCombineInfo;
+}
+[Serializable]
+public class EachLevelCombineInfo
+{
+    public List<CombineForm> eachLevelCombineInfo;
 }

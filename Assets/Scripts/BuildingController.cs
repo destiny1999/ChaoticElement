@@ -13,6 +13,8 @@ public class BuildingController : MonoBehaviour
     [SerializeField] GameObject bullet;
     [SerializeField] Transform bulletCreatePosition;
     bool attacking = false;
+    bool putted = false;
+    bool beClicked = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,10 @@ public class BuildingController : MonoBehaviour
                 transform.rotation = Quaternion.identity;
             }
         }
+    }
+    public void SetPutted()
+    {
+        putted = true;
     }
     IEnumerator AttackEnemy()
     {
@@ -97,7 +103,6 @@ public class BuildingController : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        
         if (other.transform.CompareTag("enemy"))
         {
             targetQueue.Enqueue(other.transform.gameObject);
@@ -115,11 +120,20 @@ public class BuildingController : MonoBehaviour
             }
         }
     }
+    public void SetClickStatus(bool status)
+    {
+        beClicked = status;
+    }
+    public bool GetClickStatus()
+    {
+        return beClicked;
+    }
 }
 
 [Serializable]
 public class BuildingSetting
 {
+    public int buildingCode;
     public float attackCD;
     public float bulletSpeed;
     public float damage;
@@ -130,6 +144,9 @@ public class BuildingSetting
     //public string createButtonString;
     public float createTime;
     public int buildingLevel;
+    public int areaIndex;
+    public List<int> buildingCanCombineCode;
+
 }
 [Serializable]
 public class BuildingCreateInfo

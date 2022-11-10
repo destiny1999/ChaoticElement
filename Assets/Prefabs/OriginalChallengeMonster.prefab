@@ -135,7 +135,7 @@ MonoBehaviour:
     hp: 100
     moveSpeed: 1
     specialEffectCode: 0
-    killBonus: 1
+    killBonus: 5
     areaIndex: 0
     punish: 0
 --- !u!54 &8149679747487232166

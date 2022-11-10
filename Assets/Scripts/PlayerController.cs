@@ -3,25 +3,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using TMPro;
+using UnityEngine.UI;
+
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] int areaIndex;
     [SerializeField] float hp;
     [SerializeField][Tooltip("money")] float mp;
-    //[SerializeField] GameObject judgementQuad;
-    //Dictionary<string, BuildingSetting> buildingSizeDictionary = new Dictionary<string, BuildingSetting>();
-    //[SerializeField] List<BuildingSetting> buildingCreateSetting = new List<BuildingSetting>();
+    
     [SerializeField] List<BuildingCreateInfo> buildingCreateInfos;
     Dictionary<string, BuildingCreateInfo> buildingCreateInfoDictionry = new Dictionary<string, BuildingCreateInfo>();
-    [SerializeField] bool prepareCreate = false;
     [SerializeField] bool preparePut = false;
-    //[SerializeField] bool waitToPut = false;
     [SerializeField] GameObject targetBuilding = null;
 
-    //HashSet<string> buildingCreateStringSet = new HashSet<string>();
     [SerializeField] Transform monsterCreatePosition;
     [SerializeField] GameObject buildingManager;
     int challengeScore = 0;
-    // Start is called before the first frame update
+
+    [SerializeField] PlayerTMPInfo playerTMPInfo;
+    [SerializeField] GameObject IconController;
+    [SerializeField] Texture2D cursorCombineTexture;
+
+    float willUseMP = 0;
+    int willCreateLevel;
+    int combineClickCount = 0;
+    bool combineStatus = false;
+
+    GameObject levelUpTarget = null;
+    GameObject beAbsorbTarget = null;
+    BuildingSetting willLevelUpBuildingSetting;
     void Start()
     {
 
@@ -35,61 +46,78 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B) && !prepareCreate)
+        playerTMPInfo.mpTMP.text = mp+"";
+
+        if (!preparePut && !combineStatus)
         {
-            prepareCreate = true;
-        }
-        if (prepareCreate)
-        {
-            if (!preparePut)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-
-                
-                if(Input.GetKeyDown(KeyCode.Q))
+                if (IconController.GetComponent<IconController>().GetCreateTargetBuildingCost() <= mp)
                 {
-                    StartCoroutine(WaitForSelectCreateElementLevel());
-                    
+                    willUseMP = IconController.GetComponent<IconController>().GetCreateTargetBuildingCost();
+                    string targetName = IconController.GetComponent<IconController>().
+                                            GetCreateTargetBuildingName();
+                    willCreateLevel = IconController.GetComponent<IconController>().GetCreateTargetLevelIndex();
+                    CreateBuildingCoin(targetName);
                 }
+                
             }
-            
         }
-
         if (preparePut)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 if (targetBuilding.GetComponent<BuildingController>().AllPositionOK())
                 {
+                    mp -= willUseMP;
+                    willUseMP = 0;
                     preparePut = false;
                     PutBuilding();
                 }
             }
         }
-    }
-    IEnumerator WaitForSelectCreateElementLevel()
-    {
-        bool selected = false;
-        string s = "";
-        while (!selected)
+        if (!preparePut && Input.GetKeyDown(KeyCode.W))
         {
-            string inputString = Input.inputString.ToUpper();
-            if(buildingCreateInfoDictionry.ContainsKey(inputString))
-            {
-                if (buildingCreateInfoDictionry[inputString].cost <= mp)
-                {
-                    s = inputString;
-                    mp -= buildingCreateInfoDictionry[inputString].cost;
-                    break;
-                    
-                }
-            }
-            yield return null;
+            combineStatus = true;
+            float offset = cursorCombineTexture.width/2;
+            Vector2 hotspot = new Vector2(offset, offset);
+            Cursor.SetCursor(cursorCombineTexture, hotspot, CursorMode.Auto);
         }
 
-        GameObject newBuilding = Instantiate(buildingCreateInfoDictionry[s].building);
-        targetBuilding = newBuilding;
+    }
+    public void CreateBuilding(string buildingString)
+    {
+        if (!preparePut)
+        {
+            if (buildingCreateInfoDictionry[buildingString].cost <= mp)
+            {
+                mp -= buildingCreateInfoDictionry[buildingString].cost;
+                GameObject newBuilding = Instantiate(buildingCreateInfoDictionry[buildingString].building);
+                targetBuilding = newBuilding;
+                preparePut = true;
+                StartCoroutine(MoveAndBuild(newBuilding));
+            }
+        }
+    }
+    void CreateBuildingCoin(string targetName)
+    {
+        ChangeAllBuildingRayLayer(true);
+
         preparePut = true;
+        GameObject newBuilding = Instantiate(buildingCreateInfoDictionry[targetName].building);
+        targetBuilding = newBuilding;
+        
         StartCoroutine(MoveAndBuild(newBuilding));
+    }
+    void ChangeAllBuildingRayLayer(bool ignore)
+    {
+        int layerIndex = ignore ? 2 : 0;
+        Transform[] childs = buildingManager.transform.GetComponentsInChildren<Transform>().
+            Where(child => child.gameObject.name == "Building").ToArray();
+        foreach(Transform transform in childs)
+        {
+            transform.gameObject.layer = layerIndex;
+        }
     }
     void PutBuilding()
     {
@@ -126,16 +154,23 @@ public class PlayerController : MonoBehaviour
         Destroy(targetBuilding.gameObject);
         //create Random elements building
         CreateRandomBuilding(position);
-
+        ChangeAllBuildingRayLayer(false);
         // reset create building status
-        prepareCreate = false;
+
+
     }
     void CreateRandomBuilding(Vector3 createPosition)
     {
-        int randomIndex = UnityEngine.Random.Range(0, 4);
-        GameObject building =Instantiate(GameManager.Instance.GetBuildingGameObject(randomIndex));
+        int buildingNums = GameManager.Instance.GetLevelBuildingNums(willCreateLevel);
+        int randomIndex = UnityEngine.Random.Range(0, buildingNums);
+        
+        GameObject building =Instantiate(GameManager.Instance.
+            GetBuildingGameObject(willCreateLevel, randomIndex));
+        willCreateLevel = -1;
         building.transform.position = createPosition;
         building.transform.SetParent(buildingManager.transform);
+        building.GetComponent<BuildingController>().SetPutted();
+        building.GetComponent<BuildingController>().buildingSetting.areaIndex = areaIndex;
         // close building's judgement quad.
         Transform[] judgementQuad = building.transform.GetComponentsInChildren<Transform>().
                                         Where(quad => quad.transform.
@@ -145,17 +180,29 @@ public class PlayerController : MonoBehaviour
             quad.gameObject.SetActive(false);
         }
     }
+    void CreateParticularBuilding(GameObject target, Vector3 position)
+    {
+        GameObject newBuilding = Instantiate(target);
+        newBuilding.transform.position = position;
+        newBuilding.transform.SetParent(buildingManager.transform);
+        newBuilding.GetComponent<BuildingController>().SetPutted();
+        newBuilding.GetComponent<BuildingController>().buildingSetting.areaIndex = areaIndex;
+        // close building's judgement quad.
+        Transform[] judgementQuad = newBuilding.transform.GetComponentsInChildren<Transform>().
+                                        Where(quad => quad.transform.
+                                                        CompareTag("buildingJudgePlane")).ToArray();
+        foreach (Transform quad in judgementQuad)
+        {
+            quad.gameObject.SetActive(false);
+        }
+    }
     IEnumerator MoveAndBuild(GameObject building)
     {
         bool put = false;
         RaycastHit hit;
-        //waitToPut = true;
         while (!put && preparePut)
         {
-            Vector3 mousePositoin = Input.mousePosition;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            mousePositoin.z = 1f;
-            mousePositoin = Camera.main.ScreenToWorldPoint(mousePositoin);
             if (Physics.Raycast(ray, out hit))
             {
                 Vector3 targetPosition = hit.point;
@@ -190,6 +237,56 @@ public class PlayerController : MonoBehaviour
     {
         return monsterCreatePosition;
     }
+    public void ClickBuilding(BuildingSetting buildingSetting, GameObject targetBuilding)
+    {
+        if(!preparePut && !combineStatus) //&& !prepareCreate && !prepareLevelUp)
+        {
+            GameObject.Find("IconController").GetComponent<IconController>()
+                .ShowBuildingInfo(buildingSetting);
+        }
+        else if (combineStatus)
+        {
+            targetBuilding.GetComponent<BuildingController>().SetClickStatus(true);
+            if(levelUpTarget == null)
+            {
+                levelUpTarget = targetBuilding;
+                willLevelUpBuildingSetting = buildingSetting;
+            }
+            else
+            {
+                int beAbsorbLevel = buildingSetting.buildingLevel;
+                int beAbsorbCode = buildingSetting.buildingCode;
+                if(willLevelUpBuildingSetting.buildingLevel == beAbsorbLevel &&
+                    willLevelUpBuildingSetting.buildingCanCombineCode.Contains(beAbsorbCode))
+                {
+                    beAbsorbTarget = targetBuilding;
+                    int code1 = willLevelUpBuildingSetting.buildingCode;
+                    int code2 = beAbsorbCode;
+                    int level = willLevelUpBuildingSetting.buildingLevel;
+                    GameObject newBuilding = GameManager.Instance.
+                                                GetNewLevelUpBuilding(level ,code1, code2);
+                    CombineTwoBuilding(newBuilding);
+                }
+                
+            }
+        }
+    }
+    void CombineTwoBuilding(GameObject newBuilding)
+    {
+        levelUpTarget.SetActive(false);
+        CreateParticularBuilding(newBuilding, levelUpTarget.transform.position);
+        Destroy(levelUpTarget.gameObject);
+        Destroy(beAbsorbTarget.gameObject);
+        Vector2 hotspot = Vector2.zero;
+        Debug.Log("after that should let beabsorb buildign position to can build position");
+        Cursor.SetCursor(null, hotspot, CursorMode.Auto);
+        combineStatus = false;
+    }
+}
+[Serializable]
+public class PlayerTMPInfo
+{
+    public TextMeshProUGUI mpTMP;
 }
 
 
