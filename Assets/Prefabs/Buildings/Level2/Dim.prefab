@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &810660976907908470
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3397346939717335432}
-  m_Layer: 0
-  m_Name: AttackDetectRange
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3397346939717335432
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810660976907908470}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7742658749122746981}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1695059907844816581
 GameObject:
   m_ObjectHideFlags: 0
@@ -64,7 +33,6 @@ Transform:
   - {fileID: 5650622637810024928}
   - {fileID: 8872431624029126274}
   - {fileID: 6878987910284853293}
-  - {fileID: 3397346939717335432}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -94,9 +62,10 @@ MonoBehaviour:
     buildingLevel: 2
     areaIndex: 0
     buildingCanCombineCode: 03000000
-  attackDetectRange: {fileID: 810660976907908470}
+  attackDetectRange: {fileID: 0}
   bullet: {fileID: 4077745145639377988, guid: ac2f5dc5581c402478fd09cc84aba277, type: 3}
   bulletCreatePosition: {fileID: 6878987910284853293}
+  beClicked: 0
 --- !u!136 &3283045617680893539
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -154,6 +123,7 @@ GameObject:
   - component: {fileID: 5832491406393650673}
   - component: {fileID: 3738960839751502658}
   - component: {fileID: 3689832833467235291}
+  - component: {fileID: 5040654902675542119}
   m_Layer: 0
   m_Name: Building
   m_TagString: Untagged
@@ -239,6 +209,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5040654902675542119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6122948087184127760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57ab7969c891dec43a4189c293007426, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  value: 0
 --- !u!1001 &8372185092669631061
 PrefabInstance:
   m_ObjectHideFlags: 0

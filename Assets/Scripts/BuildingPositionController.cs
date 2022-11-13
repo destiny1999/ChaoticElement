@@ -34,26 +34,4 @@ public class BuildingPositionController : MonoBehaviour
         renderer.material.color = normalColor;
         canUse = !use;
     }
-    /*
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.transform.CompareTag("buildingJudgePlane"))
-        {
-            if (canUse)
-            {
-                renderer.material.color = selectedColor;
-            }
-            else
-            {
-                renderer.material.color = notBuildColor;
-            }
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.transform.CompareTag("buildingJudgePlane"))
-        {
-            renderer.material.color = normalColor;
-        }
-    }*/
 }

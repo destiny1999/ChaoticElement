@@ -14,7 +14,8 @@ public class BuildingController : MonoBehaviour
     [SerializeField] Transform bulletCreatePosition;
     bool attacking = false;
     bool putted = false;
-    bool beClicked = false;
+    [SerializeField] bool beClicked = false;
+    List<GameObject> beUsedBuildingPosition = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +43,14 @@ public class BuildingController : MonoBehaviour
     public void SetPutted()
     {
         putted = true;
+    }
+    public void SetUsePosition(List<GameObject> beUsedPosition)
+    {
+        beUsedBuildingPosition = beUsedPosition;
+    }
+    public List<GameObject> GetUsedPosition()
+    {
+        return beUsedBuildingPosition;
     }
     IEnumerator AttackEnemy()
     {

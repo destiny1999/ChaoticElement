@@ -83,7 +83,24 @@ public class PlayerController : MonoBehaviour
             Vector2 hotspot = new Vector2(offset, offset);
             Cursor.SetCursor(cursorCombineTexture, hotspot, CursorMode.Auto);
         }
-
+        if (combineStatus)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                ResetBeClickToCombineBuilding("Click right mouse to cancel");
+            }
+        }
+    }
+    void ResetBeClickToCombineBuilding(string cancelMessage)
+    {
+        if(levelUpTarget != null)
+        {
+            levelUpTarget.GetComponent<BuildingController>().SetClickStatus(false);
+            levelUpTarget = null;
+        }
+        combineStatus = false;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        Debug.Log(cancelMessage);
     }
     public void CreateBuilding(string buildingString)
     {
@@ -121,12 +138,18 @@ public class PlayerController : MonoBehaviour
     }
     void PutBuilding()
     {
-        List<GameObject> judgementQuads = targetBuilding.GetComponent<BuildingController>().GetJudgementQuads();
-        
-
         // set building position to used and disable judgementQuad
+        //ChangeTargetBuildingBuildingPositionSituation(targetBuilding, true);
+        List<GameObject> judgementQuads = targetBuilding.GetComponent<BuildingController>().GetJudgementQuads();
+
+        List<GameObject> buildingPuttedBuildingPosition = new List<GameObject>();
+        
         foreach (GameObject quad in judgementQuads)
         {
+            // to record the putted building position info after combine will set this position can use
+            buildingPuttedBuildingPosition.Add(
+                quad.GetComponent<JudgementQuadController>().GetCurrentTarget());
+
             quad.GetComponent<JudgementQuadController>().GetCurrentTarget().
                 GetComponent<BuildingPositionController>().SetUseSituation(true);
             quad.SetActive(false);
@@ -153,13 +176,13 @@ public class PlayerController : MonoBehaviour
         Vector3 position = new Vector3(centerX, 0, centerZ);
         Destroy(targetBuilding.gameObject);
         //create Random elements building
-        CreateRandomBuilding(position);
+        CreateRandomBuilding(position, buildingPuttedBuildingPosition);
         ChangeAllBuildingRayLayer(false);
         // reset create building status
 
 
     }
-    void CreateRandomBuilding(Vector3 createPosition)
+    void CreateRandomBuilding(Vector3 createPosition, List<GameObject> usedBuildingPosition)
     {
         int buildingNums = GameManager.Instance.GetLevelBuildingNums(willCreateLevel);
         int randomIndex = UnityEngine.Random.Range(0, buildingNums);
@@ -171,6 +194,7 @@ public class PlayerController : MonoBehaviour
         building.transform.SetParent(buildingManager.transform);
         building.GetComponent<BuildingController>().SetPutted();
         building.GetComponent<BuildingController>().buildingSetting.areaIndex = areaIndex;
+        building.GetComponent<BuildingController>().SetUsePosition(usedBuildingPosition);
         // close building's judgement quad.
         Transform[] judgementQuad = building.transform.GetComponentsInChildren<Transform>().
                                         Where(quad => quad.transform.
@@ -180,9 +204,10 @@ public class PlayerController : MonoBehaviour
             quad.gameObject.SetActive(false);
         }
     }
-    void CreateParticularBuilding(GameObject target, Vector3 position)
+    void CreateParticularBuilding(GameObject target, Vector3 position, List<GameObject> usedPositoin)
     {
         GameObject newBuilding = Instantiate(target);
+        newBuilding.GetComponent<BuildingController>().SetUsePosition(usedPositoin);
         newBuilding.transform.position = position;
         newBuilding.transform.SetParent(buildingManager.transform);
         newBuilding.GetComponent<BuildingController>().SetPutted();
@@ -246,9 +271,14 @@ public class PlayerController : MonoBehaviour
         }
         else if (combineStatus)
         {
-            targetBuilding.GetComponent<BuildingController>().SetClickStatus(true);
+            if (targetBuilding.GetComponent<BuildingController>().GetClickStatus())
+            {
+                return;
+            }
+            
             if(levelUpTarget == null)
             {
+                targetBuilding.GetComponent<BuildingController>().SetClickStatus(true);
                 levelUpTarget = targetBuilding;
                 willLevelUpBuildingSetting = buildingSetting;
             }
@@ -259,6 +289,7 @@ public class PlayerController : MonoBehaviour
                 if(willLevelUpBuildingSetting.buildingLevel == beAbsorbLevel &&
                     willLevelUpBuildingSetting.buildingCanCombineCode.Contains(beAbsorbCode))
                 {
+                    targetBuilding.GetComponent<BuildingController>().SetClickStatus(true);
                     beAbsorbTarget = targetBuilding;
                     int code1 = willLevelUpBuildingSetting.buildingCode;
                     int code2 = beAbsorbCode;
@@ -267,14 +298,27 @@ public class PlayerController : MonoBehaviour
                                                 GetNewLevelUpBuilding(level ,code1, code2);
                     CombineTwoBuilding(newBuilding);
                 }
-                
+                else
+                {
+                    ResetBeClickToCombineBuilding("combine target error");
+                }
             }
         }
     }
     void CombineTwoBuilding(GameObject newBuilding)
     {
         levelUpTarget.SetActive(false);
-        CreateParticularBuilding(newBuilding, levelUpTarget.transform.position);
+        List<GameObject> levelUpusedPosition = levelUpTarget.GetComponent<BuildingController>().
+                                            GetUsedPosition();
+        CreateParticularBuilding(newBuilding, levelUpTarget.transform.position, levelUpusedPosition);
+
+        List<GameObject> usedPosition = beAbsorbTarget.GetComponent<BuildingController>().
+                                            GetUsedPosition();
+        foreach(GameObject buildingPosition in usedPosition)
+        {
+            buildingPosition.GetComponent<BuildingPositionController>().SetUseSituation(false);
+        }
+
         Destroy(levelUpTarget.gameObject);
         Destroy(beAbsorbTarget.gameObject);
         Vector2 hotspot = Vector2.zero;
