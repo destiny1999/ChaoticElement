@@ -17,6 +17,13 @@ public class BuildingController : MonoBehaviour
     [SerializeField] bool beClicked = false;
     List<GameObject> beUsedBuildingPosition = new List<GameObject>();
     // Start is called before the first frame update
+
+    HashSet<int> buffSet = new HashSet<int>();
+    HashSet<int> nerfSet = new HashSet<int>();
+
+    [SerializeField] SpecialEffectInfluenceValue specialEffectInfluenceValue;
+    Queue<GameObject> willBuffBuildingQueue = new Queue<GameObject>();
+    [SerializeField] bool buffBuilding = false;
     void Start()
     {
         
@@ -39,6 +46,14 @@ public class BuildingController : MonoBehaviour
                 transform.rotation = Quaternion.identity;
             }
         }
+        else if(willBuffBuildingQueue.Count > 0 && !attacking)
+        {
+            if(willBuffBuildingQueue.Count > 0 && willBuffBuildingQueue.Peek() != null)
+            {
+                attacking = true;
+                StartCoroutine(BuffBuilding());
+            }
+        }
     }
     public void SetPutted()
     {
@@ -51,6 +66,43 @@ public class BuildingController : MonoBehaviour
     public List<GameObject> GetUsedPosition()
     {
         return beUsedBuildingPosition;
+    }
+    IEnumerator BuffBuilding()
+    {
+        float attackTime = buildingSetting.attackCD * 
+                            (1 + specialEffectInfluenceValue.attackCDSpeedMagnification/100f);
+        
+        while(attackTime > 0)
+        {
+            attackTime -= Time.deltaTime * 1;
+            yield return null;
+        }
+        while (willBuffBuildingQueue.Count > 0)
+        {
+            if(willBuffBuildingQueue.Peek() == null)
+            {
+                willBuffBuildingQueue.Dequeue();
+                continue;
+            }
+
+            GameObject targetBuilding = willBuffBuildingQueue.Dequeue();
+            willBuffBuildingQueue.Enqueue(targetBuilding);
+
+            if(targetBuilding.GetComponent<BuildingController>().
+                GetStatusSet(true).Contains(buildingSetting.effectIndex))
+            {
+                continue;
+            }
+
+            targetBuilding.GetComponent<BuildingController>().
+                AddStatus(buildingSetting.effectIndex, buildingSetting.effectValue, true);
+            break;
+        }
+    }
+    public HashSet<int> GetStatusSet(bool buff)
+    {
+        if (buff) return buffSet;
+        else return nerfSet;
     }
     IEnumerator AttackEnemy()
     {
@@ -112,14 +164,27 @@ public class BuildingController : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        if (other.transform.CompareTag("enemy"))
+        if (buffBuilding)
         {
-            targetQueue.Enqueue(other.transform.gameObject);
+            if (other.transform.CompareTag("building"))
+            {
+                print("test");
+                willBuffBuildingQueue.Enqueue(other.transform.parent.gameObject);
+            }
         }
+        else
+        {
+            if (other.transform.CompareTag("enemy"))
+            {
+                targetQueue.Enqueue(other.transform.gameObject);
+            }
+        }
+        
+        
     }
     public void OnTriggerExit(Collider other)
     {
-        if (other.transform.CompareTag("enemy"))
+        if (other.transform.CompareTag("enemy") && targetQueue.Count > 0)
         {
             targetQueue.Dequeue();
             if (targetQueue.Count == 0)
@@ -136,6 +201,38 @@ public class BuildingController : MonoBehaviour
     public bool GetClickStatus()
     {
         return beClicked;
+    }
+    public void AddStatus(int statusCode, float value, bool buff)
+    {
+        if (buff) buffSet.Add(statusCode);
+        else nerfSet.Add(statusCode);
+
+        ChangeInfluenceValue(statusCode, value, true);
+    }
+    public void RemoveStatus(int statusCode, float value, bool buff)
+    {
+        if (buff) buffSet.Remove(statusCode);
+        else nerfSet.Remove(statusCode);
+
+        ChangeInfluenceValue(statusCode, value, false);
+    }
+    void ChangeInfluenceValue(int statusCode, float value, bool add)
+    {
+        int weight = add ? 1 : -1;
+        SpecialEffectSetting specialEffectSetting = GameManager.Instance.
+                                                        GetSpecialEffectSetting(statusCode);
+        specialEffectSetting.effectValue = value;
+        switch (specialEffectSetting.effectInfluenceTarget)
+        {
+            case SpecialEffectSetting.EffectInfluenceTarget.buildingDamage:
+                specialEffectInfluenceValue.damageMagnification += 
+                    specialEffectSetting.effectValue * weight;
+                break;
+            case SpecialEffectSetting.EffectInfluenceTarget.buildingAttackSpeed:
+                specialEffectInfluenceValue.attackCDSpeedMagnification +=
+                    specialEffectSetting.effectValue * weight;
+                break;
+        }
     }
 }
 

@@ -8,6 +8,7 @@ TagManager:
   - buildingPosition
   - enemy
   - bullet
+  - building
   layers:
   - Default
   - TransparentFX

@@ -2917,6 +2917,12 @@ MonoBehaviour:
   - eachLevelCombineInfo: []
   - eachLevelCombineInfo: []
   - eachLevelCombineInfo: []
+  specialEffectSettings:
+  - statusCode: 0
+    effectValue: 10
+    effectInfluenceTarget: 1
+    effectShowPosition: 0
+    effectVisual: {fileID: 0}
 --- !u!1 &783970621
 GameObject:
   m_ObjectHideFlags: 0

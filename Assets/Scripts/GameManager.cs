@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     int wave = 0;
     [SerializeField] List<EachLevelCombineInfo> allLevelCombineInfo;
+    [SerializeField] List<SpecialEffectSetting> specialEffectSettings;
+
     private void Awake()
     {
         Instance = this;
@@ -144,6 +146,10 @@ public class GameManager : MonoBehaviour
         GameObject targetBuilding = allElementsBuildings[currentLevel].buildings[targetCode];
         return targetBuilding;
     }
+    public SpecialEffectSetting GetSpecialEffectSetting(int statusCode)
+    {
+        return specialEffectSettings[statusCode];
+    }
 }
 [Serializable]
 public class LevelSetting
@@ -172,4 +178,36 @@ public class CombineForm
 public class EachLevelCombineInfo
 {
     public List<CombineForm> eachLevelCombineInfo;
+}
+[Serializable]
+public class SpecialEffectSetting
+{
+    // can be buff or nerf
+    public int statusCode;
+    [HideInInspector] public float effectValue;
+    public EffectInfluenceTarget effectInfluenceTarget; // building damage 1
+    public EffectShowPosition effectShowPosition; // the buff will show at target's where
+    public GameObject effectVisual; // the buff object, just like a blue ring mean slow down speed
+    public enum EffectInfluenceTarget
+    {
+        buildingDamage,
+        buildingAttackSpeed,
+        bulletSpeed,
+        monsterSpeed,
+        skillCD
+    }
+    public enum EffectShowPosition
+    {
+        headTop,
+        belowRing
+    }
+}
+[Serializable]
+public class SpecialEffectInfluenceValue
+{
+    public float attackCDSpeedMagnification;
+    public float bulletSpeedMagnification;
+    public float damageMagnification;
+    public float cdMagnification;
+    public float moveSpeedMagnification;
 }

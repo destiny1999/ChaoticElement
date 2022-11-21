@@ -56,7 +56,7 @@ MonoBehaviour:
     bulletSpeed: 10
     damage: 5
     effectIndex: 0
-    effectValue: 0
+    effectValue: 50
     sale: 5
     createTime: 0
     buildingLevel: 2
@@ -66,6 +66,13 @@ MonoBehaviour:
   bullet: {fileID: 4077745145639377988, guid: ac2f5dc5581c402478fd09cc84aba277, type: 3}
   bulletCreatePosition: {fileID: 1112024944882543901}
   beClicked: 0
+  specialEffectInfluenceValue:
+    attackCDSpeedMagnification: 0
+    bulletSpeedMagnification: 0
+    damageMagnification: 0
+    cdMagnification: 0
+    moveSpeedMagnification: 0
+  buffBuilding: 1
 --- !u!136 &8885512030031120164
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -95,7 +102,7 @@ GameObject:
   - component: {fileID: 685718119702347737}
   m_Layer: 0
   m_Name: Building
-  m_TagString: Untagged
+  m_TagString: building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
