@@ -82,21 +82,26 @@ public class BuildingController : MonoBehaviour
             if(willBuffBuildingQueue.Peek() == null)
             {
                 willBuffBuildingQueue.Dequeue();
-                continue;
+                yield return null;
             }
-
-            GameObject targetBuilding = willBuffBuildingQueue.Dequeue();
-            willBuffBuildingQueue.Enqueue(targetBuilding);
-
-            if(targetBuilding.GetComponent<BuildingController>().
-                GetStatusSet(true).Contains(buildingSetting.effectIndex))
+            else
             {
-                continue;
-            }
+                GameObject targetBuilding = willBuffBuildingQueue.Dequeue();
+                willBuffBuildingQueue.Enqueue(targetBuilding);
 
-            targetBuilding.GetComponent<BuildingController>().
-                AddStatus(buildingSetting.effectIndex, buildingSetting.effectValue, true);
-            break;
+                if (targetBuilding.GetComponent<BuildingController>().
+                    GetStatusSet(true).Contains(buildingSetting.effectIndex))
+                {
+                    yield return null;
+                }
+                else
+                {
+                    targetBuilding.GetComponent<BuildingController>().
+                    AddStatus(buildingSetting.effectIndex, buildingSetting.effectValue, true);
+                    attacking = false;
+                    yield break;
+                }
+            }
         }
     }
     public HashSet<int> GetStatusSet(bool buff)
@@ -106,8 +111,11 @@ public class BuildingController : MonoBehaviour
     }
     IEnumerator AttackEnemy()
     {
-        float attackTime = buildingSetting.attackCD;
-        while(targetEnemy != null)
+        float attackTime = buildingSetting.attackCD *
+                            (1 + specialEffectInfluenceValue.attackCDSpeedMagnification / 100f);
+        print("magnification = " + (1 + specialEffectInfluenceValue.attackCDSpeedMagnification / 100f));
+        print(attackTime);
+        while (targetEnemy != null)
         {
             transform.LookAt(targetEnemy.transform);
             attackTime -= Time.deltaTime;
@@ -125,7 +133,8 @@ public class BuildingController : MonoBehaviour
                                     );
                 newbullet.GetComponent<BulletController>().SetTargetEnemy(targetEnemy);
 
-                attackTime = buildingSetting.attackCD;
+                attackTime = buildingSetting.attackCD *
+                            (1 + specialEffectInfluenceValue.attackCDSpeedMagnification / 100f);
             }
             yield return null;
         }
@@ -168,7 +177,7 @@ public class BuildingController : MonoBehaviour
         {
             if (other.transform.CompareTag("building"))
             {
-                print("test");
+                //print("test");
                 willBuffBuildingQueue.Enqueue(other.transform.parent.gameObject);
             }
         }
@@ -230,7 +239,7 @@ public class BuildingController : MonoBehaviour
                 break;
             case SpecialEffectSetting.EffectInfluenceTarget.buildingAttackSpeed:
                 specialEffectInfluenceValue.attackCDSpeedMagnification +=
-                    specialEffectSetting.effectValue * weight;
+                    specialEffectSetting.effectValue * weight * -1;
                 break;
         }
     }

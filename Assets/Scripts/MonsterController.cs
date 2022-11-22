@@ -8,6 +8,7 @@ public class MonsterController : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] MonsterSetting monsterSetting;
     Transform nextTargetTransform;
+    bool dead = false;
     void Start()
     {
         nextTargetTransform = GameObject.Find("FirstMoveCheckPoint").gameObject.transform;
@@ -37,8 +38,9 @@ public class MonsterController : MonoBehaviour
     void GetHurt(float value)
     {
         monsterSetting.hp -= value;
-        if(monsterSetting.hp <= 0)
+        if(monsterSetting.hp <= 0 && !dead)
         {
+            dead = true;
             GameManager.Instance.SendKillStatus(monsterSetting);
             Destroy(gameObject);
         }
