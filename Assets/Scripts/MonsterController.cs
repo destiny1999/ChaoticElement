@@ -9,6 +9,7 @@ public class MonsterController : MonoBehaviour
     [SerializeField] MonsterSetting monsterSetting;
     Transform nextTargetTransform;
     bool dead = false;
+    MonsterSpecialEffectInfluenceValue specialEffectInfluenceValue;
     void Start()
     {
         nextTargetTransform = GameObject.Find("FirstMoveCheckPoint").gameObject.transform;
@@ -59,21 +60,65 @@ public class MonsterController : MonoBehaviour
         if (other.transform.CompareTag("bullet"))
         {
             float damage = other.transform.GetComponent<BulletController>().bulletSetting.damage;
-            float effectIndex = other.transform.GetComponent<BulletController>().bulletSetting.effectIndex;
-            float effectValue = other.transform.GetComponent<BulletController>().bulletSetting.effectValue;
+            
+            if (other.transform.GetComponent<BulletController>().bulletSetting.effect != 
+                    BulletSetting.BulletEffect.無特殊效果)
+            {
+                DealWithSpecialEffect(other.transform.GetComponent<BulletController>().bulletSetting);
+            }
+            
             GetHurt(damage);
             Destroy(other.gameObject);
         }
+    }
+    void DealWithSpecialEffect(BulletSetting bulletSetting)
+    {
+        switch (bulletSetting.effect)
+        {
+            case BulletSetting.BulletEffect.緩速:
+                specialEffectInfluenceValue.speed = bulletSetting.effectValue >
+                                                        specialEffectInfluenceValue.speed ?
+                                                        bulletSetting.effectValue :
+                                                        specialEffectInfluenceValue.speed;
+                break;
+            case BulletSetting.BulletEffect.持續傷害:
+                specialEffectInfluenceValue.hp = bulletSetting.effectValue >
+                                                    specialEffectInfluenceValue.hp ?
+                                                    bulletSetting.effectValue :
+                                                    specialEffectInfluenceValue.hp;
+                break;
+            case BulletSetting.BulletEffect.降低防禦:
+                specialEffectInfluenceValue.defense = bulletSetting.effectValue >
+                                                    specialEffectInfluenceValue.defense ?
+                                                    bulletSetting.effectValue :
+                                                    specialEffectInfluenceValue.defense;
+                break;
+        }
+        
     }
 }
 [Serializable]
 public class MonsterSetting
 {
     [HideInInspector]public float orignalHP;
+    public string monsterName;
     public float hp;
     public float moveSpeed;
-    public int specialEffectCode;
+    public List<SpecialEffect> specialEffects;
     public int killBonus;
     public int areaIndex;
     public int punish;
+
+    public enum SpecialEffect
+    {
+        無特殊效果,
+        水屬性抗性,
+        火屬性抗性,
+        風屬性抗性,
+        水火風屬性抗性,
+        暗屬性抗性,
+        水屬性一擊護頓,
+        火屬性一擊護頓,
+        風屬性一擊護頓
+    }
 }

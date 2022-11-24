@@ -63,6 +63,14 @@ MonoBehaviour:
   attackDetectRange: {fileID: 0}
   bullet: {fileID: 0}
   bulletCreatePosition: {fileID: 0}
+  beClicked: 0
+  specialEffectInfluenceValue:
+    attackCDSpeedMagnification: 0
+    bulletSpeedMagnification: 0
+    damageMagnification: 0
+    cdMagnification: 0
+    moveSpeedMagnification: 0
+  buffBuilding: 0
 --- !u!1 &3983135993734139501
 GameObject:
   m_ObjectHideFlags: 0

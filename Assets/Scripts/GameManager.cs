@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
     int wave = 0;
     [SerializeField] List<EachLevelCombineInfo> allLevelCombineInfo;
     [SerializeField] List<SpecialEffectSetting> specialEffectSettings;
+
+    [SerializeField] TextMeshProUGUI waveInfoTMP;
 
     private void Awake()
     {
@@ -48,11 +51,70 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator WaveStart()
     {
+        
         LevelSetting levelSetting = levelSettings[wave];
-        for(int i = 0; i<levelSetting.monsterNums; i++)
+        ShowWaveInfo(levelSetting.monster);
+        for (int i = 0; i<levelSetting.monsterNums; i++)
         {
             yield return (CreateMonster(levelSetting.monster));
         }
+    }
+    void ShowWaveInfo(GameObject targetMonster)
+    {
+        
+        string monsterName = targetMonster.GetComponent<MonsterController>().
+                                GetMonsterSetting().monsterName;
+
+        List<MonsterSetting.SpecialEffect> specialEffects = 
+            targetMonster.GetComponent<MonsterController>().GetMonsterSetting().specialEffects;
+
+        string monsterEffect = "";
+
+        for(int i = 0; i< specialEffects.Count; i++)
+        {
+            switch (specialEffects[i])
+            {
+                case MonsterSetting.SpecialEffect.無特殊效果:
+                    monsterEffect += "沒有任何能力 ";
+                    break;
+                case MonsterSetting.SpecialEffect.水屬性抗性:
+                    monsterEffect += "水屬性抗性 ";
+                    break;
+                case MonsterSetting.SpecialEffect.火屬性抗性:
+                    monsterEffect += "火屬性抗性 ";
+                    break;
+                case MonsterSetting.SpecialEffect.風屬性抗性:
+                    monsterEffect += "風屬性抗性 ";
+                    break;
+                case MonsterSetting.SpecialEffect.水火風屬性抗性:
+                    monsterEffect += "水火風屬性抗性 ";
+                    break;
+                case MonsterSetting.SpecialEffect.暗屬性抗性:
+                    monsterEffect += "暗屬性抗性 ";
+                    break;
+                case MonsterSetting.SpecialEffect.水屬性一擊護頓:
+                    monsterEffect += "水屬性一擊護頓 ";
+                    break;
+                case MonsterSetting.SpecialEffect.火屬性一擊護頓:
+                    monsterEffect += "火屬性一擊護頓 ";
+                    break;
+                case MonsterSetting.SpecialEffect.風屬性一擊護頓:
+                    monsterEffect += "風屬性一擊護頓 ";
+                    break;
+            }
+        }
+        waveInfoTMP.text = monsterName + "\n" + monsterEffect;
+        waveInfoTMP.gameObject.SetActive(true);
+        StartCoroutine(HideGameObject(waveInfoTMP.gameObject, 5f));
+    }
+    public IEnumerator HideGameObject(GameObject target, float time)
+    {
+        while(time > 0)
+        {
+            time -= Time.deltaTime * 1;
+            yield return null;
+        }
+        target.SetActive(false);
     }
     IEnumerator CreateMonster(GameObject monster)
     {
@@ -194,6 +256,8 @@ public class SpecialEffectSetting
         buildingAttackSpeed,
         bulletSpeed,
         monsterSpeed,
+        monsterDefense,
+        monsterHp,
         skillCD
     }
     public enum EffectShowPosition
@@ -203,11 +267,19 @@ public class SpecialEffectSetting
     }
 }
 [Serializable]
-public class SpecialEffectInfluenceValue
+public class BuildingSpecialEffectInfluenceValue
 {
     public float attackCDSpeedMagnification;
     public float bulletSpeedMagnification;
     public float damageMagnification;
     public float cdMagnification;
     public float moveSpeedMagnification;
+}
+
+[Serializable]
+public class MonsterSpecialEffectInfluenceValue
+{
+    public float hp;
+    public float defense;
+    public float speed;
 }

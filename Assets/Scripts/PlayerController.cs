@@ -62,6 +62,11 @@ public class PlayerController : MonoBehaviour
                 }
                 
             }
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                GameObject.Find("IconController").GetComponent<IconController>()
+                .HideBuildingInfoView();
+            }
         }
         if (preparePut)
         {
@@ -264,6 +269,7 @@ public class PlayerController : MonoBehaviour
     }
     public void ClickBuilding(BuildingSetting buildingSetting, GameObject targetBuilding)
     {
+
         if(!preparePut && !combineStatus) //&& !prepareCreate && !prepareLevelUp)
         {
             GameObject.Find("IconController").GetComponent<IconController>()

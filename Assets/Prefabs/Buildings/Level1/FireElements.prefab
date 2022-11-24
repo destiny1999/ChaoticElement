@@ -51,10 +51,12 @@ MonoBehaviour:
   judgementQuads:
   - {fileID: 1976926351440821679}
   buildingSetting:
+    buildingName: "\u7D05\u8272\u7ACB\u65B9\u9AD4"
     buildingCode: 0
     attackCD: 1
     bulletSpeed: 10
     damage: 10
+    buildingEffect: 0
     effectIndex: -1
     effectValue: 0
     sale: 5

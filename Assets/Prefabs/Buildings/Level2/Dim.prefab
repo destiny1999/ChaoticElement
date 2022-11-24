@@ -51,10 +51,12 @@ MonoBehaviour:
   judgementQuads:
   - {fileID: 5650622637810024863}
   buildingSetting:
+    buildingName: "\u9EEF\u6DE1\u7684\u80FD\u91CF\u9AD4"
     buildingCode: 3
     attackCD: 2
     bulletSpeed: 10
     damage: 40
+    buildingEffect: 0
     effectIndex: -1
     effectValue: 0
     sale: 5
@@ -161,7 +163,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6122948087184127760}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &3738960839751502658
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -21,9 +21,35 @@ public class BuildingController : MonoBehaviour
     HashSet<int> buffSet = new HashSet<int>();
     HashSet<int> nerfSet = new HashSet<int>();
 
-    [SerializeField] SpecialEffectInfluenceValue specialEffectInfluenceValue;
+    [SerializeField] BuildingSpecialEffectInfluenceValue specialEffectInfluenceValue;
     Queue<GameObject> willBuffBuildingQueue = new Queue<GameObject>();
     [SerializeField] bool buffBuilding = false;
+
+    private void Awake()
+    {
+        switch (buildingSetting.buildingEffect)
+        {
+            case BuildingSetting.BuildingEffect.無特殊效果:
+                buildingSetting.effectIndex = -1;
+                break;
+            case BuildingSetting.BuildingEffect.降低攻擊目標的移動速度:
+                buildingSetting.effectIndex = 0;
+                break;
+            case BuildingSetting.BuildingEffect.對攻擊目標造成持續傷害:
+                buildingSetting.effectIndex = 1;
+                break;
+            case BuildingSetting.BuildingEffect.每打中一下怪物縮短自身攻擊間隔:
+                buildingSetting.effectIndex = 2;
+                break;
+            case BuildingSetting.BuildingEffect.縮短附近防禦塔的攻擊間隔:
+                buildingSetting.effectIndex = 3;
+                break;
+            case BuildingSetting.BuildingEffect.降低目標怪物的防禦:
+                buildingSetting.effectIndex = 4;
+                break;
+        }
+    }
+
     void Start()
     {
         
@@ -113,8 +139,7 @@ public class BuildingController : MonoBehaviour
     {
         float attackTime = buildingSetting.attackCD *
                             (1 + specialEffectInfluenceValue.attackCDSpeedMagnification / 100f);
-        print("magnification = " + (1 + specialEffectInfluenceValue.attackCDSpeedMagnification / 100f));
-        print(attackTime);
+        
         while (targetEnemy != null)
         {
             transform.LookAt(targetEnemy.transform);
@@ -126,7 +151,7 @@ public class BuildingController : MonoBehaviour
                 Color bulletColor = this.transform.Find("Building").GetComponent<Renderer>().material.color;
                 newbullet.GetComponent<BulletController>().
                     SetBulletInfo(buildingSetting.damage,
-                                    buildingSetting.effectIndex,
+                                    buildingSetting.buildingEffect,
                                     buildingSetting.effectValue,
                                     buildingSetting.bulletSpeed,
                                     bulletColor
@@ -248,10 +273,12 @@ public class BuildingController : MonoBehaviour
 [Serializable]
 public class BuildingSetting
 {
+    public string buildingName;
     public int buildingCode;
     public float attackCD;
     public float bulletSpeed;
     public float damage;
+    public BuildingEffect buildingEffect;
     public int effectIndex;
     public float effectValue;
     //public int cost;
@@ -261,6 +288,16 @@ public class BuildingSetting
     public int buildingLevel;
     public int areaIndex;
     public List<int> buildingCanCombineCode;
+
+    public enum BuildingEffect
+    {
+        無特殊效果,
+        降低攻擊目標的移動速度,
+        對攻擊目標造成持續傷害,
+        每打中一下怪物縮短自身攻擊間隔,
+        縮短附近防禦塔的攻擊間隔,
+        降低目標怪物的防禦
+    }
 
 }
 [Serializable]
