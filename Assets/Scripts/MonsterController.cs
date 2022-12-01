@@ -9,7 +9,7 @@ public class MonsterController : MonoBehaviour
     [SerializeField] MonsterSetting monsterSetting;
     Transform nextTargetTransform;
     bool dead = false;
-    MonsterSpecialEffectInfluenceValue specialEffectInfluenceValue;
+    SpecialEffectInfluenceValue specialEffectInfluenceValue;
     void Start()
     {
         nextTargetTransform = GameObject.Find("FirstMoveCheckPoint").gameObject.transform;
@@ -61,36 +61,35 @@ public class MonsterController : MonoBehaviour
         {
             float damage = other.transform.GetComponent<BulletController>().bulletSetting.damage;
             
-            if (other.transform.GetComponent<BulletController>().bulletSetting.effect != 
-                    BulletSetting.BulletEffect.無特殊效果)
+            if (other.transform.GetComponent<BulletController>().bulletSetting.
+                SpecialEffect.effect != GameSpecialEffect.SpecialEffect.無特殊效果)
             {
                 DealWithSpecialEffect(other.transform.GetComponent<BulletController>().bulletSetting);
             }
-            
             GetHurt(damage);
             Destroy(other.gameObject);
         }
     }
     void DealWithSpecialEffect(BulletSetting bulletSetting)
     {
-        switch (bulletSetting.effect)
+        switch (bulletSetting.SpecialEffect.effect)
         {
-            case BulletSetting.BulletEffect.緩速:
-                specialEffectInfluenceValue.speed = bulletSetting.effectValue >
+            case GameSpecialEffect.SpecialEffect.降低攻擊目標的移動速度:
+                specialEffectInfluenceValue.speed = bulletSetting.SpecialEffect.effectValue >
                                                         specialEffectInfluenceValue.speed ?
-                                                        bulletSetting.effectValue :
+                                                        bulletSetting.SpecialEffect.effectValue :
                                                         specialEffectInfluenceValue.speed;
                 break;
-            case BulletSetting.BulletEffect.持續傷害:
-                specialEffectInfluenceValue.hp = bulletSetting.effectValue >
+            case GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害:
+                specialEffectInfluenceValue.hp = bulletSetting.SpecialEffect.effectValue >
                                                     specialEffectInfluenceValue.hp ?
-                                                    bulletSetting.effectValue :
+                                                    bulletSetting.SpecialEffect.effectValue :
                                                     specialEffectInfluenceValue.hp;
                 break;
-            case BulletSetting.BulletEffect.降低防禦:
-                specialEffectInfluenceValue.defense = bulletSetting.effectValue >
+            case GameSpecialEffect.SpecialEffect.降低目標的防禦:
+                specialEffectInfluenceValue.defense = bulletSetting.SpecialEffect.effectValue >
                                                     specialEffectInfluenceValue.defense ?
-                                                    bulletSetting.effectValue :
+                                                    bulletSetting.SpecialEffect.effectValue :
                                                     specialEffectInfluenceValue.defense;
                 break;
         }

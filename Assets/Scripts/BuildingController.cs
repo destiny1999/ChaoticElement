@@ -18,39 +18,15 @@ public class BuildingController : MonoBehaviour
     List<GameObject> beUsedBuildingPosition = new List<GameObject>();
     // Start is called before the first frame update
 
-    HashSet<int> buffSet = new HashSet<int>();
-    HashSet<int> nerfSet = new HashSet<int>();
+    HashSet<GameSpecialEffect.SpecialEffect> buffSet = new HashSet<GameSpecialEffect.SpecialEffect>();
+    HashSet<GameSpecialEffect.SpecialEffect> nerfSet = new HashSet<GameSpecialEffect.SpecialEffect>();
 
-    [SerializeField] BuildingSpecialEffectInfluenceValue specialEffectInfluenceValue;
+
+    //[SerializeField] BuildingSpecialEffectInfluenceValue specialEffectInfluenceValue;
     Queue<GameObject> willBuffBuildingQueue = new Queue<GameObject>();
     [SerializeField] bool buffBuilding = false;
 
     private void Awake()
-    {
-        switch (buildingSetting.buildingEffect)
-        {
-            case BuildingSetting.BuildingEffect.無特殊效果:
-                buildingSetting.effectIndex = -1;
-                break;
-            case BuildingSetting.BuildingEffect.降低攻擊目標的移動速度:
-                buildingSetting.effectIndex = 0;
-                break;
-            case BuildingSetting.BuildingEffect.對攻擊目標造成持續傷害:
-                buildingSetting.effectIndex = 1;
-                break;
-            case BuildingSetting.BuildingEffect.每打中一下怪物縮短自身攻擊間隔:
-                buildingSetting.effectIndex = 2;
-                break;
-            case BuildingSetting.BuildingEffect.縮短附近防禦塔的攻擊間隔:
-                buildingSetting.effectIndex = 3;
-                break;
-            case BuildingSetting.BuildingEffect.降低目標怪物的防禦:
-                buildingSetting.effectIndex = 4;
-                break;
-        }
-    }
-
-    void Start()
     {
         
     }
@@ -96,7 +72,8 @@ public class BuildingController : MonoBehaviour
     IEnumerator BuffBuilding()
     {
         float attackTime = buildingSetting.attackCD * 
-                            (1 + specialEffectInfluenceValue.attackCDSpeedMagnification/100f);
+                            (1 + buildingSetting.SpecialEffectInfluenceValue.
+                                attackCDSpeed/100f);
         
         while(attackTime > 0)
         {
@@ -116,21 +93,21 @@ public class BuildingController : MonoBehaviour
                 willBuffBuildingQueue.Enqueue(targetBuilding);
 
                 if (targetBuilding.GetComponent<BuildingController>().
-                    GetStatusSet(true).Contains(buildingSetting.effectIndex))
+                    GetStatusSet(true).Contains(buildingSetting.SpecialEffect.effect))
                 {
                     yield return null;
                 }
                 else
                 {
                     targetBuilding.GetComponent<BuildingController>().
-                    AddStatus(buildingSetting.effectIndex, buildingSetting.effectValue, true);
+                    AddStatus(buildingSetting.SpecialEffect, true);
                     attacking = false;
                     yield break;
                 }
             }
         }
     }
-    public HashSet<int> GetStatusSet(bool buff)
+    public HashSet<GameSpecialEffect.SpecialEffect> GetStatusSet(bool buff)
     {
         if (buff) return buffSet;
         else return nerfSet;
@@ -138,7 +115,8 @@ public class BuildingController : MonoBehaviour
     IEnumerator AttackEnemy()
     {
         float attackTime = buildingSetting.attackCD *
-                            (1 + specialEffectInfluenceValue.attackCDSpeedMagnification / 100f);
+                            (1 + buildingSetting.SpecialEffectInfluenceValue.
+                                attackCDSpeed / 100f);
         
         while (targetEnemy != null)
         {
@@ -149,17 +127,19 @@ public class BuildingController : MonoBehaviour
                 GameObject newbullet = Instantiate(bullet);
                 newbullet.transform.position = bulletCreatePosition.position;
                 Color bulletColor = this.transform.Find("Building").GetComponent<Renderer>().material.color;
+                //Debug.Break();
                 newbullet.GetComponent<BulletController>().
                     SetBulletInfo(buildingSetting.damage,
-                                    buildingSetting.buildingEffect,
-                                    buildingSetting.effectValue,
+                                    buildingSetting.Attribute,
+                                    buildingSetting.SpecialEffect,
                                     buildingSetting.bulletSpeed,
                                     bulletColor
                                     );
                 newbullet.GetComponent<BulletController>().SetTargetEnemy(targetEnemy);
 
                 attackTime = buildingSetting.attackCD *
-                            (1 + specialEffectInfluenceValue.attackCDSpeedMagnification / 100f);
+                            (1 + buildingSetting.SpecialEffectInfluenceValue.
+                                attackCDSpeed / 100f);
             }
             yield return null;
         }
@@ -236,68 +216,37 @@ public class BuildingController : MonoBehaviour
     {
         return beClicked;
     }
-    public void AddStatus(int statusCode, float value, bool buff)
+    public void AddStatus(GameSpecialEffect gameSpecialEffect, bool buff)
     {
-        if (buff) buffSet.Add(statusCode);
-        else nerfSet.Add(statusCode);
-
-        ChangeInfluenceValue(statusCode, value, true);
+        if (buff) buffSet.Add(gameSpecialEffect.effect);
+        else nerfSet.Add(gameSpecialEffect.effect);
+        buildingSetting.SpecialEffectInfluenceValue.
+            ChangeInfluenceValue(gameSpecialEffect ,true);
+        //ChangeInfluenceValue(gameSpecialEffect, true);
     }
-    public void RemoveStatus(int statusCode, float value, bool buff)
+    public void RemoveStatus(GameSpecialEffect gameSpecialEffect, bool buff)
     {
-        if (buff) buffSet.Remove(statusCode);
-        else nerfSet.Remove(statusCode);
-
-        ChangeInfluenceValue(statusCode, value, false);
+        if (buff) buffSet.Remove(gameSpecialEffect.effect);
+        else nerfSet.Remove(gameSpecialEffect.effect);
+        buildingSetting.SpecialEffectInfluenceValue.ChangeInfluenceValue(gameSpecialEffect, false);
     }
-    void ChangeInfluenceValue(int statusCode, float value, bool add)
-    {
-        int weight = add ? 1 : -1;
-        SpecialEffectSetting specialEffectSetting = GameManager.Instance.
-                                                        GetSpecialEffectSetting(statusCode);
-        specialEffectSetting.effectValue = value;
-        switch (specialEffectSetting.effectInfluenceTarget)
-        {
-            case SpecialEffectSetting.EffectInfluenceTarget.buildingDamage:
-                specialEffectInfluenceValue.damageMagnification += 
-                    specialEffectSetting.effectValue * weight;
-                break;
-            case SpecialEffectSetting.EffectInfluenceTarget.buildingAttackSpeed:
-                specialEffectInfluenceValue.attackCDSpeedMagnification +=
-                    specialEffectSetting.effectValue * weight * -1;
-                break;
-        }
-    }
+    
 }
 
 [Serializable]
-public class BuildingSetting
+public class BuildingSetting : GameItemInfo
 {
     public string buildingName;
     public int buildingCode;
     public float attackCD;
     public float bulletSpeed;
     public float damage;
-    public BuildingEffect buildingEffect;
-    public int effectIndex;
-    public float effectValue;
-    //public int cost;
     public int sale;
-    //public string createButtonString;
     public float createTime;
     public int buildingLevel;
     public int areaIndex;
     public List<int> buildingCanCombineCode;
-
-    public enum BuildingEffect
-    {
-        無特殊效果,
-        降低攻擊目標的移動速度,
-        對攻擊目標造成持續傷害,
-        每打中一下怪物縮短自身攻擊間隔,
-        縮短附近防禦塔的攻擊間隔,
-        降低目標怪物的防禦
-    }
+    
 
 }
 [Serializable]

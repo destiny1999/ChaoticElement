@@ -51,14 +51,23 @@ MonoBehaviour:
   judgementQuads:
   - {fileID: 588895519817609738}
   buildingSetting:
+    Attribute:
+      attribute: 3
+      level: 2
+    SpecialEffect:
+      effect: 0
+      effectValue: 0
+    SpecialEffectInfluenceValue:
+      hp: 0
+      defense: 0
+      speed: 0
+      damage: 0
+      attackCDSpeed: 0
     buildingName: "\u6563\u767C\u5149\u8292\u7684\u80FD\u91CF\u9AD4"
     buildingCode: 2
     attackCD: 1
     bulletSpeed: 10
     damage: 5
-    buildingEffect: 0
-    effectIndex: 0
-    effectValue: 50
     sale: 5
     createTime: 0
     buildingLevel: 2
@@ -68,12 +77,6 @@ MonoBehaviour:
   bullet: {fileID: 4077745145639377988, guid: ac2f5dc5581c402478fd09cc84aba277, type: 3}
   bulletCreatePosition: {fileID: 1112024944882543901}
   beClicked: 0
-  specialEffectInfluenceValue:
-    attackCDSpeedMagnification: 0
-    bulletSpeedMagnification: 0
-    damageMagnification: 0
-    cdMagnification: 0
-    moveSpeedMagnification: 0
   buffBuilding: 0
 --- !u!136 &8885512030031120164
 CapsuleCollider:

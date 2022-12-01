@@ -267,19 +267,68 @@ public class SpecialEffectSetting
     }
 }
 [Serializable]
-public class BuildingSpecialEffectInfluenceValue
-{
-    public float attackCDSpeedMagnification;
-    public float bulletSpeedMagnification;
-    public float damageMagnification;
-    public float cdMagnification;
-    public float moveSpeedMagnification;
-}
-
-[Serializable]
-public class MonsterSpecialEffectInfluenceValue
+public class SpecialEffectInfluenceValue
 {
     public float hp;
     public float defense;
     public float speed;
+    public float damage;
+    public float attackCDSpeed;
+
+    public void ChangeInfluenceValue(GameSpecialEffect gameSpecialEffect, bool add)
+    {
+        int weight = add ? 1 : -1;
+        switch (gameSpecialEffect.effect)
+        {
+            case GameSpecialEffect.SpecialEffect.降低攻擊目標的移動速度:
+                speed += gameSpecialEffect.effectValue * weight;
+                break;
+            case GameSpecialEffect.SpecialEffect.縮短附近防禦塔的攻擊間隔:
+                attackCDSpeed +=
+                    gameSpecialEffect.effectValue * weight * -1;
+                break;
+            case GameSpecialEffect.SpecialEffect.提升目標的攻擊傷害:
+                damage += gameSpecialEffect.effectValue * weight;
+                break;
+        }
+    }
+}
+[Serializable]
+public class GameAttribute
+{
+    public Attribute attribute;
+
+
+    public int level;
+    public enum Attribute
+    {
+        水,
+        火,
+        風,
+        光,
+        暗
+    }
+}
+[Serializable]
+public class GameSpecialEffect
+{
+    public SpecialEffect effect;
+    public float effectValue;
+    public enum SpecialEffect
+    {
+        無特殊效果,
+        降低攻擊目標的移動速度,
+        對攻擊目標造成持續傷害,
+        每打中一下目標縮短自身攻擊間隔,
+        縮短附近防禦塔的攻擊間隔,
+        降低目標的防禦,
+        提升目標的攻擊傷害
+    }
+    
+}
+public class GameItemInfo
+{
+    public GameAttribute Attribute;
+    public GameSpecialEffect SpecialEffect;
+    public SpecialEffectInfluenceValue SpecialEffectInfluenceValue = new SpecialEffectInfluenceValue();
 }

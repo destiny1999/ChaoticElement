@@ -87,24 +87,24 @@ public class IconController : MonoBehaviour
         buildingShowInfo.attackSpeedTMP.text = buildingSetting.attackCD + "";
 
         string effect = "";
-        switch (buildingSetting.buildingEffect)
+        switch (buildingSetting.SpecialEffect.effect)
         {
-            case BuildingSetting.BuildingEffect.無特殊效果:
+            case GameSpecialEffect.SpecialEffect.無特殊效果:
                 effect += "無特殊效果";
                 break;
-            case BuildingSetting.BuildingEffect.降低攻擊目標的移動速度:
+            case GameSpecialEffect.SpecialEffect.降低攻擊目標的移動速度:
                 effect += "降低攻擊目標的移動緩速";
                 break;
-            case BuildingSetting.BuildingEffect.對攻擊目標造成持續傷害:
+            case GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害:
                 effect += "對攻擊目標造成持續傷害";
                 break;
-            case BuildingSetting.BuildingEffect.每打中一下怪物縮短自身攻擊間隔:
+            case GameSpecialEffect.SpecialEffect.每打中一下目標縮短自身攻擊間隔:
                 effect += "每打中一下怪物縮短自身攻擊間隔";
                 break;
-            case BuildingSetting.BuildingEffect.縮短附近防禦塔的攻擊間隔:
+            case GameSpecialEffect.SpecialEffect.縮短附近防禦塔的攻擊間隔:
                 effect += "縮短附近防禦塔的攻擊間隔";
                 break;
-            case BuildingSetting.BuildingEffect.降低目標怪物的防禦:
+            case GameSpecialEffect.SpecialEffect.降低目標的防禦:
                 effect += "降低目標怪物的防禦";
                 break;
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     // Start is called before the first frame update
-    public BulletSetting bulletSetting;
+    [HideInInspector] public BulletSetting bulletSetting = new BulletSetting();
     GameObject targetEnemy;
     void Start()
     {
@@ -26,27 +26,15 @@ public class BulletController : MonoBehaviour
                             bulletSetting.speed * Time.deltaTime);
         }
     }
-    public void SetBulletInfo(float damage, BuildingSetting.BuildingEffect effect, float effectValue, float speed, Color color)
+    public void SetBulletInfo(float damage, GameAttribute attribute, GameSpecialEffect effect, 
+                                float speed, Color color)
     {
         bulletSetting.damage = damage;
-
-        switch (effect)
-        {
-            case BuildingSetting.BuildingEffect.無特殊效果:
-                break;
-            case BuildingSetting.BuildingEffect.降低攻擊目標的移動速度:
-                bulletSetting.effect = BulletSetting.BulletEffect.緩速;
-                break;
-            case BuildingSetting.BuildingEffect.對攻擊目標造成持續傷害:
-                bulletSetting.effect = BulletSetting.BulletEffect.持續傷害;
-                break;
-            case BuildingSetting.BuildingEffect.降低目標怪物的防禦:
-                bulletSetting.effect = BulletSetting.BulletEffect.降低防禦;
-                break;
-        }
-        bulletSetting.effectValue = effectValue;
+        bulletSetting.SpecialEffect = effect;
+        bulletSetting.Attribute = attribute;
         bulletSetting.speed = speed;
         this.GetComponent<Renderer>().material.color = color;
+
     }
     public void SetTargetEnemy(GameObject target)
     {
@@ -54,18 +42,9 @@ public class BulletController : MonoBehaviour
     }
 }
 [Serializable]
-public class BulletSetting
+public class BulletSetting : GameItemInfo
 {
     public float damage;
-    public BulletEffect effect;
-    public float effectValue;
     public float speed;
 
-    public enum BulletEffect
-    {
-        無特殊效果,
-        緩速,
-        持續傷害,
-        降低防禦
-    }
 }
