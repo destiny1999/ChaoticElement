@@ -8,31 +8,67 @@ public class EachMonster : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] MonsterSettingNew monsterSetting;
     Monster monster;
+    Transform nextTargetTransform;
+    bool dead = false;
     void Start()
     {
-        monster = new Monster(monsterSetting.name, monsterSetting.speed,
-                                        monsterSetting.damage, monsterSetting.attribute,
-                                        monsterSetting.attributeLevel);
+        monster = new Monster(monsterSetting);
+        nextTargetTransform = GameObject.Find("FirstMoveCheckPoint").gameObject.transform;
+    }
+    private void Update()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, nextTargetTransform.position,
+                            monster.speed * Time.deltaTime);
+        transform.LookAt(nextTargetTransform);
+        if (Vector3.Distance(transform.position, nextTargetTransform.position) <= 0.1f)
+        {
+            if (!nextTargetTransform.GetComponent<PathNodeController>().CheckLastNode())
+            {
+                nextTargetTransform = nextTargetTransform.GetComponent<PathNodeController>().
+                                        GetNext();
+            }
+            else
+            {
+                GameManager.Instance.SendKillStatus(monster);
+                Destroy(gameObject);
+            }
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.CompareTag("bullet"))
+        if (!dead)
         {
-            float damage = other.transform.GetComponent<BulletController>().bulletSetting.damage;
-            GameAttribute enemyAttribute = other.transform.GetComponent<BulletController>().
-                                                        bulletSetting.Attribute;
-
-            monster.GetHit(damage, enemyAttribute);
-            
-            if (other.transform.GetComponent<BulletController>().bulletSetting.SpecialEffect.effect !=
-                    GameSpecialEffect.SpecialEffect.無特殊效果)
+            if (other.transform.CompareTag("bullet"))
             {
-                monster.DealWithSpecialEffect(other.transform.GetComponent<BulletController>().bulletSetting.SpecialEffect);
-            }
+                float damage = other.transform.GetComponent<BulletController>().bulletSetting.damage;
+                GameAttribute enemyAttribute = other.transform.GetComponent<BulletController>().
+                                                            bulletSetting.Attribute;
 
-            //GetHurt(damage);
-            Destroy(other.gameObject);
+                damage = monster.CaculateDamage(damage, enemyAttribute);
+
+                if (other.transform.GetComponent<BulletController>().bulletSetting.SpecialEffect.effect !=
+                        GameSpecialEffect.SpecialEffect.無特殊效果)
+                {
+                    monster.DealWithSpecialEffect(other.transform.GetComponent<BulletController>().bulletSetting.SpecialEffect);
+                }
+                Destroy(other.gameObject);
+                monster.HP -= damage;
+                if (monster.HP <= 0)
+                {
+                    dead = true;
+                    GameManager.Instance.SendKillStatus(monster);
+                    bool drop = UnityEngine.Random.Range(0f, 100f) <= monster.elementDropRate ? true : false;
+                    if (drop) GameManager.Instance.CreateDropElement(monster.gameAttribute.attribute,
+                                                                        transform.localPosition);
+                    Destroy(gameObject);
+                }
+            }
         }
+        
+    }
+    public MonsterSettingNew GetMonsterSetting()
+    {
+        return monsterSetting;
     }
 }
 
@@ -43,7 +79,21 @@ public abstract class MonsterBase : GameItemInfo
     float _hp;
     float _speed;
     int _damage;
-    public abstract float GetHit(float damage, GameAttribute enemyAttribute);
+    float _killBonuse;
+    public abstract float CaculateDamage(float damage, GameAttribute enemyAttribute);
+    public float elementDropRate { get; set; }
+    GameSpecialEffect _specialEffect;
+    GameAttribute _attribute;
+    public GameSpecialEffect specialEffect
+    {
+        get => _specialEffect;
+        set => _specialEffect = value;
+    }
+    public GameAttribute gameAttribute
+    {
+        get => _attribute;
+        set => _attribute = value;
+    }
     public float HP
     {
         get => _hp;
@@ -63,6 +113,11 @@ public abstract class MonsterBase : GameItemInfo
     {
         get => _damage;
         set => _damage = value;
+    }
+    public float killBonuse
+    {
+        get => _killBonuse;
+        set => _killBonuse = value;
     }
     public void DealWithSpecialEffect(GameSpecialEffect _gameSpecialeffect)
     {
@@ -94,15 +149,19 @@ public abstract class MonsterBase : GameItemInfo
 
 public class Monster : MonsterBase
 {
-    public Monster(string _name, float _speed, int _damage, GameAttribute.Attribute _attribue, int _attribueLevel)
+    public Monster(MonsterSettingNew monsterSetting)
     {
-        this.monsterName = _name;
-        this.speed = _speed;
-        this.damage = _damage;
-        this.Attribute.attribute = _attribue;
-        this.Attribute.level = _attribueLevel;
+        this.monsterName = monsterSetting.name;
+        this.speed = monsterSetting.speed;
+        this.damage = monsterSetting.damage;
+        this.Attribute = monsterSetting.attribute;
+        this.HP = monsterSetting.hp;
+        this.killBonuse = monsterSetting.killBonus;
+        this.specialEffect = monsterSetting.specialEffect;
+        this.gameAttribute = monsterSetting.attribute;
+        this.elementDropRate = monsterSetting.elementDropRate;
     }
-    public override float GetHit(float damage, GameAttribute enemyAttribute)
+    public override float CaculateDamage(float damage, GameAttribute enemyAttribute)
     {
         float finalDamage = damage;
         float weight = 1 + (enemyAttribute.level - this.Attribute.level) * 0.5f;
@@ -123,9 +182,12 @@ public class Monster : MonsterBase
 [Serializable]
 public class MonsterSettingNew
 {
+    public float hp;
     public string name;
     public float speed;
     public int damage;
-    public GameAttribute.Attribute attribute;
-    public int attributeLevel;
+    public GameAttribute attribute;
+    public float killBonus;
+    public GameSpecialEffect specialEffect;
+    public float elementDropRate;
 }

@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(LevelManager))]
 public class GameManager : MonoBehaviour
 {
     [SerializeField] float eachWaveRestTime;
     [SerializeField] GameMode gameMode;
     [SerializeField] GameObject challengeMonster;
-    [SerializeField] List<LevelSetting> levelSettings;
+
     [SerializeField] List<GameObject> players;
     //[SerializeField] List<GameObject> allBuildings;
     [SerializeField] List<EachLevelBuildings> allElementsBuildings;
@@ -20,10 +21,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<SpecialEffectSetting> specialEffectSettings;
 
     [SerializeField] TextMeshProUGUI waveInfoTMP;
-
+    LevelManager levelManager;
+    int waveMonsters = 0;
+    int maxWave = 0;
+    [SerializeField] List<GameObject> dropElements;
     private void Awake()
     {
         Instance = this;
+        levelManager = this.GetComponent<LevelManager>();
     }
     //[SerializeField] List<LevelSetting> challengeLevelSetting;
     public enum GameMode
@@ -41,7 +46,8 @@ public class GameManager : MonoBehaviour
                 wave = 1;
                 break;
         }
-        StartCoroutine(WaveStart());
+        maxWave = levelManager.GetMaxLevel();
+        StartCoroutine(NextWave());
     }
 
     // Update is called once per frame
@@ -49,10 +55,24 @@ public class GameManager : MonoBehaviour
     {
         
     }
-    IEnumerator WaveStart()
+    IEnumerator NextWave()
     {
+        if(wave > maxWave)
+        {
+            print("completed");
+            yield break;
+        }
+        LevelSetting levelSetting = new LevelSetting();
         
-        LevelSetting levelSetting = levelSettings[wave];
+        if(gameMode == GameMode.normal)
+        {
+            levelSetting = levelManager.GetLevelInfo(wave, false);
+        }
+        else
+        {
+            levelSetting = levelManager.GetLevelInfo(0, true);
+        }
+        waveMonsters = levelSetting.monsterNums;
         ShowWaveInfo(levelSetting.monster);
         for (int i = 0; i<levelSetting.monsterNums; i++)
         {
@@ -61,48 +81,45 @@ public class GameManager : MonoBehaviour
     }
     void ShowWaveInfo(GameObject targetMonster)
     {
-        
-        string monsterName = targetMonster.GetComponent<MonsterController>().
-                                GetMonsterSetting().monsterName;
+        MonsterSettingNew monsterSetting = targetMonster.GetComponent<EachMonster>().GetMonsterSetting();
+        string monsterName = monsterSetting.name;
 
+        /*
         List<MonsterSetting.SpecialEffect> specialEffects = 
             targetMonster.GetComponent<MonsterController>().GetMonsterSetting().specialEffects;
-
+        */
         string monsterEffect = "";
-
-        for(int i = 0; i< specialEffects.Count; i++)
+        switch (monsterSetting.specialEffect.effect)
         {
-            switch (specialEffects[i])
-            {
-                case MonsterSetting.SpecialEffect.無特殊效果:
-                    monsterEffect += "沒有任何能力 ";
-                    break;
-                case MonsterSetting.SpecialEffect.水屬性抗性:
-                    monsterEffect += "水屬性抗性 ";
-                    break;
-                case MonsterSetting.SpecialEffect.火屬性抗性:
-                    monsterEffect += "火屬性抗性 ";
-                    break;
-                case MonsterSetting.SpecialEffect.風屬性抗性:
-                    monsterEffect += "風屬性抗性 ";
-                    break;
-                case MonsterSetting.SpecialEffect.水火風屬性抗性:
-                    monsterEffect += "水火風屬性抗性 ";
-                    break;
-                case MonsterSetting.SpecialEffect.暗屬性抗性:
-                    monsterEffect += "暗屬性抗性 ";
-                    break;
-                case MonsterSetting.SpecialEffect.水屬性一擊護頓:
-                    monsterEffect += "水屬性一擊護頓 ";
-                    break;
-                case MonsterSetting.SpecialEffect.火屬性一擊護頓:
-                    monsterEffect += "火屬性一擊護頓 ";
-                    break;
-                case MonsterSetting.SpecialEffect.風屬性一擊護頓:
-                    monsterEffect += "風屬性一擊護頓 ";
-                    break;
-            }
+            case GameSpecialEffect.SpecialEffect.無特殊效果:
+                monsterEffect += "沒有任何能力 ";
+                break;
+            case GameSpecialEffect.SpecialEffect.水屬性抗性:
+                monsterEffect += "水屬性抗性 ";
+                break;
+            case GameSpecialEffect.SpecialEffect.火屬性抗性:
+                monsterEffect += "火屬性抗性 ";
+                break;
+            case GameSpecialEffect.SpecialEffect.風屬性抗性:
+                monsterEffect += "風屬性抗性 ";
+                break;
+            case GameSpecialEffect.SpecialEffect.水火風屬性抗性:
+                monsterEffect += "水火風屬性抗性 ";
+                break;
+            case GameSpecialEffect.SpecialEffect.暗屬性抗性:
+                monsterEffect += "暗屬性抗性 ";
+                break;
+            case GameSpecialEffect.SpecialEffect.水屬性一擊護頓:
+                monsterEffect += "水屬性一擊護頓 ";
+                break;
+            case GameSpecialEffect.SpecialEffect.火屬性一擊護頓:
+                monsterEffect += "火屬性一擊護頓 ";
+                break;
+            case GameSpecialEffect.SpecialEffect.風屬性一擊護頓:
+                monsterEffect += "風屬性一擊護頓 ";
+                break;
         }
+        
         waveInfoTMP.text = monsterName + "\n" + monsterEffect;
         waveInfoTMP.gameObject.SetActive(true);
         StartCoroutine(HideGameObject(waveInfoTMP.gameObject, 5f));
@@ -120,8 +137,8 @@ public class GameManager : MonoBehaviour
     {
         GameObject newMonster = GameObject.Instantiate(monster);
         newMonster.SetActive(false);
-        int areaIndex = monster.GetComponent<MonsterController>().GetMonsterSetting().areaIndex;
-        newMonster.transform.position = players[areaIndex].GetComponent<PlayerController>().
+        //int areaIndex = monster.GetComponent<MonsterController>().GetMonsterSetting().areaIndex;
+        newMonster.transform.position = players[0].GetComponent<PlayerController>().
                                             GetMonsterCreatePosition().position;
         newMonster.transform.SetParent(monsterManager.transform);
         newMonster.SetActive(true);
@@ -136,20 +153,27 @@ public class GameManager : MonoBehaviour
     {
 
     }
-    public void SendKillStatus(MonsterSetting monsterSetting)
+    public void SendKillStatus(Monster monster)
     {
-        if(monsterSetting.hp <= 0)
+        if(monster.HP <= 0)
         {
-            players[monsterSetting.areaIndex].GetComponent<PlayerController>().
-                AddMp(monsterSetting.killBonus);
-            players[monsterSetting.areaIndex].GetComponent<PlayerController>().
-                AddScore(monsterSetting.killBonus);
+            players[0].GetComponent<PlayerController>().
+                AddMp(monster.killBonuse);
+            players[0].GetComponent<PlayerController>().
+                AddScore(wave);
         }
         else
         {
-            players[monsterSetting.areaIndex].GetComponent<PlayerController>().
-                SubHP(monsterSetting.punish);
+            players[0].GetComponent<PlayerController>().
+                SubHP(monster.damage);
         }
+        waveMonsters--;
+        if(waveMonsters == 0)
+        {
+            wave++;
+            StartCoroutine(NextWave());
+        }
+        /*
         if(gameMode == GameMode.challenge)
         {
 
@@ -169,9 +193,34 @@ public class GameManager : MonoBehaviour
             newPowerfulMonster.GetComponent<MonsterController>().
                 SetMonsterSetting(newMonsterSetting);
             newPowerfulMonster.SetActive(true);
-        }
+        }*/
     }
-    
+    public void CreateDropElement(GameAttribute.Attribute attribute, Vector3 dropPosition)
+    {
+        GameObject dropElement = null;
+        switch (attribute)
+        {
+            case GameAttribute.Attribute.無:
+                dropElement = Instantiate(dropElements[0]);
+                break;
+            case GameAttribute.Attribute.水:
+                dropElement = Instantiate(dropElements[1]);
+                break;
+            case GameAttribute.Attribute.火:
+                dropElement = Instantiate(dropElements[2]);
+                break;
+            case GameAttribute.Attribute.風:
+                dropElement = Instantiate(dropElements[3]);
+                break;
+            case GameAttribute.Attribute.光:
+                dropElement = Instantiate(dropElements[4]);
+                break;
+            case GameAttribute.Attribute.暗:
+                dropElement = Instantiate(dropElements[5]);
+                break;
+        }
+        dropElement.transform.position = dropPosition;
+    }
     public GameObject GetBuildingGameObject(int level, int buildingIndex)
     {
         return allElementsBuildings[level].buildings[buildingIndex];
@@ -213,12 +262,7 @@ public class GameManager : MonoBehaviour
         return specialEffectSettings[statusCode];
     }
 }
-[Serializable]
-public class LevelSetting
-{
-    public int monsterNums;
-    public GameObject monster;
-}
+
 [Serializable]
 public class EachLevelBuildings
 {
@@ -302,6 +346,7 @@ public class GameAttribute
     public int level;
     public enum Attribute
     {
+        無,
         水,
         火,
         風,
@@ -322,7 +367,15 @@ public class GameSpecialEffect
         每打中一下目標縮短自身攻擊間隔,
         縮短附近防禦塔的攻擊間隔,
         降低目標的防禦,
-        提升目標的攻擊傷害
+        提升目標的攻擊傷害,
+        水屬性抗性,
+        火屬性抗性,
+        風屬性抗性,
+        水火風屬性抗性,
+        暗屬性抗性,
+        水屬性一擊護頓,
+        火屬性一擊護頓,
+        風屬性一擊護頓,
     }
     
 }

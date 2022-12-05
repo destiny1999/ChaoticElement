@@ -31,7 +31,7 @@ public class MonsterController : MonoBehaviour
             }
             else
             {
-                GameManager.Instance.SendKillStatus(monsterSetting);
+                //GameManager.Instance.SendKillStatus(monsterSetting);
                 Destroy(gameObject);
             }
         }
@@ -42,7 +42,7 @@ public class MonsterController : MonoBehaviour
         if(monsterSetting.hp <= 0 && !dead)
         {
             dead = true;
-            GameManager.Instance.SendKillStatus(monsterSetting);
+            //GameManager.Instance.SendKillStatus(monsterSetting);
             Destroy(gameObject);
         }
     }

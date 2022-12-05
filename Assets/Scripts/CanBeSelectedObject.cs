@@ -22,7 +22,7 @@ public class CanBeSelectedObject : MonoBehaviour
         switch (type)
         {
             case 0:// click building
-                print("be clicked");
+                //print("be clicked");
                 BuildingSetting buildingSetting = this.GetComponentInParent<BuildingController>().buildingSetting;
                 int areaIndex = buildingSetting.areaIndex;
                 GameManager.Instance.GetSelfPlayer(areaIndex).GetComponent<PlayerController>().
