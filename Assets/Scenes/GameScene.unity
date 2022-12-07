@@ -3915,6 +3915,14 @@ MonoBehaviour:
     monster: {fileID: 3147254460034786337, guid: 131b4eba9fd660340bfb0205e7e18e1a, type: 3}
   - monsterNums: 10
     monster: {fileID: 3147254460034786337, guid: f181ebf35ce6058499a1a9893a11edab, type: 3}
+  - monsterNums: 20
+    monster: {fileID: 3147254460034786337, guid: e5b45dd5bae16e24a83f79fb9efff4ac, type: 3}
+  - monsterNums: 15
+    monster: {fileID: 3147254460034786337, guid: 2cd18bfffaf9d7648a889267138c0374, type: 3}
+  - monsterNums: 15
+    monster: {fileID: 3147254460034786337, guid: a516f1bbec0993643a1d2b6d45834ab8, type: 3}
+  - monsterNums: 30
+    monster: {fileID: 3147254460034786337, guid: 4e81f4c56b8a6d74299314a7ed1cd693, type: 3}
   infinityLevelSetting:
   - monsterNums: 5
     monster: {fileID: 3147254460034786337, guid: 131b4eba9fd660340bfb0205e7e18e1a, type: 3}
@@ -5644,6 +5652,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144517592}
   m_CullTransparentMesh: 1
+--- !u!1 &1215932394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1215932395}
+  m_Layer: 0
+  m_Name: HPMonitor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1215932395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215932394}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1225036353
 PrefabInstance:
   m_ObjectHideFlags: 0

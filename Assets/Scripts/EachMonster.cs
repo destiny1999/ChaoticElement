@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(HPMonitorController))]
 public class EachMonster : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -53,6 +54,7 @@ public class EachMonster : MonoBehaviour
                 }
                 Destroy(other.gameObject);
                 monster.HP -= damage;
+                this.GetComponent<HPMonitorController>().ChangeHpShowValue(monster.HP / monsterSetting.hp);
                 if (monster.HP <= 0)
                 {
                     dead = true;
