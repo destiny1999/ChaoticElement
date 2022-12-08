@@ -46,5 +46,5 @@ public class BulletSetting : GameItemInfo
 {
     public float damage;
     public float speed;
-
+    public bool used = false;
 }

@@ -20,13 +20,13 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
+  m_AmbientSkyColor: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 1}
   m_AmbientEquatorColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientGroundColor: {r: 0.4811321, g: 0.40760058, b: 0.26053756, a: 1}
   m_AmbientIntensity: 3.22
-  m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.41960785, g: 0.47843137, b: 0.627451, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_AmbientMode: 3
+  m_SubtractiveShadowColor: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -658,7 +658,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '  '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e2d89a39bc51ddb46aa569e05800eba9, type: 2}
   m_sharedMaterial: {fileID: -174787681956259423, guid: e2d89a39bc51ddb46aa569e05800eba9, type: 2}
@@ -3148,7 +3148,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -3188,7 +3188,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 2
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -3206,14 +3206,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.08, y: 3, z: 0}
+  m_LocalRotation: {x: 0.31200904, y: -0, z: -0, w: 0.95007914}
+  m_LocalPosition: {x: -5.12, y: 6.49, z: 3.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 36.361, y: 0, z: 0}
 --- !u!1 &715901794
 GameObject:
   m_ObjectHideFlags: 0
@@ -3858,6 +3858,12 @@ MonoBehaviour:
     - {fileID: 588895519847924728, guid: 397ef1fb8905b9d46983ac0278c029c6, type: 3}
     - {fileID: 1695059907844816581, guid: 635089a6e7390a84f86634f17ed82045, type: 3}
     - {fileID: 588895519847924728, guid: a74c00c3520fb4449800ca4eed9ab30d, type: 3}
+  - buildings:
+    - {fileID: 1976926351469038685, guid: 4cbbef785f0f2ee4e9abffb08cc2b281, type: 3}
+    - {fileID: 2300718934719978689, guid: ae84e67d298f6b349a8074954f973f43, type: 3}
+    - {fileID: 588895519847924728, guid: 119accd0183608a46b68efe7124c5fe8, type: 3}
+    - {fileID: 1695059907844816581, guid: 2479beccd7bc37b40aa4a1a19adfaad9, type: 3}
+    - {fileID: 588895519847924728, guid: ed29127b35567fe4cb12b2ac6b37a9ba, type: 3}
   monsterManager: {fileID: 1855442197}
   allLevelCombineInfo:
   - eachLevelCombineInfo:
@@ -3881,7 +3887,27 @@ MonoBehaviour:
       canCombineInfo:
       - code2: 4
         targetCode: 4
-  - eachLevelCombineInfo: []
+  - eachLevelCombineInfo:
+    - code1: 0
+      canCombineInfo:
+      - code2: 0
+        targetCode: 0
+    - code1: 1
+      canCombineInfo:
+      - code2: 1
+        targetCode: 1
+    - code1: 2
+      canCombineInfo:
+      - code2: 2
+        targetCode: 2
+    - code1: 3
+      canCombineInfo:
+      - code2: 3
+        targetCode: 3
+    - code1: 4
+      canCombineInfo:
+      - code2: 4
+        targetCode: 4
   - eachLevelCombineInfo: []
   - eachLevelCombineInfo: []
   specialEffectSettings:
@@ -3898,6 +3924,8 @@ MonoBehaviour:
   - {fileID: 8838622949017224580, guid: ca0aefb414d189b4db686d3669cad740, type: 3}
   - {fileID: 2586571311433426048, guid: e6962874c238e5b4d87f5a4fba1b7829, type: 3}
   - {fileID: 8045336045590236631, guid: e18d4efd3bbdfad4dabac605200085c9, type: 3}
+  buildingManager: {fileID: 1691224282}
+  GameExecuteSpeed: 2
 --- !u!114 &770878235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4355,7 +4383,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: ' '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e2d89a39bc51ddb46aa569e05800eba9, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4852,7 +4880,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -8542,6 +8570,7 @@ MonoBehaviour:
     mpTMP: {fileID: 267725906}
   IconController: {fileID: 1266618364}
   cursorCombineTexture: {fileID: 2800000, guid: b5fe112f45dc7d84f936964cb08d1ea8, type: 3}
+  testMode: 0
 --- !u!1 &1855442197
 GameObject:
   m_ObjectHideFlags: 0

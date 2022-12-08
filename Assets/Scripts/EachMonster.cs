@@ -10,16 +10,22 @@ public class EachMonster : MonoBehaviour
     [SerializeField] MonsterSettingNew monsterSetting;
     Monster monster;
     Transform nextTargetTransform;
-    bool dead = false;
+    public bool dead = false;
+    public bool notMove = false;
+    bool burning = false;
     void Start()
     {
         monster = new Monster(monsterSetting);
+        if (notMove) return;
         nextTargetTransform = GameObject.Find("FirstMoveCheckPoint").gameObject.transform;
     }
     private void Update()
     {
+        if (notMove) return;
+        float moveSpeed = monster.speed * (1 - (monster.SpecialEffectInfluenceValue.speed / 100f));
         transform.position = Vector3.MoveTowards(transform.position, nextTargetTransform.position,
-                            monster.speed * Time.deltaTime);
+                            moveSpeed * Time.deltaTime);
+        
         transform.LookAt(nextTargetTransform);
         if (Vector3.Distance(transform.position, nextTargetTransform.position) <= 0.1f)
         {
@@ -34,39 +40,67 @@ public class EachMonster : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        
     }
     private void OnTriggerEnter(Collider other)
     {
         if (!dead)
         {
-            if (other.transform.CompareTag("bullet"))
+            if (other.transform.CompareTag("bullet") && 
+                    !other.GetComponent<BulletController>().bulletSetting.used)
             {
+                other.GetComponent<BulletController>().bulletSetting.used = true;
                 float damage = other.transform.GetComponent<BulletController>().bulletSetting.damage;
                 GameAttribute enemyAttribute = other.transform.GetComponent<BulletController>().
                                                             bulletSetting.Attribute;
 
-                damage = monster.CaculateDamage(damage, enemyAttribute);
+                if (other.transform.GetComponent<BulletController>().bulletSetting.
+                        SpecialEffect.effect != GameSpecialEffect.SpecialEffect.無特殊效果)
+                {
+                    monster.DealWithSpecialEffectValue(other.transform.
+                        GetComponent<BulletController>().bulletSetting.SpecialEffect);
 
-                if (other.transform.GetComponent<BulletController>().bulletSetting.SpecialEffect.effect !=
-                        GameSpecialEffect.SpecialEffect.無特殊效果)
-                {
-                    monster.DealWithSpecialEffect(other.transform.GetComponent<BulletController>().bulletSetting.SpecialEffect);
+                    if(monster.SpecialEffectInfluenceValue.hp != 0 && !burning)
+                    {
+                        StartCoroutine(DealWithBurn());
+                    }
                 }
+                damage = monster.CaculateDamage(damage, enemyAttribute);
                 Destroy(other.gameObject);
-                monster.HP -= damage;
-                this.GetComponent<HPMonitorController>().ChangeHpShowValue(monster.HP / monsterSetting.hp);
-                if (monster.HP <= 0)
-                {
-                    dead = true;
-                    GameManager.Instance.SendKillStatus(monster);
-                    bool drop = UnityEngine.Random.Range(0f, 100f) <= monster.elementDropRate ? true : false;
-                    if (drop) GameManager.Instance.CreateDropElement(monster.gameAttribute.attribute,
-                                                                        transform.localPosition);
-                    Destroy(gameObject);
-                }
+                ReduceHP(damage);
             }
         }
         
+    }
+    IEnumerator DealWithBurn()
+    {
+        burning = true;
+        float time = 1;
+        while(monster.HP > 0)
+        {
+            time -= Time.deltaTime * 1;
+            if(time <= 0)
+            {
+                ReduceHP(monster.SpecialEffectInfluenceValue.hp);
+                time = 1;
+                print("reduce because of burn");
+            }
+            yield return null;
+        }
+    }
+    void ReduceHP(float damage)
+    {
+        monster.HP -= damage;
+        this.GetComponent<HPMonitorController>().ChangeHpShowValue(monster.HP / monsterSetting.hp);
+        if (monster.HP <= 0)
+        {
+            dead = true;
+            GameManager.Instance.SendKillStatus(monster);
+            bool drop = UnityEngine.Random.Range(0f, 100f) <= monster.elementDropRate ? true : false;
+            if (drop) GameManager.Instance.CreateDropElement(monster.Attribute.attribute,
+                                                                transform.localPosition);
+            Destroy(gameObject);
+        }
     }
     public MonsterSettingNew GetMonsterSetting()
     {
@@ -76,26 +110,14 @@ public class EachMonster : MonoBehaviour
 
 public abstract class MonsterBase : GameItemInfo
 {
-    public int test;
     string _name;
     float _hp;
     float _speed;
     int _damage;
     float _killBonuse;
+    float _defense;
     public abstract float CaculateDamage(float damage, GameAttribute enemyAttribute);
     public float elementDropRate { get; set; }
-    GameSpecialEffect _specialEffect;
-    GameAttribute _attribute;
-    public GameSpecialEffect specialEffect
-    {
-        get => _specialEffect;
-        set => _specialEffect = value;
-    }
-    public GameAttribute gameAttribute
-    {
-        get => _attribute;
-        set => _attribute = value;
-    }
     public float HP
     {
         get => _hp;
@@ -121,28 +143,33 @@ public abstract class MonsterBase : GameItemInfo
         get => _killBonuse;
         set => _killBonuse = value;
     }
-    public void DealWithSpecialEffect(GameSpecialEffect _gameSpecialeffect)
+    public float defense
     {
-        
-        switch (_gameSpecialeffect.effect)
+        get => _defense;
+        set => _defense = value;
+    }
+    public void DealWithSpecialEffectValue(GameSpecialEffect bulletSpecialEffect)
+    {
+        switch (bulletSpecialEffect.effect)
         {
             case GameSpecialEffect.SpecialEffect.降低攻擊目標的移動速度:
-                SpecialEffectInfluenceValue.speed = this.SpecialEffect.effectValue >
-                                                        SpecialEffectInfluenceValue.speed ?
-                                                        this.SpecialEffect.effectValue :
-                                                        SpecialEffectInfluenceValue.speed;
+                SpecialEffectInfluenceValue.speed = SpecialEffectInfluenceValue.speed >
+                                                        bulletSpecialEffect.effectValue ?
+                                                        SpecialEffectInfluenceValue.speed :
+                                                        bulletSpecialEffect.effectValue;
                 break;
             case GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害:
-                SpecialEffectInfluenceValue.hp = this.SpecialEffect.effectValue >
-                                                    SpecialEffectInfluenceValue.hp ?
-                                                    this.SpecialEffect.effectValue :
-                                                    SpecialEffectInfluenceValue.hp;
+                SpecialEffectInfluenceValue.hp = SpecialEffectInfluenceValue.hp >
+                                                    bulletSpecialEffect.effectValue ?
+                                                    SpecialEffectInfluenceValue.hp :
+                                                    bulletSpecialEffect.effectValue;
+                //Debug.Log("hp influence");
                 break;
             case GameSpecialEffect.SpecialEffect.降低目標的防禦:
-                SpecialEffectInfluenceValue.defense = this.SpecialEffect.effectValue >
-                                                    SpecialEffectInfluenceValue.defense ?
-                                                    this.SpecialEffect.effectValue :
-                                                    SpecialEffectInfluenceValue.defense;
+                SpecialEffectInfluenceValue.defense = SpecialEffectInfluenceValue.defense >
+                                                    bulletSpecialEffect.effectValue ?
+                                                    SpecialEffectInfluenceValue.defense :
+                                                    bulletSpecialEffect.effectValue;
                 break;
         }
 
@@ -159,9 +186,10 @@ public class Monster : MonsterBase
         this.Attribute = monsterSetting.attribute;
         this.HP = monsterSetting.hp;
         this.killBonuse = monsterSetting.killBonus;
-        this.specialEffect = monsterSetting.specialEffect;
-        this.gameAttribute = monsterSetting.attribute;
+        this.SpecialEffect = monsterSetting.specialEffect;
+        this.Attribute = monsterSetting.attribute;
         this.elementDropRate = monsterSetting.elementDropRate;
+        this.defense = monsterSetting.defense;
     }
     public override float CaculateDamage(float damage, GameAttribute enemyAttribute)
     {
@@ -176,6 +204,8 @@ public class Monster : MonsterBase
                 }
                 break;
         }
+        float finalDefense = this.defense - this.SpecialEffectInfluenceValue.defense;
+        finalDamage -= finalDefense;
         return finalDamage;
     }
 }
@@ -192,4 +222,5 @@ public class MonsterSettingNew
     public float killBonus;
     public GameSpecialEffect specialEffect;
     public float elementDropRate;
+    public float defense;
 }

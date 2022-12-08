@@ -33,9 +33,10 @@ public class PlayerController : MonoBehaviour
     GameObject levelUpTarget = null;
     GameObject beAbsorbTarget = null;
     BuildingSetting willLevelUpBuildingSetting;
+    public bool testMode = false;
     void Start()
     {
-
+        if (testMode) mp = 100000;
         for(int i = 0; i<buildingCreateInfos.Count; i++)
         {
             buildingCreateInfoDictionry.Add(buildingCreateInfos[i].createString,
@@ -200,6 +201,9 @@ public class PlayerController : MonoBehaviour
         building.GetComponent<BuildingController>().SetPutted();
         building.GetComponent<BuildingController>().buildingSetting.areaIndex = areaIndex;
         building.GetComponent<BuildingController>().SetUsePosition(usedBuildingPosition);
+
+        CheckNewBuildingMagicPetBuff(building);
+
         // close building's judgement quad.
         Transform[] judgementQuad = building.transform.GetComponentsInChildren<Transform>().
                                         Where(quad => quad.transform.
@@ -225,6 +229,7 @@ public class PlayerController : MonoBehaviour
         {
             quad.gameObject.SetActive(false);
         }
+        CheckNewBuildingMagicPetBuff(newBuilding);
     }
     IEnumerator MoveAndBuild(GameObject building)
     {
@@ -302,7 +307,8 @@ public class PlayerController : MonoBehaviour
                     int level = willLevelUpBuildingSetting.buildingLevel;
                     GameObject newBuilding = GameManager.Instance.
                                                 GetNewLevelUpBuilding(level ,code1, code2);
-                    CombineTwoBuilding(newBuilding);
+
+                    CombineTwoBuilding(newBuilding);    
                 }
                 else
                 {
@@ -310,6 +316,14 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+    void CheckNewBuildingMagicPetBuff(GameObject newBuilding)
+    {
+        int buffNums = GameObject.Find("MagicPet").GetComponent<MagicPetController>().
+                                    GetAttributePowerNums(newBuilding.
+                                        GetComponent<BuildingController>().buildingSetting.
+                                            Attribute.attribute);
+        newBuilding.GetComponent<BuildingController>().AddMagicPetBuff(buffNums);
     }
     void CombineTwoBuilding(GameObject newBuilding)
     {
@@ -328,7 +342,7 @@ public class PlayerController : MonoBehaviour
         Destroy(levelUpTarget.gameObject);
         Destroy(beAbsorbTarget.gameObject);
         Vector2 hotspot = Vector2.zero;
-        Debug.Log("after that should let beabsorb buildign position to can build position");
+        //Debug.Log("after that should let beabsorb buildign position to can build position");
         Cursor.SetCursor(null, hotspot, CursorMode.Auto);
         combineStatus = false;
     }

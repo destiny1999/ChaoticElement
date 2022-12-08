@@ -28,6 +28,11 @@ public class BuildingController : MonoBehaviour
 
     private void Awake()
     {
+        //print("initial orignal");
+        buildingSetting.originalDamage = buildingSetting.damage;
+    }
+    private void Start()
+    {
         
     }
 
@@ -114,10 +119,11 @@ public class BuildingController : MonoBehaviour
     }
     IEnumerator AttackEnemy()
     {
+
         float attackTime = buildingSetting.attackCD *
                             (1 + buildingSetting.SpecialEffectInfluenceValue.
                                 attackCDSpeed / 100f);
-        
+        int reduceAttackTimeWeight = 1;
         while (targetEnemy != null)
         {
             transform.LookAt(targetEnemy.transform);
@@ -126,7 +132,7 @@ public class BuildingController : MonoBehaviour
             {
                 GameObject newbullet = Instantiate(bullet);
                 newbullet.transform.position = bulletCreatePosition.position;
-                Color bulletColor = this.transform.Find("Building").GetComponent<Renderer>().material.color;
+                Color bulletColor = buildingSetting.bulletColor;
                 //Debug.Break();
                 newbullet.GetComponent<BulletController>().
                     SetBulletInfo(buildingSetting.damage,
@@ -140,6 +146,14 @@ public class BuildingController : MonoBehaviour
                 attackTime = buildingSetting.attackCD *
                             (1 + buildingSetting.SpecialEffectInfluenceValue.
                                 attackCDSpeed / 100f);
+                if (buildingSetting.Attribute.attribute == GameAttribute.Attribute.­· &&
+                        buildingSetting.Attribute.level >= 3)
+                {
+                    attackTime -= buildingSetting.SpecialEffect.effectValue * 
+                                    reduceAttackTimeWeight;
+                    reduceAttackTimeWeight++;
+                    if (attackTime < 0) attackTime = 0;
+                }
             }
             yield return null;
         }
@@ -200,12 +214,21 @@ public class BuildingController : MonoBehaviour
     {
         if (other.transform.CompareTag("enemy") && targetQueue.Count > 0)
         {
+            StartCoroutine(CheckEnemyTarget());
             targetQueue.Dequeue();
             if (targetQueue.Count == 0)
             {
                 targetEnemy = null;
                 transform.rotation = Quaternion.identity;
             }
+        }
+    }
+    IEnumerator CheckEnemyTarget()
+    {
+        while(targetQueue.Count > 0 && targetQueue.Peek() == null)
+        {
+            targetQueue.Dequeue();
+            yield return null;
         }
     }
     public void SetClickStatus(bool status)
@@ -216,6 +239,11 @@ public class BuildingController : MonoBehaviour
     {
         return beClicked;
     }
+    /// <summary>
+    /// the buff from building
+    /// </summary>
+    /// <param name="gameSpecialEffect"></param>
+    /// <param name="buff"></param>
     public void AddStatus(GameSpecialEffect gameSpecialEffect, bool buff)
     {
         if (buff) buffSet.Add(gameSpecialEffect.effect);
@@ -223,6 +251,17 @@ public class BuildingController : MonoBehaviour
         buildingSetting.SpecialEffectInfluenceValue.
             ChangeInfluenceValue(gameSpecialEffect ,true);
         //ChangeInfluenceValue(gameSpecialEffect, true);
+    }
+    /// <summary>
+    /// the magic pet collect power to buff specific buliding
+    /// </summary>
+    public void AddMagicPetBuff(int nums)
+    {
+        //print(buildingSetting.originalDamage);
+        
+
+        buildingSetting.damage = buildingSetting.originalDamage + 
+                                    buildingSetting.originalDamage / 2 * nums;
     }
     public void RemoveStatus(GameSpecialEffect gameSpecialEffect, bool buff)
     {
@@ -240,13 +279,14 @@ public class BuildingSetting : GameItemInfo
     public int buildingCode;
     public float attackCD;
     public float bulletSpeed;
+    [HideInInspector]public float originalDamage;
     public float damage;
     public int sale;
     public float createTime;
     public int buildingLevel;
     public int areaIndex;
     public List<int> buildingCanCombineCode;
-    
+    public Color bulletColor;
 
 }
 [Serializable]

@@ -98,7 +98,7 @@ public class IconController : MonoBehaviour
             case GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害:
                 effect += "對攻擊目標造成持續傷害";
                 break;
-            case GameSpecialEffect.SpecialEffect.每打中一下目標縮短自身攻擊間隔:
+            case GameSpecialEffect.SpecialEffect.攻擊後縮短自身攻擊間隔:
                 effect += "每打中一下怪物縮短自身攻擊間隔";
                 break;
             case GameSpecialEffect.SpecialEffect.縮短附近防禦塔的攻擊間隔:

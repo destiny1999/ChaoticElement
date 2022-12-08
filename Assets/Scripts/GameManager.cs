@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
     int waveMonsters = 0;
     int maxWave = 0;
     [SerializeField] List<GameObject> dropElements;
+    [SerializeField] GameObject buildingManager;
+
+    public float GameExecuteSpeed = 1f;
     private void Awake()
     {
         Instance = this;
@@ -53,7 +56,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Time.timeScale = GameExecuteSpeed;
     }
     IEnumerator NextWave()
     {
@@ -261,6 +264,24 @@ public class GameManager : MonoBehaviour
     {
         return specialEffectSettings[statusCode];
     }
+    /// <summary>
+    /// the nums mean how many power the magic pet this attribute had
+    /// </summary>
+    /// <param name="attribute"></param>
+    /// <param name="nums"></param>
+    public void SetMagicPetBuff(GameAttribute.Attribute attribute, int nums)
+    {
+        BuildingController[] buildings = buildingManager.transform.GetComponentsInChildren<BuildingController>();
+        //print(buildings.Length);
+        for(int i = 0; i<buildings.Length; i++)
+        {
+            if (buildings[i].buildingSetting.Attribute.attribute == attribute)
+            {
+                buildings[i].AddMagicPetBuff(nums);
+            }
+            
+        }
+    }
 }
 
 [Serializable]
@@ -364,7 +385,7 @@ public class GameSpecialEffect
         無特殊效果,
         降低攻擊目標的移動速度,
         對攻擊目標造成持續傷害,
-        每打中一下目標縮短自身攻擊間隔,
+        攻擊後縮短自身攻擊間隔,
         縮短附近防禦塔的攻擊間隔,
         降低目標的防禦,
         提升目標的攻擊傷害,

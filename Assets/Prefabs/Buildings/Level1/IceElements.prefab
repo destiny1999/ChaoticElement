@@ -52,7 +52,7 @@ MonoBehaviour:
   - {fileID: 2300718934672354611}
   buildingSetting:
     Attribute:
-      attribute: 0
+      attribute: 2
       level: 1
     SpecialEffect:
       effect: 0
@@ -67,12 +67,14 @@ MonoBehaviour:
     buildingCode: 1
     attackCD: 1
     bulletSpeed: 10
+    originalDamage: 0
     damage: 5
-    sale: 5
+    sale: 1
     createTime: 0
     buildingLevel: 1
     areaIndex: 0
     buildingCanCombineCode: 01000000
+    bulletColor: {r: 0.22456387, g: 0.27793613, b: 0.7830189, a: 1}
   attackDetectRange: {fileID: 0}
   bullet: {fileID: 4077745145639377988, guid: ac2f5dc5581c402478fd09cc84aba277, type: 3}
   bulletCreatePosition: {fileID: 8982352339712737866}
