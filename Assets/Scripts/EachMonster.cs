@@ -205,7 +205,8 @@ public class Monster : MonsterBase
                 break;
         }
         float finalDefense = this.defense - this.SpecialEffectInfluenceValue.defense;
-        finalDamage -= finalDefense;
+        finalDamage = Mathf.Clamp(finalDamage - finalDefense, 0, finalDamage);
+        //finalDamage -= finalDefense;
         return finalDamage;
     }
 }
