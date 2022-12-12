@@ -204,7 +204,8 @@ public class GameManager : MonoBehaviour
         switch (attribute)
         {
             case GameAttribute.Attribute.µL:
-                dropElement = Instantiate(dropElements[0]);
+                int randomElement = UnityEngine.Random.Range(0, dropElements.Count);
+                dropElement = Instantiate(dropElements[randomElement]);
                 break;
             case GameAttribute.Attribute.¤ô:
                 dropElement = Instantiate(dropElements[1]);

@@ -83,7 +83,7 @@ public class EachMonster : MonoBehaviour
             {
                 ReduceHP(monster.SpecialEffectInfluenceValue.hp);
                 time = 1;
-                print("reduce because of burn");
+                //print("reduce because of burn");
             }
             yield return null;
         }

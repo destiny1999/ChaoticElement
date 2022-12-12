@@ -52,7 +52,7 @@ MonoBehaviour:
   - {fileID: 2300718934672354611}
   buildingSetting:
     Attribute:
-      attribute: 2
+      attribute: 1
       level: 1
     SpecialEffect:
       effect: 0

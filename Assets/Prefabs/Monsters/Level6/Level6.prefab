@@ -173,7 +173,7 @@ MonoBehaviour:
     specialEffect:
       effect: 0
       effectValue: 0
-    elementDropRate: 0
+    elementDropRate: 10
     defense: 5
   dead: 0
   notMove: 0
