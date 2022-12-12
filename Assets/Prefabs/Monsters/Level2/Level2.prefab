@@ -169,7 +169,7 @@ MonoBehaviour:
     attribute:
       attribute: 0
       level: 1
-    killBonus: 4
+    killBonus: 2
     specialEffect:
       effect: 0
       effectValue: 0

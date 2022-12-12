@@ -169,11 +169,11 @@ MonoBehaviour:
     attribute:
       attribute: 0
       level: 1
-    killBonus: 2
+    killBonus: 1
     specialEffect:
       effect: 0
       effectValue: 0
-    elementDropRate: 10
+    elementDropRate: 1
     defense: 5
   dead: 0
   notMove: 0

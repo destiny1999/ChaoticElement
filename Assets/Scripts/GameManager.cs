@@ -57,6 +57,27 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         Time.timeScale = GameExecuteSpeed;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            GameExecuteSpeed = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            GameExecuteSpeed = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            GameExecuteSpeed = 3;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            GameExecuteSpeed = 4;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            GameExecuteSpeed = 5;
+        }
+
     }
     IEnumerator NextWave()
     {

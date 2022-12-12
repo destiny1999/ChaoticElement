@@ -13,6 +13,7 @@ public class EachMonster : MonoBehaviour
     public bool dead = false;
     public bool notMove = false;
     bool burning = false;
+    float moveTime = 0;
     void Start()
     {
         monster = new Monster(monsterSetting);
@@ -21,6 +22,7 @@ public class EachMonster : MonoBehaviour
     }
     private void Update()
     {
+        moveTime += Time.deltaTime * 1;
         if (notMove) return;
         float moveSpeed = monster.speed * (1 - (monster.SpecialEffectInfluenceValue.speed / 100f));
         transform.position = Vector3.MoveTowards(transform.position, nextTargetTransform.position,
@@ -37,6 +39,7 @@ public class EachMonster : MonoBehaviour
             else
             {
                 GameManager.Instance.SendKillStatus(monster);
+                //print("at the end " + moveTime);
                 Destroy(gameObject);
             }
         }

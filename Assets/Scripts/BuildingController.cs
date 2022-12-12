@@ -215,12 +215,8 @@ public class BuildingController : MonoBehaviour
         if (other.transform.CompareTag("enemy") && targetQueue.Count > 0)
         {
             StartCoroutine(CheckEnemyTarget());
-            targetQueue.Dequeue();
-            if (targetQueue.Count == 0)
-            {
-                targetEnemy = null;
-                transform.rotation = Quaternion.identity;
-            }
+
+            
         }
     }
     IEnumerator CheckEnemyTarget()
@@ -229,6 +225,15 @@ public class BuildingController : MonoBehaviour
         {
             targetQueue.Dequeue();
             yield return null;
+        }
+        if (targetQueue.Count > 0)
+        {
+            targetQueue.Dequeue();
+        }
+        if (targetQueue.Count == 0)
+        {
+            targetEnemy = null;
+            transform.rotation = Quaternion.identity;
         }
     }
     public void SetClickStatus(bool status)

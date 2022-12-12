@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3147254459950020375}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3147254460034786339}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: -676195839745509647}
   - component: {fileID: 6551531043320829949}
   m_Layer: 6
-  m_Name: Level5
+  m_Name: Level7
   m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,19 +162,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSetting:
-    hp: 100
-    name: "\u9EBB\u7169\u7684\u672A\u77E5\u7ACB\u65B9\u9AD4"
-    speed: 1
+    hp: 300
+    name: "\u86FB\u8B8A\u4E2D\u7684\u672A\u77E5\u7ACB\u65B9\u9AD4 "
+    speed: 0.5
     damage: 1
     attribute:
       attribute: 0
       level: 1
-    killBonus: 2
+    killBonus: 4
     specialEffect:
       effect: 0
       effectValue: 0
     elementDropRate: 0
-    defense: 1
+    defense: 10
   dead: 0
   notMove: 0
 --- !u!114 &6551531043320829949
@@ -209,7 +209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 553618732841127775, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.54
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 553618732841127775, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
       propertyPath: m_LocalPosition.z

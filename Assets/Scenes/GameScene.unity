@@ -9704,7 +9704,7 @@ MonoBehaviour:
   - {fileID: 2586571311433426048, guid: e6962874c238e5b4d87f5a4fba1b7829, type: 3}
   - {fileID: 8045336045590236631, guid: e18d4efd3bbdfad4dabac605200085c9, type: 3}
   buildingManager: {fileID: 1691224282}
-  GameExecuteSpeed: 2
+  GameExecuteSpeed: 1
 --- !u!114 &770878235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9718,18 +9718,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelSettings:
-  - monsterNums: 5
+  - monsterNums: 30
     monster: {fileID: 3147254460034786337, guid: 131b4eba9fd660340bfb0205e7e18e1a, type: 3}
-  - monsterNums: 10
+  - monsterNums: 20
     monster: {fileID: 3147254460034786337, guid: f181ebf35ce6058499a1a9893a11edab, type: 3}
   - monsterNums: 20
     monster: {fileID: 3147254460034786337, guid: e5b45dd5bae16e24a83f79fb9efff4ac, type: 3}
-  - monsterNums: 15
+  - monsterNums: 25
     monster: {fileID: 3147254460034786337, guid: 2cd18bfffaf9d7648a889267138c0374, type: 3}
-  - monsterNums: 15
+  - monsterNums: 25
     monster: {fileID: 3147254460034786337, guid: a516f1bbec0993643a1d2b6d45834ab8, type: 3}
-  - monsterNums: 30
+  - monsterNums: 60
     monster: {fileID: 3147254460034786337, guid: 4e81f4c56b8a6d74299314a7ed1cd693, type: 3}
+  - monsterNums: 20
+    monster: {fileID: 3147254460034786337, guid: b12e0a89840c4494dbfdaf09459cb1b6, type: 3}
+  - monsterNums: 20
+    monster: {fileID: 3147254460034786337, guid: 625de69ca34bcd143bcbdedc55802f60, type: 3}
+  - monsterNums: 10
+    monster: {fileID: 3147254460034786337, guid: 77c47531eb51fcf458de73b0f6f75125, type: 3}
+  - monsterNums: 1
+    monster: {fileID: 3147254460034786337, guid: 5608abb9754b62845887f0be386aaede, type: 3}
   infinityLevelSetting:
   - monsterNums: 5
     monster: {fileID: 3147254460034786337, guid: 131b4eba9fd660340bfb0205e7e18e1a, type: 3}
@@ -29130,8 +29138,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   areaIndex: 0
-  hp: 20
-  mp: 100
+  hp: 5
+  mp: 50
   buildingCreateInfos:
   - building: {fileID: 1129148004144231783, guid: 2331dc9ea9b1eec479a394e7538a9b2d, type: 3}
     cost: 10
