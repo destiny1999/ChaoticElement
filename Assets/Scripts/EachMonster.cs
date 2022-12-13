@@ -102,6 +102,7 @@ public class EachMonster : MonoBehaviour
             bool drop = UnityEngine.Random.Range(0f, 100f) <= monster.elementDropRate ? true : false;
             if (drop) GameManager.Instance.CreateDropElement(monster.Attribute.attribute,
                                                                 transform.localPosition);
+            GameManager.Instance.CreateEarnMoney(monster.killBonuse, transform.localPosition);
             Destroy(gameObject);
         }
     }

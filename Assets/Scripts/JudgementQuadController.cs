@@ -76,4 +76,5 @@ public class JudgementQuadController : MonoBehaviour
     {
         return currentTarget;
     }
+
 }

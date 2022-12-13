@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(LevelManager))]
 public class GameManager : MonoBehaviour
@@ -26,8 +27,10 @@ public class GameManager : MonoBehaviour
     int maxWave = 0;
     [SerializeField] List<GameObject> dropElements;
     [SerializeField] GameObject buildingManager;
-
+    [SerializeField] GameObject menuObject;
     public float GameExecuteSpeed = 1f;
+    float gameExecuteSpeedTemp = 1f;
+    [SerializeField] GameObject moneyObject;
     private void Awake()
     {
         Instance = this;
@@ -43,6 +46,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameExecuteSpeedTemp = GameExecuteSpeed;
         switch (gameMode)
         {
             case GameMode.normal:
@@ -77,7 +81,20 @@ public class GameManager : MonoBehaviour
         {
             GameExecuteSpeed = 5;
         }
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            menuObject.SetActive(!menuObject.activeSelf);
+            if (menuObject.activeSelf) 
+            {
+                gameExecuteSpeedTemp = GameExecuteSpeed;
+                GameExecuteSpeed = 0;
+            }
+            else
+            {
+                GameExecuteSpeed = gameExecuteSpeedTemp;
+                gameExecuteSpeedTemp = GameExecuteSpeed;
+            }
+        }
     }
     IEnumerator NextWave()
     {
@@ -177,10 +194,12 @@ public class GameManager : MonoBehaviour
     {
 
     }
+    
     public void SendKillStatus(Monster monster)
     {
         if(monster.HP <= 0)
         {
+            
             players[0].GetComponent<PlayerController>().
                 AddMp(monster.killBonuse);
             players[0].GetComponent<PlayerController>().
@@ -218,6 +237,12 @@ public class GameManager : MonoBehaviour
                 SetMonsterSetting(newMonsterSetting);
             newPowerfulMonster.SetActive(true);
         }*/
+    }
+    public void CreateEarnMoney(float value, Vector3 position)
+    {
+        GameObject newMoneyObject = Instantiate(moneyObject);
+        newMoneyObject.transform.position = position;
+        newMoneyObject.GetComponent<TextMeshPro>().text = $"+{value}";
     }
     public void CreateDropElement(GameAttribute.Attribute attribute, Vector3 dropPosition)
     {
@@ -303,6 +328,14 @@ public class GameManager : MonoBehaviour
             }
             
         }
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void Exit()
+    {
+        Application.Quit();
     }
 }
 

@@ -50,7 +50,8 @@ public class BuildingController : MonoBehaviour
             else
             {
                 targetQueue.Dequeue();
-                transform.rotation = Quaternion.identity;
+                //StartCoroutine(ResetRotation());
+                //transform.rotation = Quaternion.identity;
             }
         }
         else if(willBuffBuildingQueue.Count > 0 && !attacking)
@@ -60,6 +61,14 @@ public class BuildingController : MonoBehaviour
                 attacking = true;
                 StartCoroutine(BuffBuilding());
             }
+        }
+    }
+    IEnumerator ResetRotation()
+    {
+        while (transform.eulerAngles != Vector3.zero && targetEnemy == null)
+        {
+            transform.rotation = Quaternion.identity;
+            yield return null;
         }
     }
     public void SetPutted()
@@ -126,7 +135,7 @@ public class BuildingController : MonoBehaviour
         int reduceAttackTimeWeight = 1;
         while (targetEnemy != null)
         {
-            transform.LookAt(targetEnemy.transform);
+            //transform.LookAt(targetEnemy.transform);
             attackTime -= Time.deltaTime;
             if(attackTime <= 0)
             {
@@ -215,8 +224,6 @@ public class BuildingController : MonoBehaviour
         if (other.transform.CompareTag("enemy") && targetQueue.Count > 0)
         {
             StartCoroutine(CheckEnemyTarget());
-
-            
         }
     }
     IEnumerator CheckEnemyTarget()
@@ -233,7 +240,12 @@ public class BuildingController : MonoBehaviour
         if (targetQueue.Count == 0)
         {
             targetEnemy = null;
-            transform.rotation = Quaternion.identity;
+            //transform.rotation = Quaternion.identity;
+            //StartCoroutine(ResetRotation());
+        }
+        else
+        {
+            targetEnemy = targetQueue.Peek();
         }
     }
     public void SetClickStatus(bool status)

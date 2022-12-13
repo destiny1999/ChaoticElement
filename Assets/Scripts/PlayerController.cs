@@ -245,6 +245,21 @@ public class PlayerController : MonoBehaviour
                 building.transform.position = targetPosition;
             }
             yield return null;
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                Destroy(building.gameObject);
+                if (targetBuilding.GetComponent<BuildingController>().AllPositionOK())
+                {
+                    List<GameObject> quads = targetBuilding.GetComponent<BuildingController>().
+                                                GetBuildingPositionQuads();
+                    foreach(GameObject quad in quads)
+                    {
+                        quad.GetComponent<BuildingPositionController>().ChangeColor(false);
+                    }
+                }
+                targetBuilding = null;
+                break;
+            }
         }
         preparePut = false;
     }
