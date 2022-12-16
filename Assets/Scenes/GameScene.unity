@@ -10353,6 +10353,12 @@ MonoBehaviour:
     - {fileID: 588895519847924728, guid: 119accd0183608a46b68efe7124c5fe8, type: 3}
     - {fileID: 1695059907844816581, guid: 2479beccd7bc37b40aa4a1a19adfaad9, type: 3}
     - {fileID: 588895519847924728, guid: ed29127b35567fe4cb12b2ac6b37a9ba, type: 3}
+  - buildings:
+    - {fileID: 1976926351469038685, guid: 121172a3fe273f54aa8ab4285b9a1688, type: 3}
+    - {fileID: 2300718934719978689, guid: 5c36418c1c1cf3641b24a4d228c37ac2, type: 3}
+    - {fileID: 588895519847924728, guid: f16f21b4fc66afd498ae1690b2b450cb, type: 3}
+    - {fileID: 1695059907844816581, guid: 571f8093a7158b34abc38db73aeb1d1e, type: 3}
+    - {fileID: 588895519847924728, guid: 1467c9e77d8b9ca469e184dea54cbce0, type: 3}
   monsterManager: {fileID: 1855442197}
   allLevelCombineInfo:
   - eachLevelCombineInfo:

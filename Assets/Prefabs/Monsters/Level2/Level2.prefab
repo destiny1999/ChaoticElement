@@ -173,10 +173,21 @@ MonoBehaviour:
     specialEffect:
       effect: 0
       effectValue: 0
+      effectKeepTime: 0
     elementDropRate: 0
     defense: 0
   dead: 0
   notMove: 0
+  statusList:
+  - target: 1
+    value: 0
+    time: 0
+  - target: 0
+    value: 0
+    time: 0
+  - target: 2
+    value: 0
+    time: 0
 --- !u!114 &6551531043320829949
 MonoBehaviour:
   m_ObjectHideFlags: 0

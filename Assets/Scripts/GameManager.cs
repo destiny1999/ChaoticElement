@@ -414,6 +414,21 @@ public class SpecialEffectInfluenceValue
     }
 }
 [Serializable]
+public class Status
+{
+    public  InfluenceStatus target;
+    public float value;
+    public float time;
+
+    public enum InfluenceStatus
+    {
+        hp,
+        speed,
+        defense
+    }
+}
+
+[Serializable]
 public class GameAttribute
 {
     public Attribute attribute;
@@ -435,6 +450,7 @@ public class GameSpecialEffect
 {
     public SpecialEffect effect;
     public float effectValue;
+    public float effectKeepTime;
     public enum SpecialEffect
     {
         無特殊效果,
@@ -452,6 +468,7 @@ public class GameSpecialEffect
         水屬性一擊護頓,
         火屬性一擊護頓,
         風屬性一擊護頓,
+        攻擊時有機會凍住敵人
     }
     
 }

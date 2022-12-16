@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3552536009262578756}
   - component: {fileID: 8885512030031120164}
   m_Layer: 2
-  m_Name: Light
+  m_Name: HopeLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
