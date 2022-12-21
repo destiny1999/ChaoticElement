@@ -50,7 +50,7 @@ public class MagicPetController : MonoBehaviour
                     break;
             }
             powerNums[elementIndex]++;
-            print(nextPosition);
+            //print(nextPosition);
             magicPowers[nextPosition].GetComponent<MagicPowerController>().
                 SetColor(magicPowerColors[elementIndex]);
             nextPosition++;

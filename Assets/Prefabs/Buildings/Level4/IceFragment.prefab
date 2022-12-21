@@ -58,6 +58,7 @@ MonoBehaviour:
       effect: 15
       effectValue: 30
       effectKeepTime: 2
+      effectLevel: 4
     SpecialEffectInfluenceValue:
       hp: 0
       defense: 0

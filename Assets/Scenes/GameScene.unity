@@ -10403,8 +10403,48 @@ MonoBehaviour:
       canCombineInfo:
       - code2: 4
         targetCode: 4
-  - eachLevelCombineInfo: []
-  - eachLevelCombineInfo: []
+  - eachLevelCombineInfo:
+    - code1: 0
+      canCombineInfo:
+      - code2: 0
+        targetCode: 0
+    - code1: 1
+      canCombineInfo:
+      - code2: 1
+        targetCode: 1
+    - code1: 2
+      canCombineInfo:
+      - code2: 2
+        targetCode: 2
+    - code1: 3
+      canCombineInfo:
+      - code2: 3
+        targetCode: 3
+    - code1: 4
+      canCombineInfo:
+      - code2: 4
+        targetCode: 4
+  - eachLevelCombineInfo:
+    - code1: 0
+      canCombineInfo:
+      - code2: 0
+        targetCode: 0
+    - code1: 1
+      canCombineInfo:
+      - code2: 1
+        targetCode: 1
+    - code1: 2
+      canCombineInfo:
+      - code2: 2
+        targetCode: 2
+    - code1: 3
+      canCombineInfo:
+      - code2: 3
+        targetCode: 3
+    - code1: 4
+      canCombineInfo:
+      - code2: 4
+        targetCode: 4
   specialEffectSettings:
   - statusCode: 0
     effectValue: 10
@@ -30541,7 +30581,7 @@ MonoBehaviour:
     mpTMP: {fileID: 267725906}
   IconController: {fileID: 1266618364}
   cursorCombineTexture: {fileID: 2800000, guid: b5fe112f45dc7d84f936964cb08d1ea8, type: 3}
-  testMode: 1
+  testMode: 0
 --- !u!1 &1853228645
 GameObject:
   m_ObjectHideFlags: 0

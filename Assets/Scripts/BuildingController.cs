@@ -85,6 +85,7 @@ public class BuildingController : MonoBehaviour
     }
     IEnumerator BuffBuilding()
     {
+        //print("use buff");
         float attackTime = buildingSetting.attackCD * 
                             (1 + buildingSetting.SpecialEffectInfluenceValue.
                                 attackCDSpeed/100f);
@@ -114,12 +115,13 @@ public class BuildingController : MonoBehaviour
                 else
                 {
                     targetBuilding.GetComponent<BuildingController>().
-                    AddStatus(buildingSetting.SpecialEffect, true);
+                        AddStatus(buildingSetting.SpecialEffect, true);
                     attacking = false;
                     yield break;
                 }
             }
         }
+        attacking = false;
     }
     public HashSet<GameSpecialEffect.SpecialEffect> GetStatusSet(bool buff)
     {
@@ -133,6 +135,7 @@ public class BuildingController : MonoBehaviour
                             (1 + buildingSetting.SpecialEffectInfluenceValue.
                                 attackCDSpeed / 100f);
         int reduceAttackTimeWeight = 1;
+        buildingSetting.damage = buildingSetting.originalDamage;
         while (targetEnemy != null)
         {
             //transform.LookAt(targetEnemy.transform);
@@ -143,8 +146,10 @@ public class BuildingController : MonoBehaviour
                 newbullet.transform.position = bulletCreatePosition.position;
                 Color bulletColor = buildingSetting.bulletColor;
                 //Debug.Break();
+                //print("special damage " + buildingSetting.SpecialEffectInfluenceValue.damage);
                 newbullet.GetComponent<BulletController>().
-                    SetBulletInfo(buildingSetting.damage,
+                    SetBulletInfo(buildingSetting.damage * 
+                                    (1 + buildingSetting.SpecialEffectInfluenceValue.damage / 100f),
                                     buildingSetting.Attribute,
                                     buildingSetting.SpecialEffect,
                                     buildingSetting.bulletSpeed,
@@ -161,6 +166,10 @@ public class BuildingController : MonoBehaviour
                     attackTime -= buildingSetting.SpecialEffect.effectValue * 
                                     reduceAttackTimeWeight;
                     reduceAttackTimeWeight++;
+                    if(buildingSetting.Attribute.level == 4)
+                    {
+                        buildingSetting.damage += buildingSetting.SpecialEffect.effectValue * 1000f;
+                    }
                     if (attackTime < 0) attackTime = 0;
                 }
             }
@@ -223,10 +232,14 @@ public class BuildingController : MonoBehaviour
     {
         if (other.transform.CompareTag("enemy") && targetQueue.Count > 0)
         {
-            StartCoroutine(CheckEnemyTarget());
+            StartCoroutine(CheckTargetQueue(targetQueue));
+        }
+        else if(other.transform.CompareTag("building") && willBuffBuildingQueue.Count > 0)
+        {
+            StartCoroutine(CheckTargetQueue(willBuffBuildingQueue));
         }
     }
-    IEnumerator CheckEnemyTarget()
+    IEnumerator CheckTargetQueue(Queue<GameObject> targetQueue)
     {
         while(targetQueue.Count > 0 && targetQueue.Peek() == null)
         {
@@ -240,8 +253,6 @@ public class BuildingController : MonoBehaviour
         if (targetQueue.Count == 0)
         {
             targetEnemy = null;
-            //transform.rotation = Quaternion.identity;
-            //StartCoroutine(ResetRotation());
         }
         else
         {
@@ -267,7 +278,22 @@ public class BuildingController : MonoBehaviour
         else nerfSet.Add(gameSpecialEffect.effect);
         buildingSetting.SpecialEffectInfluenceValue.
             ChangeInfluenceValue(gameSpecialEffect ,true);
+        if(gameSpecialEffect.effectKeepTime > 0)
+        {
+            StartCoroutine(ReduceStatusTime(gameSpecialEffect));
+        }
         //ChangeInfluenceValue(gameSpecialEffect, true);
+    }
+    IEnumerator ReduceStatusTime(GameSpecialEffect gameSpecialEffect)
+    {
+        float time = gameSpecialEffect.effectKeepTime;
+        while(time > 0)
+        {
+            //print("time = " + time);
+            time -= Time.deltaTime * 1;
+            yield return null;
+        }
+        RemoveStatus(gameSpecialEffect, true);
     }
     /// <summary>
     /// the magic pet collect power to buff specific buliding
@@ -282,11 +308,26 @@ public class BuildingController : MonoBehaviour
     }
     public void RemoveStatus(GameSpecialEffect gameSpecialEffect, bool buff)
     {
-        if (buff) buffSet.Remove(gameSpecialEffect.effect);
-        else nerfSet.Remove(gameSpecialEffect.effect);
+        //print("remove");
+        if (buff)
+            CheckTargetToRemove(buffSet, gameSpecialEffect);
+        //buffSet.Remove(gameSpecialEffect.effect);
+        else
+            CheckTargetToRemove(nerfSet, gameSpecialEffect);
+            //nerfSet.Remove(gameSpecialEffect.effect);
         buildingSetting.SpecialEffectInfluenceValue.ChangeInfluenceValue(gameSpecialEffect, false);
     }
-    
+    void CheckTargetToRemove(HashSet<GameSpecialEffect.SpecialEffect> set ,GameSpecialEffect specialEffect)
+    {
+        foreach(GameSpecialEffect.SpecialEffect gse in set)
+        {
+            if(gse == specialEffect.effect)
+            {
+                set.Remove(gse);
+                break;
+            }
+        }
+    }
 }
 
 [Serializable]

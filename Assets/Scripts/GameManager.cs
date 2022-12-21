@@ -406,6 +406,10 @@ public class SpecialEffectInfluenceValue
             case GameSpecialEffect.SpecialEffect.縮短附近防禦塔的攻擊間隔:
                 attackCDSpeed +=
                     gameSpecialEffect.effectValue * weight * -1;
+                if(gameSpecialEffect.effectLevel >= 4)
+                {
+                    damage += gameSpecialEffect.effectValue * weight;
+                }
                 break;
             case GameSpecialEffect.SpecialEffect.提升目標的攻擊傷害:
                 damage += gameSpecialEffect.effectValue * weight;
@@ -451,6 +455,7 @@ public class GameSpecialEffect
     public SpecialEffect effect;
     public float effectValue;
     public float effectKeepTime;
+    public float effectLevel;
     public enum SpecialEffect
     {
         無特殊效果,

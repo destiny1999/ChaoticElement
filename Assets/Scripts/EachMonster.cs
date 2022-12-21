@@ -84,6 +84,7 @@ public class EachMonster : MonoBehaviour
                     }
                 }
                 damage = monster.CaculateDamage(damage, enemyAttribute);
+                //print(damage);
                 Destroy(other.gameObject);
                 ReduceHP(damage);
             }
@@ -115,7 +116,7 @@ public class EachMonster : MonoBehaviour
                 }
                 else
                 {
-                    print("freeze failed");
+                    //print("freeze failed");
                 }
                 break;
 
@@ -164,7 +165,30 @@ public class EachMonster : MonoBehaviour
                 //Debug.Log("hp influence");
                 break;
             case GameSpecialEffect.SpecialEffect.降低目標的防禦:
-                newStatus.target = Status.InfluenceStatus.hp;
+                //newStatus.target = Status.InfluenceStatus.defense;
+                if(bulletSpecialEffect.effectLevel < 4)
+                {
+                    statusList[2].value += bulletSpecialEffect.effectValue;
+                }
+                else if(bulletSpecialEffect.effectLevel == 4)
+                {
+                    if (statusList[2].value == 0)
+                    {
+                        statusList[2].value = monster.defense / 2;
+                    }
+                    else
+                    {
+                        statusList[2].value += (monster.defense - statusList[2].value) / 2f;
+                    }
+
+                    if (statusList[2].value >= 
+                            monster.defense * (100-bulletSpecialEffect.effectValue) / 100f)
+                    {
+                        statusList[2].value = monster.defense;
+                    }
+                }
+                break;
+                /*
                 if (statusList[2].value <= bulletSpecialEffect.effectValue)
                 {
                     statusList[2].value = bulletSpecialEffect.effectValue;
@@ -176,8 +200,8 @@ public class EachMonster : MonoBehaviour
                     {
                         statusList[2].time = newStatus.time;
                     }
-                }
-                break;
+                }*/
+
                 /*
                 monster.SpecialEffectInfluenceValue.defense = monster.SpecialEffectInfluenceValue.defense >
                                                     bulletSpecialEffect.effectValue ?
@@ -379,6 +403,7 @@ public class Monster : MonsterBase
                 }
                 break;
         }
+        
         float finalDefense = this.defense - this.SpecialEffectInfluenceValue.defense;
         finalDamage = Mathf.Clamp(finalDamage - finalDefense, 0, finalDamage);
         //finalDamage -= finalDefense;
