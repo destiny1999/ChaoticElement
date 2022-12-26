@@ -124,7 +124,7 @@ public class EachMonster : MonoBehaviour
                 }
                 else
                 {
-                    StartCoroutine(UseLevel5Ice(newStatus));
+                    UseLevel5Ice(newStatus);
                     
                 }
                 break;
@@ -228,37 +228,29 @@ public class EachMonster : MonoBehaviour
         }
         //yield return null;
     }
-    IEnumerator UseLevel5Ice(Status status)
+    void UseLevel5Ice(Status status)
     {
         int times = 0;
-        float time = 0;
-        while(times < 3)
+        for(int i = 0; i<5; i++)
         {
-            if(time <= 0)
+            if (UnityEngine.Random.Range(0f, 100f) <= 50f)
             {
-                bool success = false;
-                if (UnityEngine.Random.Range(0f, 100f) <= 20f)
-                {
-                    statusList[0].value = Mathf.Clamp((statusList[0].value + 20f),
-                                                        statusList[0].value, 100f);
-                    success = true;
-                }
-                print(success);
                 times++;
-                time = 1f;
-                if (statusList[0].time == 0)
-                {
-                    StartCoroutine(ReduceStatusRemainTime(0, status));
-                }
-                else
-                {
-                    statusList[0].time = status.time;
-                }
             }
-            time -= Time.deltaTime * 1;
-            yield return null;
         }
+        if (statusList[0].value <= times * 20f)
+        {
+            statusList[0].value = times * 20f;
+            if (statusList[0].time == 0)
+            {
+                StartCoroutine(ReduceStatusRemainTime(0, status));
+            }
+            else
+            {
+                statusList[0].time = status.time;
+            }
 
+        }
     }
 
     /// <summary>
