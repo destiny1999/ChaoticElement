@@ -32,6 +32,7 @@ public class EachMonster : MonoBehaviour
 
         monster.SpecialEffectInfluenceValue.speed = statusList[0].value;
         monster.SpecialEffectInfluenceValue.hp = statusList[1].value;
+        //print("target hp = " + monster.SpecialEffectInfluenceValue.hp);
         monster.SpecialEffectInfluenceValue.defense = statusList[2].value;
 
 
@@ -81,6 +82,8 @@ public class EachMonster : MonoBehaviour
                         GetComponent<BulletController>().bulletSetting.SpecialEffect);*/
                     DealWithStatus(other.transform.
                                     GetComponent<BulletController>().bulletSetting.SpecialEffect);
+                    print(monster.SpecialEffectInfluenceValue.hp);
+                    print(burning);
                     if(monster.SpecialEffectInfluenceValue.hp != 0 && !burning)
                     {
                         StartCoroutine(DealWithBurn());
@@ -91,7 +94,9 @@ public class EachMonster : MonoBehaviour
                 if (!other.GetComponent<BulletController>().rangeAttack)
                 {
                     Destroy(other.gameObject);
+                    print("de");
                 }
+                print("damage = " + damage);
                 ReduceHP(damage);
             }
         }
@@ -151,11 +156,13 @@ public class EachMonster : MonoBehaviour
                                                         bulletSpecialEffect.effectValue;*/
                 break;
             case GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害:
+                print("into hp");
                 newStatus.target = Status.InfluenceStatus.hp;
+                print(bulletSpecialEffect.effectValue);
                 if (statusList[1].value <= bulletSpecialEffect.effectValue)
                 {
                     statusList[1].value = bulletSpecialEffect.effectValue;
-                    
+                    monster.SpecialEffectInfluenceValue.hp = statusList[1].value;
                     if (statusList[1].time == 0 )
                     {
                         StartCoroutine(ReduceStatusRemainTime(1, newStatus));
@@ -166,12 +173,6 @@ public class EachMonster : MonoBehaviour
                     }
                     
                 }
-                /*
-                monster.SpecialEffectInfluenceValue.hp = monster.SpecialEffectInfluenceValue.hp >
-                                                    bulletSpecialEffect.effectValue ?
-                                                    monster.SpecialEffectInfluenceValue.hp :
-                                                    bulletSpecialEffect.effectValue;*/
-                //Debug.Log("hp influence");
                 break;
             case GameSpecialEffect.SpecialEffect.降低目標的防禦:
                 //newStatus.target = Status.InfluenceStatus.defense;
@@ -273,7 +274,7 @@ public class EachMonster : MonoBehaviour
     }
     IEnumerator DealWithBurn()
     {
-        //print("into burn");
+        print("into burn");
         burning = true;
         float time = 1;
         while(monster.SpecialEffectInfluenceValue.hp > 0)
@@ -283,7 +284,6 @@ public class EachMonster : MonoBehaviour
             {
                 ReduceHP(monster.SpecialEffectInfluenceValue.hp);
                 time = 1;
-                //print("reduce because of burn");
             }
             yield return null;
         }

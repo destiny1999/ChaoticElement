@@ -17096,7 +17096,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1115479506}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalPosition: {x: 0, y: -18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30654,7 +30654,7 @@ MonoBehaviour:
   IconController: {fileID: 1266618364}
   cursorCombineTexture: {fileID: 2800000, guid: b5fe112f45dc7d84f936964cb08d1ea8, type: 3}
   testMode: 1
-  testBuildingIndex: 1
+  testBuildingIndex: 0
 --- !u!1 &1853228645
 GameObject:
   m_ObjectHideFlags: 0

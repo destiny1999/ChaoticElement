@@ -8,6 +8,7 @@ public class BulletController : MonoBehaviour
     // Start is called before the first frame update
     [HideInInspector] public BulletSetting bulletSetting = new BulletSetting();
     public bool rangeAttack = false;
+    public bool move = true;
     GameObject targetEnemy;
     void Start()
     {
@@ -17,15 +18,18 @@ public class BulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(targetEnemy == null)
+        if (move)
         {
-            print("null");
-            Destroy(gameObject);
-        }
-        else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, targetEnemy.transform.position,
-                            bulletSetting.speed * Time.deltaTime);
+            if (targetEnemy == null)
+            {
+                print("null");
+                Destroy(gameObject);
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetEnemy.transform.position,
+                                bulletSetting.speed * Time.deltaTime);
+            }
         }
     }
     public void SetBulletInfo(float damage, GameAttribute attribute, GameSpecialEffect effect, 
@@ -36,7 +40,7 @@ public class BulletController : MonoBehaviour
         bulletSetting.Attribute = attribute;
         bulletSetting.speed = speed;
         this.GetComponent<Renderer>().material.color = color;
-
+        
     }
     public void SetTargetEnemy(GameObject target)
     {

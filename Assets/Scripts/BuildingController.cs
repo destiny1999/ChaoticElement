@@ -26,7 +26,10 @@ public class BuildingController : MonoBehaviour
     Queue<GameObject> willBuffBuildingQueue = new Queue<GameObject>();
     [SerializeField] bool buffBuilding = false;
     [SerializeField] bool allAttack = false;
+    [SerializeField] bool notAttack = false;
     GameObject centerAllAttackTarget;
+    
+
     private void Awake()
     {
         //print("initial orignal");
@@ -40,6 +43,14 @@ public class BuildingController : MonoBehaviour
             bulletCreatePosition.position = GameManager.Instance.allAttackBulletCreatePosition.position;
             targetEnemy = centerAllAttackTarget;
             StartCoroutine(AttackEnemy());
+        }
+        else if(notAttack && buildingSetting.Attribute.attribute == GameAttribute.Attribute.¤õ)
+        {
+            GameObject bullet = this.transform.Find("Level5Building").Find("FireRing").gameObject;
+            bullet.GetComponent<BulletController>().SetBulletInfo
+                (buildingSetting.damage, buildingSetting.Attribute, buildingSetting.SpecialEffect,
+                buildingSetting.bulletSpeed, buildingSetting.bulletColor
+                );
         }
     }
 
@@ -135,6 +146,7 @@ public class BuildingController : MonoBehaviour
     }
     IEnumerator AttackEnemy()
     {
+        if (notAttack) yield break;
         float attackTime = buildingSetting.attackCD *
                             (1 + buildingSetting.SpecialEffectInfluenceValue.
                                 attackCDSpeed / 100f);
