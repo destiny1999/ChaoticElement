@@ -66,7 +66,10 @@ public class EachMonster : MonoBehaviour
             if (other.transform.CompareTag("bullet") && 
                     !other.GetComponent<BulletController>().bulletSetting.used)
             {
-                other.GetComponent<BulletController>().bulletSetting.used = true;
+                if (!other.GetComponent<BulletController>().rangeAttack)
+                {
+                    other.GetComponent<BulletController>().bulletSetting.used = true;
+                }
                 float damage = other.transform.GetComponent<BulletController>().bulletSetting.damage;
                 GameAttribute enemyAttribute = other.transform.GetComponent<BulletController>().
                                                             bulletSetting.Attribute;
@@ -85,7 +88,10 @@ public class EachMonster : MonoBehaviour
                 }
                 damage = monster.CaculateDamage(damage, enemyAttribute);
                 //print(damage);
-                Destroy(other.gameObject);
+                if (!other.GetComponent<BulletController>().rangeAttack)
+                {
+                    Destroy(other.gameObject);
+                }
                 ReduceHP(damage);
             }
         }
@@ -100,23 +106,26 @@ public class EachMonster : MonoBehaviour
         switch (bulletSpecialEffect.effect)
         {
             case GameSpecialEffect.SpecialEffect.攻擊時有機會凍住敵人:
-                if (UnityEngine.Random.Range(0f, 100f) <= bulletSpecialEffect.effectValue)
+                newStatus.target = Status.InfluenceStatus.speed;
+                if (bulletSpecialEffect.effectLevel < 5)
                 {
-                    newStatus.target = Status.InfluenceStatus.speed;
-
-                    statusList[0].value = 100f;
-                    if (statusList[0].time == 0)
+                    if (UnityEngine.Random.Range(0f, 100f) <= bulletSpecialEffect.effectValue)
                     {
-                        StartCoroutine(ReduceStatusRemainTime(0, newStatus));
-                    }
-                    else
-                    {
-                        statusList[0].time = newStatus.time;
+                        statusList[0].value = 100f;
+                        if (statusList[0].time == 0)
+                        {
+                            StartCoroutine(ReduceStatusRemainTime(0, newStatus));
+                        }
+                        else
+                        {
+                            statusList[0].time = newStatus.time;
+                        }
                     }
                 }
                 else
                 {
-                    //print("freeze failed");
+                    StartCoroutine(UseLevel5Ice(newStatus));
+                    
                 }
                 break;
 
@@ -219,6 +228,39 @@ public class EachMonster : MonoBehaviour
         }
         //yield return null;
     }
+    IEnumerator UseLevel5Ice(Status status)
+    {
+        int times = 0;
+        float time = 0;
+        while(times < 3)
+        {
+            if(time <= 0)
+            {
+                bool success = false;
+                if (UnityEngine.Random.Range(0f, 100f) <= 20f)
+                {
+                    statusList[0].value = Mathf.Clamp((statusList[0].value + 20f),
+                                                        statusList[0].value, 100f);
+                    success = true;
+                }
+                print(success);
+                times++;
+                time = 1f;
+                if (statusList[0].time == 0)
+                {
+                    StartCoroutine(ReduceStatusRemainTime(0, status));
+                }
+                else
+                {
+                    statusList[0].time = status.time;
+                }
+            }
+            time -= Time.deltaTime * 1;
+            yield return null;
+        }
+
+    }
+
     /// <summary>
     /// if this status remain time less than 0, will remove status.
     /// 0 speed, 1 hp, 2 defens

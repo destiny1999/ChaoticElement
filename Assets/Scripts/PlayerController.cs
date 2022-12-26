@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     GameObject beAbsorbTarget = null;
     BuildingSetting willLevelUpBuildingSetting;
     public bool testMode = false;
+    public int testBuildingIndex = -1;
     void Start()
     {
         if (testMode) mp = 100000;
@@ -192,7 +193,11 @@ public class PlayerController : MonoBehaviour
     {
         int buildingNums = GameManager.Instance.GetLevelBuildingNums(willCreateLevel);
         int randomIndex = UnityEngine.Random.Range(0, buildingNums);
-        
+        if (testBuildingIndex != -1) 
+        {
+            randomIndex = testBuildingIndex;
+            Debug.Log("Test building");
+        }
         GameObject building =Instantiate(GameManager.Instance.
             GetBuildingGameObject(willCreateLevel, randomIndex));
         willCreateLevel = -1;

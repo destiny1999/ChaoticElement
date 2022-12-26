@@ -7,6 +7,7 @@ public class BulletController : MonoBehaviour
 {
     // Start is called before the first frame update
     [HideInInspector] public BulletSetting bulletSetting = new BulletSetting();
+    public bool rangeAttack = false;
     GameObject targetEnemy;
     void Start()
     {
@@ -18,6 +19,7 @@ public class BulletController : MonoBehaviour
     {
         if(targetEnemy == null)
         {
+            print("null");
             Destroy(gameObject);
         }
         else

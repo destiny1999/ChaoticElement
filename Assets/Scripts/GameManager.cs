@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
     public float GameExecuteSpeed = 1f;
     float gameExecuteSpeedTemp = 1f;
     [SerializeField] GameObject moneyObject;
+    public Transform allAttackBulletCreatePosition;
+    public GameObject allAttackCenterTarget;
     private void Awake()
     {
         Instance = this;

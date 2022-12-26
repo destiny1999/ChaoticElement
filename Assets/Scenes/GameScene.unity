@@ -10359,6 +10359,12 @@ MonoBehaviour:
     - {fileID: 588895519847924728, guid: f16f21b4fc66afd498ae1690b2b450cb, type: 3}
     - {fileID: 1695059907844816581, guid: 571f8093a7158b34abc38db73aeb1d1e, type: 3}
     - {fileID: 588895519847924728, guid: 1467c9e77d8b9ca469e184dea54cbce0, type: 3}
+  - buildings:
+    - {fileID: 1976926351469038685, guid: f84af3af3891d254984afb0071188321, type: 3}
+    - {fileID: 2300718934719978689, guid: 30ff9f431b4430d4490a37085e741aa1, type: 3}
+    - {fileID: 588895519847924728, guid: 6498d305051fa9f46841177ce6f9c931, type: 3}
+    - {fileID: 1695059907844816581, guid: 5e1294935133bdf4189dc52b13911496, type: 3}
+    - {fileID: 588895519847924728, guid: 65b9fcdd3d9dc064bb26d0ee8c9813a2, type: 3}
   monsterManager: {fileID: 1855442197}
   allLevelCombineInfo:
   - eachLevelCombineInfo:
@@ -10463,6 +10469,8 @@ MonoBehaviour:
   menuObject: {fileID: 1080327272}
   GameExecuteSpeed: 1
   moneyObject: {fileID: 2492384538548393269, guid: 6c308198bb7140a44ae6a3a8a8ac994c, type: 3}
+  allAttackBulletCreatePosition: {fileID: 2100995525}
+  allAttackCenterTarget: {fileID: 1115479506}
 --- !u!114 &770878235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10476,7 +10484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelSettings:
-  - monsterNums: 30
+  - monsterNums: 2
     monster: {fileID: 3147254460034786337, guid: 131b4eba9fd660340bfb0205e7e18e1a, type: 3}
   - monsterNums: 20
     monster: {fileID: 3147254460034786337, guid: f181ebf35ce6058499a1a9893a11edab, type: 3}
@@ -17062,6 +17070,64 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &1115479506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1115479507}
+  - component: {fileID: 1115479508}
+  - component: {fileID: 1115479509}
+  m_Layer: 0
+  m_Name: AllAttackCenterTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1115479507
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115479506}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1115479508
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115479506}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.3, z: 1}
+  m_Center: {x: 0, y: -0.3, z: 0}
+--- !u!114 &1115479509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115479506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38bdd99f6cfd7b648ac30acbaea6f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1142126193
 GameObject:
   m_ObjectHideFlags: 0
@@ -22435,16 +22501,19 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 61ab4925e15dd2149b7221e721249d54, type: 3}
     - {fileID: 21300000, guid: 61ab4925e15dd2149b7221e721249d54, type: 3}
     - {fileID: 21300000, guid: 61ab4925e15dd2149b7221e721249d54, type: 3}
+    - {fileID: 21300000, guid: 61ab4925e15dd2149b7221e721249d54, type: 3}
     elementsName:
     - Level1
     - Level2
     - Level3
     - Level4
+    - Level5
     cost:
     - 10
     - 30
     - 50
     - 100
+    - 200
   buildingShowInfo:
     sprite: {fileID: 1435053244}
     nameTMP: {fileID: 1563177356}
@@ -30573,6 +30642,9 @@ MonoBehaviour:
   - building: {fileID: 1129148004144231783, guid: 2331dc9ea9b1eec479a394e7538a9b2d, type: 3}
     cost: 100
     createString: Level4
+  - building: {fileID: 1129148004144231783, guid: 2331dc9ea9b1eec479a394e7538a9b2d, type: 3}
+    cost: 200
+    createString: Level5
   preparePut: 0
   targetBuilding: {fileID: 0}
   monsterCreatePosition: {fileID: 7586733310855003183}
@@ -30581,7 +30653,8 @@ MonoBehaviour:
     mpTMP: {fileID: 267725906}
   IconController: {fileID: 1266618364}
   cursorCombineTexture: {fileID: 2800000, guid: b5fe112f45dc7d84f936964cb08d1ea8, type: 3}
-  testMode: 0
+  testMode: 1
+  testBuildingIndex: 1
 --- !u!1 &1853228645
 GameObject:
   m_ObjectHideFlags: 0
@@ -31688,6 +31761,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2848123345204720887, guid: cd64e1bcadeadd94ba65ea21066d02b3, type: 3}
   m_PrefabInstance: {fileID: 2848123345927040673}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2100995524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2100995525}
+  m_Layer: 0
+  m_Name: AllAttackBulletCreatePosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2100995525
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100995524}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2101009321
 PrefabInstance:
   m_ObjectHideFlags: 0

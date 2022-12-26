@@ -25,7 +25,8 @@ public class BuildingController : MonoBehaviour
     //[SerializeField] BuildingSpecialEffectInfluenceValue specialEffectInfluenceValue;
     Queue<GameObject> willBuffBuildingQueue = new Queue<GameObject>();
     [SerializeField] bool buffBuilding = false;
-
+    [SerializeField] bool allAttack = false;
+    GameObject centerAllAttackTarget;
     private void Awake()
     {
         //print("initial orignal");
@@ -33,13 +34,19 @@ public class BuildingController : MonoBehaviour
     }
     private void Start()
     {
-        
+        if (allAttack)
+        {
+            centerAllAttackTarget = GameManager.Instance.allAttackCenterTarget;
+            bulletCreatePosition.position = GameManager.Instance.allAttackBulletCreatePosition.position;
+            targetEnemy = centerAllAttackTarget;
+            StartCoroutine(AttackEnemy());
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(targetQueue.Count > 0 && !attacking)
+        if(targetQueue.Count > 0 && !attacking && !allAttack)
         {
             targetEnemy = targetQueue.Peek();
             if(targetEnemy != null)
@@ -50,8 +57,6 @@ public class BuildingController : MonoBehaviour
             else
             {
                 targetQueue.Dequeue();
-                //StartCoroutine(ResetRotation());
-                //transform.rotation = Quaternion.identity;
             }
         }
         else if(willBuffBuildingQueue.Count > 0 && !attacking)
@@ -130,7 +135,6 @@ public class BuildingController : MonoBehaviour
     }
     IEnumerator AttackEnemy()
     {
-
         float attackTime = buildingSetting.attackCD *
                             (1 + buildingSetting.SpecialEffectInfluenceValue.
                                 attackCDSpeed / 100f);
@@ -138,15 +142,13 @@ public class BuildingController : MonoBehaviour
         buildingSetting.damage = buildingSetting.originalDamage;
         while (targetEnemy != null)
         {
-            //transform.LookAt(targetEnemy.transform);
             attackTime -= Time.deltaTime;
             if(attackTime <= 0)
             {
                 GameObject newbullet = Instantiate(bullet);
                 newbullet.transform.position = bulletCreatePosition.position;
                 Color bulletColor = buildingSetting.bulletColor;
-                //Debug.Break();
-                //print("special damage " + buildingSetting.SpecialEffectInfluenceValue.damage);
+
                 newbullet.GetComponent<BulletController>().
                     SetBulletInfo(buildingSetting.damage * 
                                     (1 + buildingSetting.SpecialEffectInfluenceValue.damage / 100f),
@@ -210,6 +212,7 @@ public class BuildingController : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
+        if (allAttack) return;
         if (buffBuilding)
         {
             if (other.transform.CompareTag("building"))
@@ -230,6 +233,7 @@ public class BuildingController : MonoBehaviour
     }
     public void OnTriggerExit(Collider other)
     {
+        if (allAttack) return;
         if (other.transform.CompareTag("enemy") && targetQueue.Count > 0)
         {
             StartCoroutine(CheckTargetQueue(targetQueue));
