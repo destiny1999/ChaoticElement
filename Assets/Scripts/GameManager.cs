@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
     }
     void ShowWaveInfo(GameObject targetMonster)
     {
-        MonsterSettingNew monsterSetting = targetMonster.GetComponent<EachMonster>().GetMonsterSetting();
+        MonsterSetting monsterSetting = targetMonster.GetComponent<EachMonster>().GetMonsterSetting();
         string monsterName = monsterSetting.name;
 
         /*
@@ -134,36 +134,40 @@ public class GameManager : MonoBehaviour
             targetMonster.GetComponent<MonsterController>().GetMonsterSetting().specialEffects;
         */
         string monsterEffect = "";
-        switch (monsterSetting.specialEffect.effect)
+        for(int i = 0; i < monsterSetting.specialEffect.Count; i++)
         {
-            case GameSpecialEffect.SpecialEffect.無特殊效果:
-                monsterEffect += "沒有任何能力 ";
-                break;
-            case GameSpecialEffect.SpecialEffect.水屬性抗性:
-                monsterEffect += "水屬性抗性 ";
-                break;
-            case GameSpecialEffect.SpecialEffect.火屬性抗性:
-                monsterEffect += "火屬性抗性 ";
-                break;
-            case GameSpecialEffect.SpecialEffect.風屬性抗性:
-                monsterEffect += "風屬性抗性 ";
-                break;
-            case GameSpecialEffect.SpecialEffect.水火風屬性抗性:
-                monsterEffect += "水火風屬性抗性 ";
-                break;
-            case GameSpecialEffect.SpecialEffect.暗屬性抗性:
-                monsterEffect += "暗屬性抗性 ";
-                break;
-            case GameSpecialEffect.SpecialEffect.水屬性一擊護頓:
-                monsterEffect += "水屬性一擊護頓 ";
-                break;
-            case GameSpecialEffect.SpecialEffect.火屬性一擊護頓:
-                monsterEffect += "火屬性一擊護頓 ";
-                break;
-            case GameSpecialEffect.SpecialEffect.風屬性一擊護頓:
-                monsterEffect += "風屬性一擊護頓 ";
-                break;
+            switch (monsterSetting.specialEffect[i].effect)
+            {
+                case GameSpecialEffect.SpecialEffect.無特殊效果:
+                    monsterEffect += "沒有任何能力 ";
+                    break;
+                case GameSpecialEffect.SpecialEffect.水屬性抗性:
+                    monsterEffect += "水屬性抗性 ";
+                    break;
+                case GameSpecialEffect.SpecialEffect.火屬性抗性:
+                    monsterEffect += "火屬性抗性 ";
+                    break;
+                case GameSpecialEffect.SpecialEffect.風屬性抗性:
+                    monsterEffect += "風屬性抗性 ";
+                    break;
+                case GameSpecialEffect.SpecialEffect.水火風屬性抗性:
+                    monsterEffect += "水火風屬性抗性 ";
+                    break;
+                case GameSpecialEffect.SpecialEffect.暗屬性抗性:
+                    monsterEffect += "暗屬性抗性 ";
+                    break;
+                case GameSpecialEffect.SpecialEffect.水屬性一擊護頓:
+                    monsterEffect += "水屬性一擊護頓 ";
+                    break;
+                case GameSpecialEffect.SpecialEffect.火屬性一擊護頓:
+                    monsterEffect += "火屬性一擊護頓 ";
+                    break;
+                case GameSpecialEffect.SpecialEffect.風屬性一擊護頓:
+                    monsterEffect += "風屬性一擊護頓 ";
+                    break;
+            }
         }
+        
         
         waveInfoTMP.text = monsterName + "\n" + monsterEffect;
         waveInfoTMP.gameObject.SetActive(true);
@@ -418,10 +422,6 @@ public class SpecialEffectInfluenceValue
             case GameSpecialEffect.SpecialEffect.縮短附近防禦塔的攻擊間隔:
                 attackCDSpeed +=
                     gameSpecialEffect.effectValue * weight * -1;
-                if(gameSpecialEffect.effectLevel >= 4)
-                {
-                    damage += gameSpecialEffect.effectValue * weight;
-                }
                 break;
             case GameSpecialEffect.SpecialEffect.提升目標的攻擊傷害:
                 damage += gameSpecialEffect.effectValue * weight;
@@ -474,8 +474,12 @@ public class GameSpecialEffect
         降低攻擊目標的移動速度,
         對攻擊目標造成持續傷害,
         攻擊後縮短自身攻擊間隔,
+        攻擊後提升自身攻擊傷害,
+        攻擊一定次數後爆擊傷害,
         縮短附近防禦塔的攻擊間隔,
         降低目標的防禦,
+        減半目標防禦,
+        攻擊時有機率秒殺小怪,
         提升目標的攻擊傷害,
         水屬性抗性,
         火屬性抗性,
@@ -485,13 +489,37 @@ public class GameSpecialEffect
         水屬性一擊護頓,
         火屬性一擊護頓,
         風屬性一擊護頓,
-        攻擊時有機會凍住敵人
+        攻擊時有機會凍住敵人,
+        攻擊時有機會雙倍傷害
     }
     
 }
 public class GameItemInfo
 {
     public GameAttribute Attribute;
-    public GameSpecialEffect SpecialEffect;
+    public List<GameSpecialEffect> SpecialEffects;
     public SpecialEffectInfluenceValue SpecialEffectInfluenceValue = new SpecialEffectInfluenceValue();
+
+    public GameSpecialEffect GetTargetSpecialEffect(GameSpecialEffect.SpecialEffect targetEffect)
+    {
+        bool get = false;
+        GameSpecialEffect target = new GameSpecialEffect();
+        for (int i = 0; i < SpecialEffects.Count; i++)
+        {
+            if (SpecialEffects[i].effect == targetEffect)
+            {
+                target = SpecialEffects[i];
+                get = true;
+                break;
+            }
+        }
+        if (get)
+        {
+            return target;
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

@@ -103,21 +103,20 @@ MonoBehaviour:
     Attribute:
       attribute: 0
       level: 0
-    SpecialEffect:
-      effect: 0
-      effectValue: 0
-      effectKeepTime: 0
-      effectLevel: 0
+    SpecialEffects: []
     SpecialEffectInfluenceValue:
       hp: 0
       defense: 0
       speed: 0
       damage: 0
       attackCDSpeed: 0
+      extraDamageRate: 0
+      extraDamageWeight: 0
     damage: 0
     speed: 0
     used: 0
   rangeAttack: 1
+  move: 1
 --- !u!54 &4077745145639377986
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -32,11 +32,11 @@ public class BulletController : MonoBehaviour
             }
         }
     }
-    public void SetBulletInfo(float damage, GameAttribute attribute, GameSpecialEffect effect, 
+    public void SetBulletInfo(float damage, GameAttribute attribute, List<GameSpecialEffect> effects, 
                                 float speed, Color color)
     {
         bulletSetting.damage = damage;
-        bulletSetting.SpecialEffect = effect;
+        bulletSetting.SpecialEffects = effects;
         //print(bulletSetting.SpecialEffect.effectValue);
         bulletSetting.Attribute = attribute;
         bulletSetting.speed = speed;

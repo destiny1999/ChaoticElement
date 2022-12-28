@@ -7,7 +7,7 @@ using UnityEngine;
 public class EachMonster : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] MonsterSettingNew monsterSetting;
+    [SerializeField] MonsterSetting monsterSetting;
     Monster monster;
     Transform nextTargetTransform;
     public bool dead = false;
@@ -66,37 +66,63 @@ public class EachMonster : MonoBehaviour
     {
         if (!dead)
         {
+            // check the target is bullet
             if (other.transform.CompareTag("bullet") && 
                     !other.GetComponent<BulletController>().bulletSetting.used)
             {
+                // if not range attack it will not attack other 
                 if (!other.GetComponent<BulletController>().rangeAttack)
                 {
                     other.GetComponent<BulletController>().bulletSetting.used = true;
                 }
+
+                // get the bullet's damage
                 float damage = other.transform.GetComponent<BulletController>().bulletSetting.damage;
+                
+                // check the miracle
+                if(other.GetComponent<BulletController>().bulletSetting
+                    .GetTargetSpecialEffect(GameSpecialEffect.SpecialEffect.攻擊時有機會雙倍傷害) != null)
+                {
+                    //print("before miracle = " + damage);
+                    damage = UnityEngine.Random.Range(0, 2) == 1 ? damage * 2 : damage;
+                    //print("after miracle = " + damage);
+                }
+
+                //
                 GameAttribute enemyAttribute = other.transform.GetComponent<BulletController>().
                                                             bulletSetting.Attribute;
-
-                if (other.transform.GetComponent<BulletController>().bulletSetting.
-                        SpecialEffect.effect != GameSpecialEffect.SpecialEffect.無特殊效果)
+                for(int i = 0; i< other.transform.GetComponent<BulletController>().bulletSetting.
+                        SpecialEffects.Count; i++)
                 {
-                    DealWithStatus(other.transform.
-                                    GetComponent<BulletController>().bulletSetting.SpecialEffect);
-                    //print(monster.SpecialEffectInfluenceValue.hp);
-                    //print(burning);
-                    if(monster.SpecialEffectInfluenceValue.hp != 0 && !burning)
+                    if (other.transform.GetComponent<BulletController>().bulletSetting.
+                        SpecialEffects[i].effect != GameSpecialEffect.SpecialEffect.無特殊效果)
                     {
-                        StartCoroutine(DealWithBurn());
+                        DealWithStatus(other.transform.
+                                        GetComponent<BulletController>().bulletSetting.SpecialEffects[i]);
+                        //print(monster.SpecialEffectInfluenceValue.hp);
+                        //print(burning);
+                        if (monster.SpecialEffectInfluenceValue.hp != 0 && !burning)
+                        {
+                            StartCoroutine(DealWithBurn());
+                        }
                     }
                 }
+                
                 damage = monster.CaculateDamage(damage, enemyAttribute);
-                if(!boss && enemyAttribute.attribute == GameAttribute.Attribute.暗 &&
-                    enemyAttribute.level == 5)
+                if(!boss && other.GetComponent<BulletController>().bulletSetting
+                    .GetTargetSpecialEffect(GameSpecialEffect.SpecialEffect.攻擊時有機率秒殺小怪)
+                    != null)
                 {
-                    bool dead = UnityEngine.Random.Range(0f, 100f) <= 3f ? true : false;
-                    if (dead) damage = monster.HP;
+                    float value = other.GetComponent<BulletController>().bulletSetting
+                    .GetTargetSpecialEffect(GameSpecialEffect.SpecialEffect.攻擊時有機率秒殺小怪)
+                    .effectValue;
+                    bool dead = UnityEngine.Random.Range(0f, 100f) <= value ? true : false;
+                    if (dead)
+                    {
+                        //print("dead");
+                        damage = monster.HP;
+                    }
                 }
-                //print(damage);
                 if (!other.GetComponent<BulletController>().rangeAttack)
                 {
                     Destroy(other.gameObject);
@@ -110,8 +136,10 @@ public class EachMonster : MonoBehaviour
                       other.GetComponent<BulletController>().bulletSetting.Attribute.level == 5)
             {
                 burnEffectStack.Push(other.GetComponent<BulletController>());
-                statusList[1].value = burnEffectStack.Peek().bulletSetting.SpecialEffect.effectValue;
-                print(statusList[1].value);
+                var target = burnEffectStack.Peek().bulletSetting.GetTargetSpecialEffect(GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害);
+                //statusList[1].value = burnEffectStack.Peek().bulletSetting.SpecialEffects[0].effectValue;
+                statusList[1].value = target.effectValue;
+                //print(statusList[1].value);
                 //print(monster.SpecialEffectInfluenceValue.hp);
                 StartCoroutine(DealWithBurn());
             }
@@ -129,7 +157,8 @@ public class EachMonster : MonoBehaviour
             burnEffectStack.Pop();
             if(burnEffectStack.Count > 0)
             {
-                statusList[1].value = burnEffectStack.Peek().bulletSetting.SpecialEffect.effectValue;
+                var target = burnEffectStack.Peek().bulletSetting.GetTargetSpecialEffect(GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害);
+                statusList[1].value = target.effectValue;
             }
         }
     }
@@ -162,7 +191,6 @@ public class EachMonster : MonoBehaviour
                 else
                 {
                     UseLevel5Ice(newStatus);
-                    
                 }
                 break;
 
@@ -214,54 +242,23 @@ public class EachMonster : MonoBehaviour
                 {
                     statusList[2].value += bulletSpecialEffect.effectValue;
                 }
-                else if(bulletSpecialEffect.effectLevel >= 4)
+                break;
+            case GameSpecialEffect.SpecialEffect.減半目標防禦:
+                if (statusList[2].value == 0)
                 {
-                    if (statusList[2].value == 0)
-                    {
-                        statusList[2].value = monster.defense / 2;
-                    }
-                    else
-                    {
-                        statusList[2].value += (monster.defense - statusList[2].value) / 2f;
-                    }
-
-                    if (statusList[2].value >= 
-                            monster.defense * (100-bulletSpecialEffect.effectValue) / 100f)
-                    {
-                        statusList[2].value = monster.defense;
-                    }
+                    statusList[2].value = monster.defense / 2;
+                }
+                else
+                {
+                    statusList[2].value += (monster.defense - statusList[2].value) / 2f;
+                }
+                if (statusList[2].value >=
+                        monster.defense * (100 - bulletSpecialEffect.effectValue) / 100f)
+                {
+                    statusList[2].value = monster.defense;
                 }
                 break;
-                /*
-                if (statusList[2].value <= bulletSpecialEffect.effectValue)
-                {
-                    statusList[2].value = bulletSpecialEffect.effectValue;
-                    if (statusList[2].time == 0)
-                    {
-                        StartCoroutine(ReduceStatusRemainTime(2, newStatus));
-                    }
-                    else
-                    {
-                        statusList[2].time = newStatus.time;
-                    }
-                }*/
-
-                /*
-                monster.SpecialEffectInfluenceValue.defense = monster.SpecialEffectInfluenceValue.defense >
-                                                    bulletSpecialEffect.effectValue ?
-                                                    monster.SpecialEffectInfluenceValue.defense :
-                                                    bulletSpecialEffect.effectValue;
-                break;*/
-                /*
-            case GameSpecialEffect.SpecialEffect.攻擊時有機會凍住敵人:
-                float rate = bulletSpecialEffect.effectValue;
-                if (UnityEngine.Random.Range(0f, 100f) <= rate)
-                {
-                    monster.SpecialEffectInfluenceValue.speed = 100f;
-                }
-                break;*/
         }
-        //yield return null;
     }
     void UseLevel5Ice(Status status)
     {
@@ -271,11 +268,13 @@ public class EachMonster : MonoBehaviour
             if (UnityEngine.Random.Range(0f, 100f) <= 50f)
             {
                 times++;
+                //print("success");
             }
         }
         if (statusList[0].value <= times * 20f)
         {
             statusList[0].value = times * 20f;
+            //print(statusList[0].value);
             if (statusList[0].time == 0)
             {
                 StartCoroutine(ReduceStatusRemainTime(0, status));
@@ -297,7 +296,9 @@ public class EachMonster : MonoBehaviour
     /// <returns></returns>
     IEnumerator ReduceStatusRemainTime(int targetIndex, Status status)
     {
+        //print("reduce time");
         statusList[targetIndex].time = status.time;
+        //print("time = " + statusList[targetIndex].time);
         while (statusList[targetIndex].time > 0)
         {
             statusList[targetIndex].time -= Time.deltaTime * 1;
@@ -342,7 +343,7 @@ public class EachMonster : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public MonsterSettingNew GetMonsterSetting()
+    public MonsterSetting GetMonsterSetting()
     {
         return monsterSetting;
     }
@@ -388,69 +389,11 @@ public abstract class MonsterBase : GameItemInfo
         get => _defense;
         set => _defense = value;
     }
-    /*
-    public void DealWithSpecialEffectValue(GameSpecialEffect bulletSpecialEffect)
-    {
-        switch (bulletSpecialEffect.effect)
-        {
-            case GameSpecialEffect.SpecialEffect.降低攻擊目標的移動速度:
-                SpecialEffectInfluenceValue.speed = SpecialEffectInfluenceValue.speed >
-                                                        bulletSpecialEffect.effectValue ?
-                                                        SpecialEffectInfluenceValue.speed :
-                                                        bulletSpecialEffect.effectValue;
-                break;
-            case GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害:
-                SpecialEffectInfluenceValue.hp = SpecialEffectInfluenceValue.hp >
-                                                    bulletSpecialEffect.effectValue ?
-                                                    SpecialEffectInfluenceValue.hp :
-                                                    bulletSpecialEffect.effectValue;
-                //Debug.Log("hp influence");
-                break;
-            case GameSpecialEffect.SpecialEffect.降低目標的防禦:
-                SpecialEffectInfluenceValue.defense = SpecialEffectInfluenceValue.defense >
-                                                    bulletSpecialEffect.effectValue ?
-                                                    SpecialEffectInfluenceValue.defense :
-                                                    bulletSpecialEffect.effectValue;
-                break;
-            case GameSpecialEffect.SpecialEffect.攻擊時有機會凍住敵人:
-                float rate = bulletSpecialEffect.effectValue;
-                if(UnityEngine.Random.Range(0f,100f) <= rate)
-                {
-                    SpecialEffectInfluenceValue.speed = 100f;
-                }
-                break;
-        }
-
-    }
-    IEnumerator AddStatus(SpecialEffectInfluenceValue seivalue, 
-                            GameSpecialEffect.SpecialEffect effectDescription,
-                            float effectValue, float effectKeepTime)
-    {
-        ChangeSpecialInfluenceValue(seivalue, effectDescription, effectValue, true);
-        while(effectKeepTime > 0)
-        {
-            effectKeepTime -= Time.deltaTime * 1;
-            yield return null;
-        }
-        ChangeSpecialInfluenceValue(seivalue, effectDescription, effectValue, false);
-    }
-    void ChangeSpecialInfluenceValue(SpecialEffectInfluenceValue seivalue,
-                            GameSpecialEffect.SpecialEffect effectDescription,
-                            float effectValue, bool add)
-    {
-        float weight = add ? 1 : -1;
-        switch (effectDescription)
-        {
-            case GameSpecialEffect.SpecialEffect.攻擊時有機會凍住敵人:
-                seivalue.speed += 100f * weight;
-                break;
-        }
-    }*/
 }
 
 public class Monster : MonsterBase
 {
-    public Monster(MonsterSettingNew monsterSetting)
+    public Monster(MonsterSetting monsterSetting)
     {
         this.monsterName = monsterSetting.name;
         this.speed = monsterSetting.speed;
@@ -458,7 +401,7 @@ public class Monster : MonsterBase
         this.Attribute = monsterSetting.attribute;
         this.HP = monsterSetting.hp;
         this.killBonuse = monsterSetting.killBonus;
-        this.SpecialEffect = monsterSetting.specialEffect;
+        this.SpecialEffects = monsterSetting.specialEffect;
         this.Attribute = monsterSetting.attribute;
         this.elementDropRate = monsterSetting.elementDropRate;
         this.defense = monsterSetting.defense;
@@ -486,7 +429,7 @@ public class Monster : MonsterBase
 
 
 [Serializable]
-public class MonsterSettingNew
+public class MonsterSetting
 {
     public float hp;
     public string name;
@@ -494,7 +437,7 @@ public class MonsterSettingNew
     public int damage;
     public GameAttribute attribute;
     public float killBonus;
-    public GameSpecialEffect specialEffect;
+    public List<GameSpecialEffect> specialEffect;
     public float elementDropRate;
     public float defense;
 }

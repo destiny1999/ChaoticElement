@@ -54,15 +54,19 @@ MonoBehaviour:
     Attribute:
       attribute: 1
       level: 3
-    SpecialEffect:
-      effect: 1
+    SpecialEffects:
+    - effect: 1
       effectValue: 10
+      effectKeepTime: 2
+      effectLevel: 3
     SpecialEffectInfluenceValue:
       hp: 0
       defense: 0
       speed: 0
       damage: 0
       attackCDSpeed: 0
+      extraDamageRate: 0
+      extraDamageWeight: 0
     buildingName: "\u6C34\u5143\u7D20"
     buildingCode: 1
     attackCD: 1
@@ -80,6 +84,8 @@ MonoBehaviour:
   bulletCreatePosition: {fileID: 8982352339712737866}
   beClicked: 0
   buffBuilding: 0
+  allAttack: 0
+  notAttack: 0
 --- !u!136 &8476507929311075155
 CapsuleCollider:
   m_ObjectHideFlags: 0

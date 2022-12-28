@@ -54,16 +54,19 @@ MonoBehaviour:
     Attribute:
       attribute: 5
       level: 3
-    SpecialEffect:
-      effect: 5
+    SpecialEffects:
+    - effect: 7
       effectValue: 5
       effectKeepTime: 0
+      effectLevel: 3
     SpecialEffectInfluenceValue:
       hp: 0
       defense: 0
       speed: 0
       damage: 0
       attackCDSpeed: 0
+      extraDamageRate: 0
+      extraDamageWeight: 0
     buildingName: "\u6697\u5143\u7D20"
     buildingCode: 3
     attackCD: 1.5
@@ -81,6 +84,8 @@ MonoBehaviour:
   bulletCreatePosition: {fileID: 6878987910284853293}
   beClicked: 0
   buffBuilding: 0
+  allAttack: 0
+  notAttack: 0
 --- !u!136 &3283045617680893539
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -225,6 +230,10 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.112723015
       objectReference: {fileID: 0}
+    - target: {fileID: 3827264115780404086, guid: 325215f9b8c2bee44a1d23edcbb01b8c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bc8aa9553c94dbe45bf1015ccc459475, type: 2}
     - target: {fileID: 7831740662026284754, guid: 325215f9b8c2bee44a1d23edcbb01b8c, type: 3}
       propertyPath: m_Color.b
       value: 0.11320752

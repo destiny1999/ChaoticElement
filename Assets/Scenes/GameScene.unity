@@ -10485,7 +10485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelSettings:
-  - monsterNums: 2
+  - monsterNums: 30
     monster: {fileID: 3147254460034786337, guid: 131b4eba9fd660340bfb0205e7e18e1a, type: 3}
   - monsterNums: 20
     monster: {fileID: 3147254460034786337, guid: f181ebf35ce6058499a1a9893a11edab, type: 3}
@@ -30722,8 +30722,8 @@ MonoBehaviour:
     mpTMP: {fileID: 267725906}
   IconController: {fileID: 1266618364}
   cursorCombineTexture: {fileID: 2800000, guid: b5fe112f45dc7d84f936964cb08d1ea8, type: 3}
-  testMode: 1
-  testBuildingIndex: 2
+  testMode: 0
+  testBuildingIndex: -1
 --- !u!1 &1853228645
 GameObject:
   m_ObjectHideFlags: 0

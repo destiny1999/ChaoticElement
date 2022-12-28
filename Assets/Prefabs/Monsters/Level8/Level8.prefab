@@ -169,15 +169,25 @@ MonoBehaviour:
     attribute:
       attribute: 0
       level: 1
-    killBonus: 4
+    killBonus: 2
     specialEffect:
-      effect: 0
+    - effect: 0
       effectValue: 0
       effectKeepTime: 0
+      effectLevel: 0
+    - effect: 0
+      effectValue: 0
+      effectKeepTime: 0
+      effectLevel: 0
+    - effect: 0
+      effectValue: 0
+      effectKeepTime: 0
+      effectLevel: 0
     elementDropRate: 0
     defense: 5
   dead: 0
   notMove: 0
+  boss: 0
   statusList:
   - target: 1
     value: 0

@@ -69,6 +69,7 @@ public class BuildingController : MonoBehaviour
         {
             if(willBuffBuildingQueue.Count > 0 && willBuffBuildingQueue.Peek() != null)
             {
+                print("into buff");
                 attacking = true;
                 StartCoroutine(BuffBuilding());
             }
@@ -108,6 +109,7 @@ public class BuildingController : MonoBehaviour
         }
         while (willBuffBuildingQueue.Count > 0)
         {
+            print("buff count > 0");
             if(willBuffBuildingQueue.Peek() == null)
             {
                 willBuffBuildingQueue.Dequeue();
@@ -117,19 +119,22 @@ public class BuildingController : MonoBehaviour
             {
                 GameObject targetBuilding = willBuffBuildingQueue.Dequeue();
                 willBuffBuildingQueue.Enqueue(targetBuilding);
-
-                if (targetBuilding.GetComponent<BuildingController>().
-                    GetStatusSet(true).Contains(buildingSetting.SpecialEffect.effect))
+                for(int i = 0; i< buildingSetting.SpecialEffects.Count; i++)
                 {
-                    yield return null;
+                    if (targetBuilding.GetComponent<BuildingController>().
+                    GetStatusSet(true).Contains(buildingSetting.SpecialEffects[i].effect))
+                    {
+                        //yield return null;
+                    }
+                    else
+                    {
+                        targetBuilding.GetComponent<BuildingController>().
+                            AddStatus(buildingSetting.SpecialEffects[i], true);
+                        attacking = false;
+                    }
+                    
                 }
-                else
-                {
-                    targetBuilding.GetComponent<BuildingController>().
-                        AddStatus(buildingSetting.SpecialEffect, true);
-                    attacking = false;
-                    yield break;
-                }
+                break;
             }
         }
         attacking = false;
@@ -148,13 +153,14 @@ public class BuildingController : MonoBehaviour
         int reduceAttackTimeWeight = 1;
         buildingSetting.damage = buildingSetting.originalDamage;
         int attackTimes = 0;
+        float targetAttackTimes = -1;
         bool specialAttack = false;
         while (targetEnemy != null)
         {
             attackTime -= Time.deltaTime;
             if(attackTime <= 0)
             {
-                if(attackTimes == 10)
+                if(attackTimes == targetAttackTimes)
                 {
                     attackTimes = 0;
                     specialAttack = true;
@@ -162,15 +168,23 @@ public class BuildingController : MonoBehaviour
                 GameObject newbullet = Instantiate(bullet);
                 newbullet.transform.position = bulletCreatePosition.position;
                 Color bulletColor = buildingSetting.bulletColor;
-
+                
                 newbullet.GetComponent<BulletController>().
                     SetBulletInfo(buildingSetting.damage * 
                                     (1 + buildingSetting.SpecialEffectInfluenceValue.damage / 100f),
                                     buildingSetting.Attribute,
-                                    buildingSetting.SpecialEffect,
+                                    buildingSetting.SpecialEffects,
                                     buildingSetting.bulletSpeed,
                                     bulletColor
                                     );
+                if (buffSet.Contains(GameSpecialEffect.SpecialEffect.攻擊時有機會雙倍傷害))
+                {
+                    print("contain");
+                    GameSpecialEffect newEffect = new GameSpecialEffect();
+                    newEffect.effect = GameSpecialEffect.SpecialEffect.攻擊時有機會雙倍傷害;
+                    newbullet.GetComponent<BulletController>().bulletSetting.SpecialEffects.
+                        Add(newEffect);
+                }
                 if (specialAttack)
                 {
                     specialAttack = false;
@@ -183,20 +197,26 @@ public class BuildingController : MonoBehaviour
                 attackTime = buildingSetting.attackCD *
                             (1 + buildingSetting.SpecialEffectInfluenceValue.
                                 attackCDSpeed / 100f);
-                if (buildingSetting.Attribute.attribute == GameAttribute.Attribute.風 &&
-                        buildingSetting.Attribute.level >= 3)
+                if(buildingSetting.GetTargetSpecialEffect
+                    (GameSpecialEffect.SpecialEffect.攻擊後縮短自身攻擊間隔) != null)
                 {
-                    attackTime -= buildingSetting.SpecialEffect.effectValue * 
-                                    reduceAttackTimeWeight;
+                    attackTime -= buildingSetting.GetTargetSpecialEffect
+                        (GameSpecialEffect.SpecialEffect.攻擊後縮短自身攻擊間隔).effectValue *
+                        reduceAttackTimeWeight;
                     reduceAttackTimeWeight++;
-                    if(buildingSetting.Attribute.level >= 4)
-                    {
-                        buildingSetting.damage += buildingSetting.SpecialEffect.effectValue * 1000f;
-                    }
-                    if(buildingSetting.Attribute.level >= 5)
-                    {
-                        attackTimes++;
-                    }
+                }
+                if(buildingSetting.GetTargetSpecialEffect
+                    (GameSpecialEffect.SpecialEffect.攻擊後提升自身攻擊傷害) != null)
+                {
+                    buildingSetting.damage += buildingSetting.GetTargetSpecialEffect
+                            (GameSpecialEffect.SpecialEffect.攻擊後提升自身攻擊傷害).effectValue;
+                }
+                if (buildingSetting.GetTargetSpecialEffect
+                    (GameSpecialEffect.SpecialEffect.攻擊一定次數後爆擊傷害) != null)
+                {
+                    targetAttackTimes = buildingSetting.GetTargetSpecialEffect
+                    (GameSpecialEffect.SpecialEffect.攻擊一定次數後爆擊傷害).effectValue;
+                    attackTimes++;
                 }
                 if (attackTime < 0) attackTime = 0;
             }
