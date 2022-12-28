@@ -174,10 +174,12 @@ MonoBehaviour:
       effect: 0
       effectValue: 0
       effectKeepTime: 0
+      effectLevel: 0
     elementDropRate: 100
     defense: 5
   dead: 0
   notMove: 0
+  boss: 1
   statusList:
   - target: 1
     value: 0

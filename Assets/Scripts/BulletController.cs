@@ -22,7 +22,7 @@ public class BulletController : MonoBehaviour
         {
             if (targetEnemy == null)
             {
-                print("null");
+                //print("null");
                 Destroy(gameObject);
             }
             else
@@ -37,6 +37,7 @@ public class BulletController : MonoBehaviour
     {
         bulletSetting.damage = damage;
         bulletSetting.SpecialEffect = effect;
+        //print(bulletSetting.SpecialEffect.effectValue);
         bulletSetting.Attribute = attribute;
         bulletSetting.speed = speed;
         this.GetComponent<Renderer>().material.color = color;

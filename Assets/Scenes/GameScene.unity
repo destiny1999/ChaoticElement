@@ -10471,6 +10471,7 @@ MonoBehaviour:
   moneyObject: {fileID: 2492384538548393269, guid: 6c308198bb7140a44ae6a3a8a8ac994c, type: 3}
   allAttackBulletCreatePosition: {fileID: 2100995525}
   allAttackCenterTarget: {fileID: 1115479506}
+  fireRingController: {fileID: 1595563046}
 --- !u!114 &770878235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29491,6 +29492,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1563177354}
   m_CullTransparentMesh: 1
+--- !u!1001 &1595563045
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_RootOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 52317627274729789, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065999399437163491, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+      propertyPath: m_Name
+      value: Level5FireBullet
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+--- !u!114 &1595563046 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2780041844850432221, guid: 327b871c0861bed49b6705ab1e2c40ef, type: 3}
+  m_PrefabInstance: {fileID: 1595563045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b139db125f8f3774dafc70f3359d1047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1597930124
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30654,7 +30723,7 @@ MonoBehaviour:
   IconController: {fileID: 1266618364}
   cursorCombineTexture: {fileID: 2800000, guid: b5fe112f45dc7d84f936964cb08d1ea8, type: 3}
   testMode: 1
-  testBuildingIndex: 0
+  testBuildingIndex: 2
 --- !u!1 &1853228645
 GameObject:
   m_ObjectHideFlags: 0

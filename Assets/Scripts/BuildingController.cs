@@ -28,7 +28,6 @@ public class BuildingController : MonoBehaviour
     [SerializeField] bool allAttack = false;
     [SerializeField] bool notAttack = false;
     GameObject centerAllAttackTarget;
-    
 
     private void Awake()
     {
@@ -46,11 +45,7 @@ public class BuildingController : MonoBehaviour
         }
         else if(notAttack && buildingSetting.Attribute.attribute == GameAttribute.Attribute.¤õ)
         {
-            GameObject bullet = this.transform.Find("Level5Building").Find("FireRing").gameObject;
-            bullet.GetComponent<BulletController>().SetBulletInfo
-                (buildingSetting.damage, buildingSetting.Attribute, buildingSetting.SpecialEffect,
-                buildingSetting.bulletSpeed, buildingSetting.bulletColor
-                );
+            GameManager.Instance.CallChangeRingsCount(1, true);
         }
     }
 
@@ -152,11 +147,18 @@ public class BuildingController : MonoBehaviour
                                 attackCDSpeed / 100f);
         int reduceAttackTimeWeight = 1;
         buildingSetting.damage = buildingSetting.originalDamage;
+        int attackTimes = 0;
+        bool specialAttack = false;
         while (targetEnemy != null)
         {
             attackTime -= Time.deltaTime;
             if(attackTime <= 0)
             {
+                if(attackTimes == 10)
+                {
+                    attackTimes = 0;
+                    specialAttack = true;
+                }
                 GameObject newbullet = Instantiate(bullet);
                 newbullet.transform.position = bulletCreatePosition.position;
                 Color bulletColor = buildingSetting.bulletColor;
@@ -169,6 +171,13 @@ public class BuildingController : MonoBehaviour
                                     buildingSetting.bulletSpeed,
                                     bulletColor
                                     );
+                if (specialAttack)
+                {
+                    specialAttack = false;
+                    newbullet.GetComponent<BulletController>().bulletSetting.damage =
+                        newbullet.GetComponent<BulletController>().bulletSetting.damage * 10;
+                }
+
                 newbullet.GetComponent<BulletController>().SetTargetEnemy(targetEnemy);
 
                 attackTime = buildingSetting.attackCD *
@@ -180,12 +189,16 @@ public class BuildingController : MonoBehaviour
                     attackTime -= buildingSetting.SpecialEffect.effectValue * 
                                     reduceAttackTimeWeight;
                     reduceAttackTimeWeight++;
-                    if(buildingSetting.Attribute.level == 4)
+                    if(buildingSetting.Attribute.level >= 4)
                     {
                         buildingSetting.damage += buildingSetting.SpecialEffect.effectValue * 1000f;
                     }
-                    if (attackTime < 0) attackTime = 0;
+                    if(buildingSetting.Attribute.level >= 5)
+                    {
+                        attackTimes++;
+                    }
                 }
+                if (attackTime < 0) attackTime = 0;
             }
             yield return null;
         }

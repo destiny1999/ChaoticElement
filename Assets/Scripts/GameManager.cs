@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject moneyObject;
     public Transform allAttackBulletCreatePosition;
     public GameObject allAttackCenterTarget;
+
+    [SerializeField] FireRingController fireRingController;
     private void Awake()
     {
         Instance = this;
@@ -331,6 +333,12 @@ public class GameManager : MonoBehaviour
             
         }
     }
+    public void CallChangeRingsCount(int nums, bool add)
+    {
+        fireRingController.ChangeRingsCount(nums, add);
+    }
+
+
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -396,6 +404,8 @@ public class SpecialEffectInfluenceValue
     public float speed;
     public float damage;
     public float attackCDSpeed;
+    public float extraDamageRate;
+    public float extraDamageWeight;
 
     public void ChangeInfluenceValue(GameSpecialEffect gameSpecialEffect, bool add)
     {

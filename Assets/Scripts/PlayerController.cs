@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
     BuildingSetting willLevelUpBuildingSetting;
     public bool testMode = false;
     public int testBuildingIndex = -1;
+
+
+
     void Start()
     {
         if (testMode) mp = 100000;
@@ -358,7 +361,14 @@ public class PlayerController : MonoBehaviour
         {
             buildingPosition.GetComponent<BuildingPositionController>().SetUseSituation(false);
         }
-
+        /*
+        if(levelUpTarget.GetComponent<BuildingController>().buildingSetting.Attribute.attribute
+            == GameAttribute.Attribute.¤õ &&
+            levelUpTarget.GetComponent<BuildingController>().buildingSetting.Attribute.level == 5)
+        {
+            GameManager.Instance.CallChangeRingsCount(1, false);
+        }*/
+        
         Destroy(levelUpTarget.gameObject);
         Destroy(beAbsorbTarget.gameObject);
         Vector2 hotspot = Vector2.zero;
@@ -372,5 +382,6 @@ public class PlayerTMPInfo
 {
     public TextMeshProUGUI mpTMP;
 }
+
 
 

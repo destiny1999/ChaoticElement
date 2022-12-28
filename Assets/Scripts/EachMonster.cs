@@ -12,9 +12,11 @@ public class EachMonster : MonoBehaviour
     Transform nextTargetTransform;
     public bool dead = false;
     public bool notMove = false;
+    public bool boss = false;
     bool burning = false;
     float moveTime = 0;
     [SerializeField]List<Status> statusList = new List<Status>();
+    Stack<BulletController> burnEffectStack = new Stack<BulletController>();
     private void Awake()
     {
 
@@ -31,7 +33,7 @@ public class EachMonster : MonoBehaviour
         //moveTime += Time.deltaTime * 1;
 
         monster.SpecialEffectInfluenceValue.speed = statusList[0].value;
-        monster.SpecialEffectInfluenceValue.hp = statusList[1].value;
+        //monster.SpecialEffectInfluenceValue.hp = statusList[1].value;
         //print("target hp = " + monster.SpecialEffectInfluenceValue.hp);
         monster.SpecialEffectInfluenceValue.defense = statusList[2].value;
 
@@ -78,30 +80,60 @@ public class EachMonster : MonoBehaviour
                 if (other.transform.GetComponent<BulletController>().bulletSetting.
                         SpecialEffect.effect != GameSpecialEffect.SpecialEffect.無特殊效果)
                 {
-                    /*monster.DealWithSpecialEffectValue(other.transform.
-                        GetComponent<BulletController>().bulletSetting.SpecialEffect);*/
                     DealWithStatus(other.transform.
                                     GetComponent<BulletController>().bulletSetting.SpecialEffect);
-                    print(monster.SpecialEffectInfluenceValue.hp);
-                    print(burning);
+                    //print(monster.SpecialEffectInfluenceValue.hp);
+                    //print(burning);
                     if(monster.SpecialEffectInfluenceValue.hp != 0 && !burning)
                     {
                         StartCoroutine(DealWithBurn());
                     }
                 }
                 damage = monster.CaculateDamage(damage, enemyAttribute);
+                if(!boss && enemyAttribute.attribute == GameAttribute.Attribute.暗 &&
+                    enemyAttribute.level == 5)
+                {
+                    bool dead = UnityEngine.Random.Range(0f, 100f) <= 3f ? true : false;
+                    if (dead) damage = monster.HP;
+                }
                 //print(damage);
                 if (!other.GetComponent<BulletController>().rangeAttack)
                 {
                     Destroy(other.gameObject);
-                    print("de");
                 }
-                print("damage = " + damage);
+                //print("damage = " + damage);
                 ReduceHP(damage);
+            }
+            else if(other.transform.CompareTag("bullet") &&
+                      other.GetComponent<BulletController>().bulletSetting.Attribute.attribute
+                      == GameAttribute.Attribute.火 &&
+                      other.GetComponent<BulletController>().bulletSetting.Attribute.level == 5)
+            {
+                burnEffectStack.Push(other.GetComponent<BulletController>());
+                statusList[1].value = burnEffectStack.Peek().bulletSetting.SpecialEffect.effectValue;
+                print(statusList[1].value);
+                //print(monster.SpecialEffectInfluenceValue.hp);
+                StartCoroutine(DealWithBurn());
             }
         }
         
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "bullet" &&
+            other.GetComponent<BulletController>().bulletSetting.Attribute.attribute
+                      == GameAttribute.Attribute.火 &&
+                      other.GetComponent<BulletController>().bulletSetting.Attribute.level == 5)
+        {
+            burnEffectStack.Pop();
+            if(burnEffectStack.Count > 0)
+            {
+                statusList[1].value = burnEffectStack.Peek().bulletSetting.SpecialEffect.effectValue;
+            }
+        }
+    }
+
     void DealWithStatus(GameSpecialEffect bulletSpecialEffect)
     {
         Status newStatus = new Status();
@@ -156,13 +188,15 @@ public class EachMonster : MonoBehaviour
                                                         bulletSpecialEffect.effectValue;*/
                 break;
             case GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害:
-                print("into hp");
+                //print("into hp");
+                if (bulletSpecialEffect.effectLevel == 5) break;
                 newStatus.target = Status.InfluenceStatus.hp;
-                print(bulletSpecialEffect.effectValue);
+                //print(bulletSpecialEffect.effectValue);
                 if (statusList[1].value <= bulletSpecialEffect.effectValue)
                 {
                     statusList[1].value = bulletSpecialEffect.effectValue;
                     monster.SpecialEffectInfluenceValue.hp = statusList[1].value;
+
                     if (statusList[1].time == 0 )
                     {
                         StartCoroutine(ReduceStatusRemainTime(1, newStatus));
@@ -180,7 +214,7 @@ public class EachMonster : MonoBehaviour
                 {
                     statusList[2].value += bulletSpecialEffect.effectValue;
                 }
-                else if(bulletSpecialEffect.effectLevel == 4)
+                else if(bulletSpecialEffect.effectLevel >= 4)
                 {
                     if (statusList[2].value == 0)
                     {
@@ -274,14 +308,18 @@ public class EachMonster : MonoBehaviour
     }
     IEnumerator DealWithBurn()
     {
-        print("into burn");
+        //print("into burn");
         burning = true;
         float time = 1;
+        monster.SpecialEffectInfluenceValue.hp = statusList[1].value;
         while(monster.SpecialEffectInfluenceValue.hp > 0)
         {
+            monster.SpecialEffectInfluenceValue.hp = statusList[1].value;
+            //print("keep burn");
             time -= Time.deltaTime * 1;
             if(time <= 0)
             {
+                //print("reduce " + monster.SpecialEffectInfluenceValue.hp);
                 ReduceHP(monster.SpecialEffectInfluenceValue.hp);
                 time = 1;
             }
@@ -290,6 +328,7 @@ public class EachMonster : MonoBehaviour
     }
     void ReduceHP(float damage)
     {
+        //print("damage = " + damage);
         monster.HP -= damage;
         this.GetComponent<HPMonitorController>().ChangeHpShowValue(monster.HP / monsterSetting.hp);
         if (monster.HP <= 0)
