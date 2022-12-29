@@ -207,7 +207,6 @@ public class GameManager : MonoBehaviour
     {
         if(monster.HP <= 0)
         {
-            
             players[0].GetComponent<PlayerController>().
                 AddMp(monster.killBonuse);
             players[0].GetComponent<PlayerController>().
@@ -291,6 +290,11 @@ public class GameManager : MonoBehaviour
     {
         return allElementsBuildings[index].buildings.Count;
     }
+    public GameObject GetParticularBuilding(int level, int code)
+    {
+        //print("level = " + level + " code = " + code);
+        return allElementsBuildings[level].buildings[code];
+    }
     public GameObject GetNewLevelUpBuilding(int currentLevel, int code1, int code2)
     {
         EachLevelCombineInfo targetLevel = allLevelCombineInfo[currentLevel-1];
@@ -312,6 +316,8 @@ public class GameManager : MonoBehaviour
                 if (get) break;
             }
         }
+        //print(currentLevel + " " + targetCode);
+        if (currentLevel == 1) targetCode = code1; 
         GameObject targetBuilding = allElementsBuildings[currentLevel].buildings[targetCode];
         return targetBuilding;
     }

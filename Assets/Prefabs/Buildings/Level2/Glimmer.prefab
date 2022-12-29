@@ -72,7 +72,7 @@ MonoBehaviour:
     attackCD: 1
     bulletSpeed: 10
     originalDamage: 0
-    damage: 30
+    damage: 25
     sale: 5
     createTime: 0
     buildingLevel: 2

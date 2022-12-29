@@ -335,11 +335,12 @@ public class EachMonster : MonoBehaviour
         if (monster.HP <= 0)
         {
             dead = true;
-            GameManager.Instance.SendKillStatus(monster);
+            
             bool drop = UnityEngine.Random.Range(0f, 100f) <= monster.elementDropRate ? true : false;
             if (drop) GameManager.Instance.CreateDropElement(monster.Attribute.attribute,
                                                                 transform.localPosition);
             GameManager.Instance.CreateEarnMoney(monster.killBonuse, transform.localPosition);
+            GameManager.Instance.SendKillStatus(monster);
             Destroy(gameObject);
         }
     }

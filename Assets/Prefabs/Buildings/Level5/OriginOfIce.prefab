@@ -19424,7 +19424,7 @@ GameObject:
   - component: {fileID: 2497716977573845279}
   - component: {fileID: 8168869766814460985}
   m_Layer: 0
-  m_Name: Level5Building
+  m_Name: Building
   m_TagString: building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

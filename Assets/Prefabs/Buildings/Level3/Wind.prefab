@@ -73,7 +73,7 @@ MonoBehaviour:
     attackCD: 0.5
     bulletSpeed: 12
     originalDamage: 0
-    damage: 15
+    damage: 30
     sale: 10
     createTime: 0
     buildingLevel: 3
@@ -294,7 +294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1652143759095011289, guid: 325215f9b8c2bee44a1d23edcbb01b8c, type: 3}
       propertyPath: m_Name
-      value: Level3Building
+      value: Building
       objectReference: {fileID: 0}
     - target: {fileID: 1652143759095011302, guid: 325215f9b8c2bee44a1d23edcbb01b8c, type: 3}
       propertyPath: m_RootOrder

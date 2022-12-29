@@ -69,7 +69,7 @@ MonoBehaviour:
       extraDamageWeight: 0
     buildingName: "\u9EEF\u6DE1\u7684\u80FD\u91CF\u9AD4"
     buildingCode: 3
-    attackCD: 1
+    attackCD: 1.2
     bulletSpeed: 10
     originalDamage: 0
     damage: 30

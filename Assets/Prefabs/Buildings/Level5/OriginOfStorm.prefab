@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6560915164832588939}
   - component: {fileID: 646554665818182061}
   m_Layer: 0
-  m_Name: Level5Building
+  m_Name: Building
   m_TagString: building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4825,7 +4825,7 @@ MonoBehaviour:
       level: 5
     SpecialEffects:
     - effect: 3
-      effectValue: 2.1
+      effectValue: 0.1
       effectKeepTime: 0
       effectLevel: 5
     - effect: 4

@@ -69,7 +69,7 @@ public class BuildingController : MonoBehaviour
         {
             if(willBuffBuildingQueue.Count > 0 && willBuffBuildingQueue.Peek() != null)
             {
-                print("into buff");
+                //print("into buff");
                 attacking = true;
                 StartCoroutine(BuffBuilding());
             }
@@ -109,7 +109,7 @@ public class BuildingController : MonoBehaviour
         }
         while (willBuffBuildingQueue.Count > 0)
         {
-            print("buff count > 0");
+            //print("buff count > 0");
             if(willBuffBuildingQueue.Peek() == null)
             {
                 willBuffBuildingQueue.Dequeue();
@@ -203,6 +203,12 @@ public class BuildingController : MonoBehaviour
                     attackTime -= buildingSetting.GetTargetSpecialEffect
                         (GameSpecialEffect.SpecialEffect.攻擊後縮短自身攻擊間隔).effectValue *
                         reduceAttackTimeWeight;
+
+                    if(buildingSetting.Attribute.level < 5)
+                    {
+                        attackTime = Mathf.Clamp(attackTime, 0.1f, attackTime);
+                    }
+
                     reduceAttackTimeWeight++;
                 }
                 if(buildingSetting.GetTargetSpecialEffect

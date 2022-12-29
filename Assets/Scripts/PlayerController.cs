@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     public int testBuildingIndex = -1;
 
 
-
+    public bool changeElement = false;
     void Start()
     {
         if (testMode) mp = 100000;
@@ -100,6 +100,22 @@ public class PlayerController : MonoBehaviour
                 ResetBeClickToCombineBuilding("Click right mouse to cancel");
             }
         }
+
+        if(!combineStatus && !preparePut)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                changeElement = true;
+            }
+        }
+        if (changeElement)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                changeElement = false;
+            }
+        }
+
     }
     void ResetBeClickToCombineBuilding(string cancelMessage)
     {
@@ -298,7 +314,7 @@ public class PlayerController : MonoBehaviour
     public void ClickBuilding(BuildingSetting buildingSetting, GameObject targetBuilding)
     {
 
-        if(!preparePut && !combineStatus) //&& !prepareCreate && !prepareLevelUp)
+        if(!preparePut && !combineStatus && !changeElement) //&& !prepareCreate && !prepareLevelUp)
         {
             GameObject.Find("IconController").GetComponent<IconController>()
                 .ShowBuildingInfo(buildingSetting);
@@ -339,6 +355,31 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        else if (changeElement)
+        {
+            changeElement = false;
+            float requireCost = 5 * Mathf.Pow(2, buildingSetting.buildingLevel - 1);
+            if (mp < requireCost) return;
+            mp -= requireCost;
+            int level = buildingSetting.buildingLevel - 1;
+            int code = UnityEngine.Random.Range(0, 5);
+
+            GameObject newBuilding = GameManager.Instance.GetParticularBuilding(level, code);
+            CreateParticularBuilding(newBuilding, targetBuilding.transform.position,
+                targetBuilding.GetComponent<BuildingController>().GetUsedPosition());
+            CheckBuildingDestroy(targetBuilding);
+            Destroy(targetBuilding);
+        }
+    }
+    void CheckBuildingDestroy(GameObject target)
+    {
+        BuildingSetting buildingSetting = target.GetComponent<BuildingController>().buildingSetting;
+
+        if(buildingSetting.Attribute.attribute == GameAttribute.Attribute.¤õ && 
+            buildingSetting.buildingLevel == 5)
+        {
+            GameManager.Instance.CallChangeRingsCount(1, false);
+        }
     }
     void CheckNewBuildingMagicPetBuff(GameObject newBuilding)
     {
@@ -351,23 +392,18 @@ public class PlayerController : MonoBehaviour
     void CombineTwoBuilding(GameObject newBuilding)
     {
         levelUpTarget.SetActive(false);
-        List<GameObject> levelUpusedPosition = levelUpTarget.GetComponent<BuildingController>().
-                                            GetUsedPosition();
-        CreateParticularBuilding(newBuilding, levelUpTarget.transform.position, levelUpusedPosition);
 
-        List<GameObject> usedPosition = beAbsorbTarget.GetComponent<BuildingController>().
+        List<GameObject> levelUpusedPosition = beAbsorbTarget.GetComponent<BuildingController>().
+                                            GetUsedPosition();
+        CreateParticularBuilding(newBuilding, beAbsorbTarget.transform.position, levelUpusedPosition);
+
+        List<GameObject> usedPosition = levelUpTarget.GetComponent<BuildingController>().
                                             GetUsedPosition();
         foreach(GameObject buildingPosition in usedPosition)
         {
             buildingPosition.GetComponent<BuildingPositionController>().SetUseSituation(false);
         }
-        /*
-        if(levelUpTarget.GetComponent<BuildingController>().buildingSetting.Attribute.attribute
-            == GameAttribute.Attribute.¤õ &&
-            levelUpTarget.GetComponent<BuildingController>().buildingSetting.Attribute.level == 5)
-        {
-            GameManager.Instance.CallChangeRingsCount(1, false);
-        }*/
+
         
         Destroy(levelUpTarget.gameObject);
         Destroy(beAbsorbTarget.gameObject);

@@ -42,6 +42,10 @@ public class FireRingController : MonoBehaviour
         int weight = add ? 1 : -1;
         count += nums * weight;
         ChangeRingsInfo();
+        if(count == 0)
+        {
+            this.gameObject.SetActive(false);
+        }
         
     }
     void ChangeRingsInfo()

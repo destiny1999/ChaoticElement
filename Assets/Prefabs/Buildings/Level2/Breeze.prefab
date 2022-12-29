@@ -69,10 +69,10 @@ MonoBehaviour:
       extraDamageWeight: 0
     buildingName: "\u6563\u767C\u7DA0\u5149\u7684\u80FD\u91CF\u9AD4"
     buildingCode: 4
-    attackCD: 1
+    attackCD: 0.6
     bulletSpeed: 10
     originalDamage: 0
-    damage: 30
+    damage: 22
     sale: 5
     createTime: 0
     buildingLevel: 2

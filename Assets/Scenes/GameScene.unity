@@ -9973,7 +9973,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &748224732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10487,15 +10487,15 @@ MonoBehaviour:
   levelSettings:
   - monsterNums: 30
     monster: {fileID: 3147254460034786337, guid: 131b4eba9fd660340bfb0205e7e18e1a, type: 3}
-  - monsterNums: 20
+  - monsterNums: 30
     monster: {fileID: 3147254460034786337, guid: f181ebf35ce6058499a1a9893a11edab, type: 3}
-  - monsterNums: 20
+  - monsterNums: 45
     monster: {fileID: 3147254460034786337, guid: e5b45dd5bae16e24a83f79fb9efff4ac, type: 3}
-  - monsterNums: 25
+  - monsterNums: 15
     monster: {fileID: 3147254460034786337, guid: 2cd18bfffaf9d7648a889267138c0374, type: 3}
-  - monsterNums: 25
+  - monsterNums: 15
     monster: {fileID: 3147254460034786337, guid: a516f1bbec0993643a1d2b6d45834ab8, type: 3}
-  - monsterNums: 60
+  - monsterNums: 45
     monster: {fileID: 3147254460034786337, guid: 4e81f4c56b8a6d74299314a7ed1cd693, type: 3}
   - monsterNums: 20
     monster: {fileID: 3147254460034786337, guid: b12e0a89840c4494dbfdaf09459cb1b6, type: 3}
@@ -30697,7 +30697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   areaIndex: 0
   hp: 5
-  mp: 50
+  mp: 55
   buildingCreateInfos:
   - building: {fileID: 1129148004144231783, guid: 2331dc9ea9b1eec479a394e7538a9b2d, type: 3}
     cost: 10
@@ -30724,6 +30724,7 @@ MonoBehaviour:
   cursorCombineTexture: {fileID: 2800000, guid: b5fe112f45dc7d84f936964cb08d1ea8, type: 3}
   testMode: 0
   testBuildingIndex: -1
+  changeElement: 0
 --- !u!1 &1853228645
 GameObject:
   m_ObjectHideFlags: 0
@@ -31023,7 +31024,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1864137479
 RectTransform:
   m_ObjectHideFlags: 0

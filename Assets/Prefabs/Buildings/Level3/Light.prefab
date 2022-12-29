@@ -223,7 +223,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1652143759095011289, guid: 325215f9b8c2bee44a1d23edcbb01b8c, type: 3}
       propertyPath: m_Name
-      value: Level3Building
+      value: Building
       objectReference: {fileID: 0}
     - target: {fileID: 1652143759095011302, guid: 325215f9b8c2bee44a1d23edcbb01b8c, type: 3}
       propertyPath: m_RootOrder

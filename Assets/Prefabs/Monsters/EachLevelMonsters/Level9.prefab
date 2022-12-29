@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3147254459950020375}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3147254460034786339}
@@ -95,9 +95,9 @@ GameObject:
   - component: {fileID: 3147254460034786338}
   - component: {fileID: 845768739483943272}
   - component: {fileID: -676195839745509647}
-  - component: {fileID: 6932975301188228763}
+  - component: {fileID: 6551531043320829949}
   m_Layer: 6
-  m_Name: Level6
+  m_Name: Level9
   m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3147254459950020371}
-  - {fileID: 7049038075761703006}
+  - {fileID: 6242795639531923005}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -147,8 +147,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3, z: 0.3}
-  m_Center: {x: 0, y: 0.15, z: 0}
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!114 &-676195839745509647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,22 +162,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSetting:
-    hp: 50
-    name: "\u8FC5\u901F\u7684\u5C0F\u578B\u672A\u77E5\u7ACB\u65B9\u9AD4"
-    speed: 1.2
+    hp: 500
+    name: "\u6607\u83EF\u7684\u672A\u77E5\u7ACB\u65B9\u9AD4 "
+    speed: 0.9
     damage: 1
     attribute:
       attribute: 0
       level: 1
     killBonus: 1
     specialEffect:
-      effect: 0
+    - effect: 0
       effectValue: 0
       effectKeepTime: 0
-    elementDropRate: 1
-    defense: 5
+      effectLevel: 0
+    - effect: 0
+      effectValue: 0
+      effectKeepTime: 0
+      effectLevel: 0
+    - effect: 0
+      effectValue: 0
+      effectKeepTime: 0
+      effectLevel: 0
+    elementDropRate: 0
+    defense: 6
   dead: 0
   notMove: 0
+  boss: 0
   statusList:
   - target: 1
     value: 0
@@ -188,7 +198,7 @@ MonoBehaviour:
   - target: 2
     value: 0
     time: 0
---- !u!114 &6932975301188228763
+--- !u!114 &6551531043320829949
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,10 +210,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6d6304fd61a53043b3b7c6ea6a6b969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpValue: {fileID: 2490142093626751959}
-  hpMonitor: {fileID: 6768318629380204336}
+  hpValue: {fileID: 1585029904239191476}
+  hpMonitor: {fileID: 7682031180388989267}
   testValue: -1
---- !u!1001 &7385322321521014529
+--- !u!1001 &5840048052699081058
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -220,7 +230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 553618732841127775, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.45
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 553618732841127775, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -260,18 +270,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
---- !u!1 &2490142093626751959 stripped
+--- !u!1 &1585029904239191476 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4968363809914440918, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
-  m_PrefabInstance: {fileID: 7385322321521014529}
+  m_PrefabInstance: {fileID: 5840048052699081058}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6768318629380204336 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4291941901052432433, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
-  m_PrefabInstance: {fileID: 7385322321521014529}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7049038075761703006 stripped
+--- !u!4 &6242795639531923005 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 553618732841127775, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
-  m_PrefabInstance: {fileID: 7385322321521014529}
+  m_PrefabInstance: {fileID: 5840048052699081058}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7682031180388989267 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4291941901052432433, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
+  m_PrefabInstance: {fileID: 5840048052699081058}
   m_PrefabAsset: {fileID: 0}

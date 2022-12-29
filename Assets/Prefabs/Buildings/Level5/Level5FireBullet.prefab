@@ -351,17 +351,17 @@ MonoBehaviour:
   ring1Effect:
   - effect: 2
     effectValue: 0
-    effectKeepTime: 9999
+    effectKeepTime: 1
     effectLevel: 0
   ring2Effect:
   - effect: 2
     effectValue: 0
-    effectKeepTime: 9999
+    effectKeepTime: 1
     effectLevel: 0
   ring3Effect:
   - effect: 2
     effectValue: 0
-    effectKeepTime: 9999
+    effectKeepTime: 1
     effectLevel: 0
   color: {r: 0.9254902, g: 0.0627451, b: 0.0627451, a: 1}
 --- !u!1 &8941852006621235615
