@@ -27,6 +27,7 @@ public class BuildingController : MonoBehaviour
     [SerializeField] bool buffBuilding = false;
     [SerializeField] bool allAttack = false;
     [SerializeField] bool notAttack = false;
+    [SerializeField] GameObject ChangeCost;
     GameObject centerAllAttackTarget;
 
     private void Awake()
@@ -179,7 +180,7 @@ public class BuildingController : MonoBehaviour
                                     );
                 if (buffSet.Contains(GameSpecialEffect.SpecialEffect.攻擊時有機會雙倍傷害))
                 {
-                    print("contain");
+                    //print("contain");
                     GameSpecialEffect newEffect = new GameSpecialEffect();
                     newEffect.effect = GameSpecialEffect.SpecialEffect.攻擊時有機會雙倍傷害;
                     newbullet.GetComponent<BulletController>().bulletSetting.SpecialEffects.
@@ -382,6 +383,11 @@ public class BuildingController : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void SetChangeCost(bool status)
+    {
+        ChangeCost.SetActive(status);
     }
 }
 

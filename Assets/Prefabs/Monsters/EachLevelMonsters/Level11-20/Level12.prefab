@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3147254459950020375}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3147254460034786339}
@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3147254459950020375}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &3147254459950020369
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -93,11 +93,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3147254460034786339}
   - component: {fileID: 3147254460034786338}
-  - component: {fileID: 845768739483943272}
   - component: {fileID: -676195839745509647}
   - component: {fileID: 6551531043320829949}
+  - component: {fileID: 986165712118890588}
   m_Layer: 6
-  m_Name: Level10
+  m_Name: Level12
   m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,19 +136,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 4
   m_CollisionDetection: 0
---- !u!65 &845768739483943272
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3147254460034786337}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5, z: 0.5}
-  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!114 &-676195839745509647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,14 +149,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSetting:
-    hp: 3000
-    name: "\u5DE8\u5927\u7684\u672A\u77E5\u7ACB\u65B9\u9AD4 "
-    speed: 1
+    hp: 500
+    name: "\u8F03\u5FEB\u7684X\u5C6C\u6027\u672A\u77E5\u7403\u9AD4"
+    speed: 1.2
     damage: 1
     attribute:
-      attribute: 0
+      attribute: 6
       level: 1
-    killBonus: 100
+    killBonus: 2
     specialEffect:
     - effect: 0
       effectValue: 0
@@ -187,11 +174,11 @@ MonoBehaviour:
       effectValue: 0
       effectKeepTime: 0
       effectLevel: 0
-    elementDropRate: 100
+    elementDropRate: 1
     defense: 6
   dead: 0
   notMove: 0
-  boss: 1
+  boss: 0
   statusList:
   - target: 1
     value: 0
@@ -217,6 +204,19 @@ MonoBehaviour:
   hpValue: {fileID: 1585029904239191476}
   hpMonitor: {fileID: 7682031180388989267}
   testValue: -1
+--- !u!135 &986165712118890588
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3147254460034786337}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5840048052699081058
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -238,7 +238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 553618732841127775, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 553618732841127775, guid: 78fcd1366824f854b8ac6b0e0d522f0a, type: 3}
       propertyPath: m_LocalPosition.z

@@ -342,9 +342,9 @@ MonoBehaviour:
   - {fileID: 530584276152059729}
   - {fileID: 7331061314440362091}
   damages:
-  - 1
-  - 2
-  - 3
+  - 100
+  - 200
+  - 500
   attribute:
     attribute: 2
     level: 5

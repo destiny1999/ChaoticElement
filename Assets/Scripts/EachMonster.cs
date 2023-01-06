@@ -15,6 +15,7 @@ public class EachMonster : MonoBehaviour
     public bool boss = false;
     bool burning = false;
     float moveTime = 0;
+    bool needToSetAttribute = false;
     [SerializeField]List<Status> statusList = new List<Status>();
     Stack<BulletController> burnEffectStack = new Stack<BulletController>();
     private void Awake()
@@ -24,6 +25,10 @@ public class EachMonster : MonoBehaviour
     void Start()
     {
         monster = new Monster(monsterSetting);
+        if (needToSetAttribute)
+        {
+            SetMonsterAttribute();
+        }
         if (notMove) return;
         nextTargetTransform = GameObject.Find("FirstMoveCheckPoint").gameObject.transform;
         
@@ -329,6 +334,7 @@ public class EachMonster : MonoBehaviour
     }
     void ReduceHP(float damage)
     {
+        if (dead) return;
         //print("damage = " + damage);
         monster.HP -= damage;
         this.GetComponent<HPMonitorController>().ChangeHpShowValue(monster.HP / monsterSetting.hp);
@@ -344,9 +350,66 @@ public class EachMonster : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    public void SetMonsterAttribute()
+    {
+        if(monster.Attribute.attribute == GameAttribute.Attribute.隨機)
+        {
+            monster.Attribute.attribute = GetRandomAttribute();
+        }
+        switch (monster.Attribute.attribute)
+        {
+            case GameAttribute.Attribute.水:
+                this.transform.Find("MonsterTest").GetComponent<MeshRenderer>().
+                    material.color = Color.blue;
+                break;
+            case GameAttribute.Attribute.火:
+                this.transform.Find("MonsterTest").GetComponent<MeshRenderer>().
+                    material.color = Color.red;
+                break;
+            case GameAttribute.Attribute.風:
+                this.transform.Find("MonsterTest").GetComponent<MeshRenderer>().
+                    material.color = Color.green;
+                break;
+            case GameAttribute.Attribute.光:
+                this.transform.Find("MonsterTest").GetComponent<MeshRenderer>().
+                    material.color = Color.yellow;
+                break;
+            case GameAttribute.Attribute.暗:
+                this.transform.Find("MonsterTest").GetComponent<MeshRenderer>().
+                    material.color = Color.black;
+                break;
+        }
+    }
+    GameAttribute.Attribute GetRandomAttribute()
+    {
+        GameAttribute.Attribute attribute = GameAttribute.Attribute.無;
+        switch (UnityEngine.Random.Range(0, 5))
+        {
+            case 0:
+                attribute = GameAttribute.Attribute.水;
+                break;
+            case 1:
+                attribute = GameAttribute.Attribute.火;
+                break;
+            case 2:
+                attribute = GameAttribute.Attribute.風;
+                break;
+            case 3:
+                attribute = GameAttribute.Attribute.光;
+                break;
+            case 4:
+                attribute = GameAttribute.Attribute.暗;
+                break;
+        }
+        return attribute;
+    }
     public MonsterSetting GetMonsterSetting()
     {
         return monsterSetting;
+    }
+    public void SetNeedToSetAttribute()
+    {
+        needToSetAttribute = true;
     }
 }
 
@@ -407,11 +470,11 @@ public class Monster : MonsterBase
         this.elementDropRate = monsterSetting.elementDropRate;
         this.defense = monsterSetting.defense;
     }
-    public override float CaculateDamage(float damage, GameAttribute enemyAttribute)
+    public override float CaculateDamage(float damage, GameAttribute bulletAttribute)
     {
         float finalDamage = damage;
-        float weight = 1 + (enemyAttribute.level - this.Attribute.level) * 0.5f;
-        switch (enemyAttribute.attribute)
+        float weight = 1 + (bulletAttribute.level - this.Attribute.level) * 0.5f;
+        switch (bulletAttribute.attribute)
         {
             case GameAttribute.Attribute.水:
                 if(this.Attribute.attribute == GameAttribute.Attribute.火)
@@ -419,6 +482,36 @@ public class Monster : MonsterBase
                     finalDamage *= weight;
                 }
                 break;
+            case GameAttribute.Attribute.火:
+                if (this.Attribute.attribute == GameAttribute.Attribute.風)
+                {
+                    finalDamage *= weight;
+                }
+                break;
+            case GameAttribute.Attribute.風:
+                if (this.Attribute.attribute == GameAttribute.Attribute.水)
+                {
+                    finalDamage *= weight;
+                }
+                break;
+            case GameAttribute.Attribute.光:
+                if (this.Attribute.attribute == GameAttribute.Attribute.暗)
+                {
+                    finalDamage *= weight / 0.5f * 2f;
+                }
+                break;
+            case GameAttribute.Attribute.暗:
+                if (this.Attribute.attribute != GameAttribute.Attribute.光 &&
+                    this.Attribute.attribute != GameAttribute.Attribute.暗)
+                {
+                    finalDamage *= weight / 0.5f * 0.25f;
+                }
+                else if(this.Attribute.attribute == GameAttribute.Attribute.光)
+                {
+                    finalDamage *= weight / 0.5f * 2f;
+                }
+                break;
+            
         }
         
         float finalDefense = this.defense - this.SpecialEffectInfluenceValue.defense;

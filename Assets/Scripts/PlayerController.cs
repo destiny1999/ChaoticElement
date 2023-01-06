@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
     {
         playerTMPInfo.mpTMP.text = mp+"";
 
-        if (!preparePut && !combineStatus)
+        if (!preparePut && !combineStatus && !changeElement)
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        if (!preparePut && Input.GetKeyDown(KeyCode.W))
+        if (!preparePut && !changeElement && Input.GetKeyDown(KeyCode.W))
         {
             combineStatus = true;
             float offset = cursorCombineTexture.width/2;
@@ -106,6 +106,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 changeElement = true;
+                ShowChangeCost(true);
             }
         }
         if (changeElement)
@@ -113,9 +114,21 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 changeElement = false;
+                ShowChangeCost(false);
             }
         }
 
+    }
+    void ShowChangeCost(bool status)
+    {
+        BuildingController[] buildings = buildingManager.transform.
+            GetComponentsInChildren<BuildingController>();
+
+        foreach(BuildingController building in buildings)
+        {
+            building.SetChangeCost(status);
+        }
+        
     }
     void ResetBeClickToCombineBuilding(string cancelMessage)
     {
@@ -358,7 +371,9 @@ public class PlayerController : MonoBehaviour
         else if (changeElement)
         {
             changeElement = false;
-            float requireCost = 5 * Mathf.Pow(2, buildingSetting.buildingLevel - 1);
+            ShowChangeCost(false);
+
+            float requireCost = 10 * Mathf.Pow(2, buildingSetting.buildingLevel - 1);
             if (mp < requireCost) return;
             mp -= requireCost;
             int level = buildingSetting.buildingLevel - 1;

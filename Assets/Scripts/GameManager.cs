@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     public GameObject allAttackCenterTarget;
 
     [SerializeField] FireRingController fireRingController;
+
+    GameAttribute waveAttribute = null;
     private void Awake()
     {
         Instance = this;
@@ -123,16 +125,13 @@ public class GameManager : MonoBehaviour
         {
             yield return (CreateMonster(levelSetting.monster));
         }
+        waveAttribute = null;
     }
     void ShowWaveInfo(GameObject targetMonster)
     {
         MonsterSetting monsterSetting = targetMonster.GetComponent<EachMonster>().GetMonsterSetting();
         string monsterName = monsterSetting.name;
 
-        /*
-        List<MonsterSetting.SpecialEffect> specialEffects = 
-            targetMonster.GetComponent<MonsterController>().GetMonsterSetting().specialEffects;
-        */
         string monsterEffect = "";
         for(int i = 0; i < monsterSetting.specialEffect.Count; i++)
         {
@@ -167,7 +166,34 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
-        
+
+        if (monsterName.Contains("X"))
+        {
+            waveAttribute = new GameAttribute();
+            switch (UnityEngine.Random.Range(0, 5))
+            {
+                case 0:
+                    waveAttribute.attribute = GameAttribute.Attribute.水;
+                    monsterName = monsterName.Replace('X', '水');
+                    break;
+                case 1:
+                    waveAttribute.attribute = GameAttribute.Attribute.火;
+                    monsterName = monsterName.Replace('X', '火');
+                    break;
+                case 2:
+                    waveAttribute.attribute = GameAttribute.Attribute.風;
+                    monsterName = monsterName.Replace('X', '風');
+                    break;
+                case 3:
+                    waveAttribute.attribute = GameAttribute.Attribute.光;
+                    monsterName = monsterName.Replace('X', '光');
+                    break;
+                case 4:
+                    waveAttribute.attribute = GameAttribute.Attribute.暗;
+                    monsterName = monsterName.Replace('X', '暗');
+                    break;
+            }
+        }
         
         waveInfoTMP.text = monsterName + "\n" + monsterEffect;
         waveInfoTMP.gameObject.SetActive(true);
@@ -190,8 +216,15 @@ public class GameManager : MonoBehaviour
         newMonster.transform.position = players[0].GetComponent<PlayerController>().
                                             GetMonsterCreatePosition().position;
         newMonster.transform.SetParent(monsterManager.transform);
+        if(waveAttribute != null)
+        {
+            newMonster.GetComponent<EachMonster>().GetMonsterSetting().attribute.attribute =
+                waveAttribute.attribute;
+            newMonster.GetComponent<EachMonster>().SetNeedToSetAttribute();
+        }
+        
         newMonster.SetActive(true);
-        float time = 0.5f;
+        float time = 1f;
         while(time > 0)
         {
             time -= Time.deltaTime * 1;
@@ -223,27 +256,7 @@ public class GameManager : MonoBehaviour
             wave++;
             StartCoroutine(NextWave());
         }
-        /*
-        if(gameMode == GameMode.challenge)
-        {
-
-            // create next level monster
-            GameObject newPowerfulMonster = Instantiate(challengeMonster);
-            newPowerfulMonster.SetActive(false);
-            MonsterSetting newMonsterSetting = new MonsterSetting();
-            newMonsterSetting.hp = monsterSetting.orignalHP * 1.5f;
-            newMonsterSetting.moveSpeed = Mathf.Clamp(monsterSetting.moveSpeed * 1.1f,
-                                                       monsterSetting.moveSpeed,
-                                                       5f);
-            newMonsterSetting.killBonus = monsterSetting.killBonus + 1;
-            Transform targetTransform = players[monsterSetting.areaIndex].
-                                            GetComponent<PlayerController>().GetMonsterCreatePosition();
-            
-            newPowerfulMonster.transform.position = targetTransform.position;
-            newPowerfulMonster.GetComponent<MonsterController>().
-                SetMonsterSetting(newMonsterSetting);
-            newPowerfulMonster.SetActive(true);
-        }*/
+        
     }
     public void CreateEarnMoney(float value, Vector3 position)
     {
@@ -464,7 +477,8 @@ public class GameAttribute
         火,
         風,
         光,
-        暗
+        暗,
+        隨機
     }
 }
 [Serializable]

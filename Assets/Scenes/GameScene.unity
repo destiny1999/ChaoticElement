@@ -10505,6 +10505,16 @@ MonoBehaviour:
     monster: {fileID: 3147254460034786337, guid: 77c47531eb51fcf458de73b0f6f75125, type: 3}
   - monsterNums: 1
     monster: {fileID: 3147254460034786337, guid: 5608abb9754b62845887f0be386aaede, type: 3}
+  - monsterNums: 10
+    monster: {fileID: 3147254460034786337, guid: 86ba092368cd49a4089446642e50e9d6, type: 3}
+  - monsterNums: 20
+    monster: {fileID: 3147254460034786337, guid: e311e03e61f73df4b910d3390aab1ca5, type: 3}
+  - monsterNums: 15
+    monster: {fileID: 3147254460034786337, guid: b0b33f9501dde344faf99eba1ca5643c, type: 3}
+  - monsterNums: 5
+    monster: {fileID: 3147254460034786337, guid: 8718c7335350a6841a33ae434d0a05ab, type: 3}
+  - monsterNums: 1
+    monster: {fileID: 3147254460034786337, guid: 37fa0cc30269bd843b66b57b73ea8c79, type: 3}
   infinityLevelSetting:
   - monsterNums: 5
     monster: {fileID: 3147254460034786337, guid: 131b4eba9fd660340bfb0205e7e18e1a, type: 3}
@@ -30696,8 +30706,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   areaIndex: 0
-  hp: 5
-  mp: 55
+  hp: 6
+  mp: 50
   buildingCreateInfos:
   - building: {fileID: 1129148004144231783, guid: 2331dc9ea9b1eec479a394e7538a9b2d, type: 3}
     cost: 10
