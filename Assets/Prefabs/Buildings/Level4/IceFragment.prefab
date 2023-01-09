@@ -58,7 +58,7 @@ MonoBehaviour:
     SpecialEffects:
     - effect: 19
       effectValue: 30
-      effectKeepTime: 2
+      effectKeepTime: 1
       effectLevel: 4
     SpecialEffectInfluenceValue:
       hp: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
       extraDamageRate: 0
       extraDamageWeight: 0
     buildingName: "\u51B0\u96EA\u6B98\u7247"
-    buildingCode: 0
+    buildingCode: 1
     attackCD: 0.5
     bulletSpeed: 20
     originalDamage: 0

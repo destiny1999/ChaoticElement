@@ -364,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2300718934719978689, guid: ae84e67d298f6b349a8074954f973f43, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2300718934719978717, guid: ae84e67d298f6b349a8074954f973f43, type: 3}
       propertyPath: m_RootOrder
@@ -636,6 +636,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gale
       objectReference: {fileID: 0}
+    - target: {fileID: 588895519847924728, guid: 1467c9e77d8b9ca469e184dea54cbce0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1467c9e77d8b9ca469e184dea54cbce0, type: 3}
 --- !u!1001 &872571200
@@ -692,6 +696,10 @@ PrefabInstance:
     - target: {fileID: 588895519847924728, guid: 65b9fcdd3d9dc064bb26d0ee8c9813a2, type: 3}
       propertyPath: m_Name
       value: OriginOfStorm
+      objectReference: {fileID: 0}
+    - target: {fileID: 588895519847924728, guid: 65b9fcdd3d9dc064bb26d0ee8c9813a2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65b9fcdd3d9dc064bb26d0ee8c9813a2, type: 3}
@@ -928,7 +936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 588895519847924728, guid: ed29127b35567fe4cb12b2ac6b37a9ba, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed29127b35567fe4cb12b2ac6b37a9ba, type: 3}
@@ -1686,6 +1694,7 @@ MonoBehaviour:
   buffBuilding: 0
   allAttack: 0
   notAttack: 0
+  ChangeCost: {fileID: 0}
 --- !u!136 &2465295110832275782
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1767,6 +1776,7 @@ MonoBehaviour:
   buffBuilding: 0
   allAttack: 0
   notAttack: 0
+  ChangeCost: {fileID: 0}
 --- !u!1001 &3632399359917034631
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2186,7 +2196,7 @@ MonoBehaviour:
     speed: 0.8
     damage: 1
     attribute:
-      attribute: 0
+      attribute: 2
       level: 1
     killBonus: 5
     specialEffect:

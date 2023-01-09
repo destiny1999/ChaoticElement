@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] FireRingController fireRingController;
 
     GameAttribute waveAttribute = null;
+    public bool createMonster = true;
     private void Awake()
     {
         Instance = this;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
         maxWave = levelManager.GetMaxLevel();
+        if (!createMonster) return;
         StartCoroutine(NextWave());
     }
 
@@ -270,8 +272,8 @@ public class GameManager : MonoBehaviour
         switch (attribute)
         {
             case GameAttribute.Attribute.µL:
-                int randomElement = UnityEngine.Random.Range(0, dropElements.Count);
-                dropElement = Instantiate(dropElements[randomElement]);
+                
+                dropElement = Instantiate(dropElements[0]);
                 break;
             case GameAttribute.Attribute.¤ô:
                 dropElement = Instantiate(dropElements[1]);
@@ -287,6 +289,10 @@ public class GameManager : MonoBehaviour
                 break;
             case GameAttribute.Attribute.·t:
                 dropElement = Instantiate(dropElements[5]);
+                break;
+            case GameAttribute.Attribute.ÀH¾÷:
+                int randomElement = UnityEngine.Random.Range(0, dropElements.Count);
+                dropElement = Instantiate(dropElements[randomElement]);
                 break;
         }
         dropElement.transform.position = dropPosition;

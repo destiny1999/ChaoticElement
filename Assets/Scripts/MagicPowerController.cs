@@ -15,8 +15,9 @@ public class MagicPowerController : MonoBehaviour
     {
         
     }
-    public void SetColor(Color color)
+    public void SetColor(Color color, bool canChange)
     {
+        this.GetComponent<Collider2D>().enabled = canChange;
         this.GetComponent<SpriteRenderer>().color = color;
         StartCoroutine(ChangeColorAlpha());
     }
@@ -30,5 +31,8 @@ public class MagicPowerController : MonoBehaviour
             yield return null;
         }
     }
-    
+    private void OnMouseDown()
+    {
+        print("click");
+    }
 }

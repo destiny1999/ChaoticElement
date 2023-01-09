@@ -162,9 +162,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSetting:
-    hp: 100
+    hp: 150
     name: "\u9EBB\u7169\u7684\u672A\u77E5\u7ACB\u65B9\u9AD4"
-    speed: 0.9
+    speed: 1
     damage: 1
     attribute:
       attribute: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
       effectKeepTime: 0
       effectLevel: 0
     elementDropRate: 0
-    defense: 5
+    defense: 3
   dead: 0
   notMove: 0
   boss: 0

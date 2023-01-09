@@ -141,6 +141,7 @@ public class PlayerController : MonoBehaviour
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         Debug.Log(cancelMessage);
     }
+    /*
     public void CreateBuilding(string buildingString)
     {
         if (!preparePut)
@@ -154,7 +155,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(MoveAndBuild(newBuilding));
             }
         }
-    }
+    }*/
     void CreateBuildingCoin(string targetName)
     {
         ChangeAllBuildingRayLayer(true);
@@ -295,6 +296,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
                 targetBuilding = null;
+                ChangeAllBuildingRayLayer(false);
                 break;
             }
         }

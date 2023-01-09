@@ -164,20 +164,30 @@ MonoBehaviour:
   monsterSetting:
     hp: 20
     name: "\u5C0F\u578B\u672A\u77E5\u7ACB\u65B9\u9AD4"
-    speed: 0.8
+    speed: 1
     damage: 1
     attribute:
       attribute: 0
       level: 1
     killBonus: 1
     specialEffect:
-      effect: 0
+    - effect: 0
       effectValue: 0
       effectKeepTime: 0
+      effectLevel: 0
+    - effect: 0
+      effectValue: 0
+      effectKeepTime: 0
+      effectLevel: 0
+    - effect: 0
+      effectValue: 0
+      effectKeepTime: 0
+      effectLevel: 0
     elementDropRate: 0
     defense: 0
   dead: 0
   notMove: 0
+  boss: 0
   statusList:
   - target: 1
     value: 0

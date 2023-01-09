@@ -24,6 +24,7 @@ public class MagicPetController : MonoBehaviour
         if (other.CompareTag("DropElement") && !other.GetComponent<DropElementController>().
                                                 GetUsedStatus())
         {
+            bool canClickToChange = false;
             other.GetComponent<DropElementController>().SetUsedStatus();
             int elementIndex = -1;
             GameAttribute.Attribute targetAttribute = 
@@ -32,6 +33,7 @@ public class MagicPetController : MonoBehaviour
             {
                 case GameAttribute.Attribute.µL:
                     elementIndex = 0;
+                    canClickToChange = true;
                     break;
                 case GameAttribute.Attribute.¤ô:
                     elementIndex = 1;
@@ -52,7 +54,7 @@ public class MagicPetController : MonoBehaviour
             powerNums[elementIndex]++;
             //print(nextPosition);
             magicPowers[nextPosition].GetComponent<MagicPowerController>().
-                SetColor(magicPowerColors[elementIndex]);
+                SetColor(magicPowerColors[elementIndex], canClickToChange);
             nextPosition++;
             Destroy(other.gameObject);
             GameManager.Instance.SetMagicPetBuff(targetAttribute, powerNums[elementIndex]);

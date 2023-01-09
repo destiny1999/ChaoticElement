@@ -474,6 +474,7 @@ public class Monster : MonsterBase
     {
         float finalDamage = damage;
         float weight = 1 + (bulletAttribute.level - this.Attribute.level) * 0.5f;
+        float reverseWeight = 1 - (bulletAttribute.level - this.Attribute.level) * 0.5f;
         switch (bulletAttribute.attribute)
         {
             case GameAttribute.Attribute.水:
@@ -481,11 +482,19 @@ public class Monster : MonsterBase
                 {
                     finalDamage *= weight;
                 }
+                else if(this.Attribute.attribute == GameAttribute.Attribute.風)
+                {
+                    finalDamage *= reverseWeight;
+                }
                 break;
             case GameAttribute.Attribute.火:
                 if (this.Attribute.attribute == GameAttribute.Attribute.風)
                 {
                     finalDamage *= weight;
+                }
+                else if (this.Attribute.attribute == GameAttribute.Attribute.水)
+                {
+                    finalDamage *= reverseWeight;
                 }
                 break;
             case GameAttribute.Attribute.風:
@@ -493,22 +502,26 @@ public class Monster : MonsterBase
                 {
                     finalDamage *= weight;
                 }
+                else if (this.Attribute.attribute == GameAttribute.Attribute.火)
+                {
+                    finalDamage *= reverseWeight;
+                }
                 break;
             case GameAttribute.Attribute.光:
                 if (this.Attribute.attribute == GameAttribute.Attribute.暗)
                 {
-                    finalDamage *= weight / 0.5f * 2f;
+                    finalDamage *= weight / 0.5f + 1f;
                 }
                 break;
             case GameAttribute.Attribute.暗:
                 if (this.Attribute.attribute != GameAttribute.Attribute.光 &&
                     this.Attribute.attribute != GameAttribute.Attribute.暗)
                 {
-                    finalDamage *= weight / 0.5f * 0.25f;
+                    finalDamage *= weight / 0.5f + 0.25f;
                 }
                 else if(this.Attribute.attribute == GameAttribute.Attribute.光)
                 {
-                    finalDamage *= weight / 0.5f * 2f;
+                    finalDamage *= weight / 0.5f - 0.5f;
                 }
                 break;
             
