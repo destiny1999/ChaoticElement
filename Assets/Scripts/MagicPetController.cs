@@ -8,16 +8,25 @@ public class MagicPetController : MonoBehaviour
     [SerializeField] List<GameObject> magicPowers;
     [SerializeField] List<Color> magicPowerColors;
     int[] powerNums = new int[6];
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static MagicPetController Instance;
+    bool selectingBuff = false;
+    [SerializeField] BuffElementSelectorController BuffElementSelector;
 
+    int selectedIndex = -1;
+    private void Awake()
+    {
+        Instance = this;
+    }
     // Update is called once per frame
     void Update()
     {
-        
+        if (selectingBuff)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                SelectedFinished();
+            }
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -82,5 +91,60 @@ public class MagicPetController : MonoBehaviour
                 break;
         }
         return nums;
+    }
+    public void CallChangeBuffElementsStatus()
+    {
+        if (!selectingBuff)
+        {
+            selectingBuff = true;
+            BuffElementSelector.ChangeBuffElementsStatus();
+        }
+    }
+    public void SetClickTargetIndex(int index)
+    {
+        selectedIndex = index;
+    }
+    public void SelectedFinished()
+    {
+        BuffElementSelector.ChangeBuffElementsStatus();
+        selectingBuff = false;
+    }
+    
+    public void AddMagicPowerBuff(int elementIndex)
+    {
+        SelectedFinished();
+
+        powerNums[elementIndex]++;
+        GameAttribute.Attribute targetAttribute = UseIndexGetAttribute(elementIndex);
+        Color color = magicPowerColors[elementIndex];
+        color.a = 1;
+        magicPowers[selectedIndex].GetComponent<MagicPowerController>().
+            SetColor(color, false);
+        selectedIndex = -1;
+        print(targetAttribute);
+        GameManager.Instance.SetMagicPetBuff(targetAttribute, powerNums[elementIndex]);
+    }
+    GameAttribute.Attribute UseIndexGetAttribute(int index)
+    {
+        GameAttribute.Attribute target = GameAttribute.Attribute.無;
+        switch (index)
+        {
+            case 1:
+                target = GameAttribute.Attribute.水;
+                break;
+            case 2:
+                target = GameAttribute.Attribute.火;
+                break;
+            case 3:
+                target = GameAttribute.Attribute.風;
+                break;
+            case 4:
+                target = GameAttribute.Attribute.光;
+                break;
+            case 5:
+                target = GameAttribute.Attribute.暗;
+                break;
+        }
+        return target;
     }
 }

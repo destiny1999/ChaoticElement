@@ -141,21 +141,6 @@ public class PlayerController : MonoBehaviour
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         Debug.Log(cancelMessage);
     }
-    /*
-    public void CreateBuilding(string buildingString)
-    {
-        if (!preparePut)
-        {
-            if (buildingCreateInfoDictionry[buildingString].cost <= mp)
-            {
-                mp -= buildingCreateInfoDictionry[buildingString].cost;
-                GameObject newBuilding = Instantiate(buildingCreateInfoDictionry[buildingString].building);
-                targetBuilding = newBuilding;
-                preparePut = true;
-                StartCoroutine(MoveAndBuild(newBuilding));
-            }
-        }
-    }*/
     void CreateBuildingCoin(string targetName)
     {
         ChangeAllBuildingRayLayer(true);

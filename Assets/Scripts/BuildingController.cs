@@ -32,7 +32,7 @@ public class BuildingController : MonoBehaviour
 
     private void Awake()
     {
-        //print("initial orignal");
+        print("initial orignal");
         buildingSetting.originalDamage = buildingSetting.damage;
     }
     private void Start()
@@ -53,6 +53,7 @@ public class BuildingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //print(buildingSetting.damage);
         if(targetQueue.Count > 0 && !attacking && !allAttack)
         {
             targetEnemy = targetQueue.Peek();
@@ -152,7 +153,9 @@ public class BuildingController : MonoBehaviour
                             (1 + buildingSetting.SpecialEffectInfluenceValue.
                                 attackCDSpeed / 100f);
         int reduceAttackTimeWeight = 1;
-        buildingSetting.damage = buildingSetting.originalDamage;
+        buildingSetting.damage = buildingSetting.originalDamage +
+                                    buildingSetting.originalDamage / 2 * 
+                                    buildingSetting.magicPetNums;
         int attackTimes = 0;
         float targetAttackTimes = -1;
         bool specialAttack = false;
@@ -356,11 +359,16 @@ public class BuildingController : MonoBehaviour
     /// </summary>
     public void AddMagicPetBuff(int nums)
     {
+        print("num = " + nums);
         //print(buildingSetting.originalDamage);
-        
+        buildingSetting.magicPetNums = nums;
+        print("before damage = " + buildingSetting.damage);
 
         buildingSetting.damage = buildingSetting.originalDamage + 
-                                    buildingSetting.originalDamage / 2 * nums;
+                                    buildingSetting.originalDamage / 2 * 
+                                    buildingSetting.magicPetNums;
+
+        print("after damage = " + buildingSetting.damage);
     }
     public void RemoveStatus(GameSpecialEffect gameSpecialEffect, bool buff)
     {
@@ -406,7 +414,7 @@ public class BuildingSetting : GameItemInfo
     public int areaIndex;
     public List<int> buildingCanCombineCode;
     public Color bulletColor;
-
+    public int magicPetNums = 0;
 }
 [Serializable]
 public class BuildingCreateInfo

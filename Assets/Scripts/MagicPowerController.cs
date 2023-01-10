@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MagicPowerController : MonoBehaviour
 {
+    [SerializeField] int index;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +34,7 @@ public class MagicPowerController : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        print("click");
+        MagicPetController.Instance.CallChangeBuffElementsStatus();
+        MagicPetController.Instance.SetClickTargetIndex(index);
     }
 }

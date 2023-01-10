@@ -6,44 +6,36 @@ public class BuffElementSelectorController : MonoBehaviour
 {
     [SerializeField] GameObject moveTarget;
     [SerializeField] GameObject rotateTarget;
+    [SerializeField] GameObject openTrigger;
+    [SerializeField] GameObject closeTrigger;
     public bool stop = true;
     public float moveSpeed;
     public float rotateSpeed;
-    // Start is called before the first frame update
-    void Start()
+    bool open = false;
+
+    float tempTimeScale = -1;
+
+    private void Awake()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            StartCoroutine(ChangeBuffElementsStatus(true));
+            ChangeBuffElementsStatus();
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            StartCoroutine(ChangeBuffElementsStatus(false));
-        }
+
     }
-    IEnumerator ChangeBuffElementsStatus(bool open)
+    public void ChangeBuffElementsStatus()
     {
-        Vector3 rotateDirection = open ? Vector3.down : Vector3.up;
-        Vector3 moveDirection = open ? Vector3.right : Vector3.left;
-        //float targetPos = open ? 0 : -1545f;
-        stop = false;
-        while(!stop)
-        {
-            //print(Mathf.Abs(moveTarget.GetComponent<RectTransform>().anchoredPosition.x));
-            moveTarget.transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
-            rotateTarget.transform.Rotate(rotateDirection * rotateSpeed * Time.deltaTime);
-            yield return null;
-        }
-        /*
-        moveTarget.GetComponent<RectTransform>().anchoredPosition =
-            new Vector2(targetPos,
-                        moveTarget.GetComponent<RectTransform>().anchoredPosition.y);*/
+        tempTimeScale = Time.timeScale == 0 ? tempTimeScale : Time.timeScale;
+        open = !open;
+        Time.timeScale = open ? 0 : tempTimeScale;
+        this.gameObject.SetActive(open);
     }
     public void TriggerStop()
     {

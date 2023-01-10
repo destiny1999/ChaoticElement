@@ -28,8 +28,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<GameObject> dropElements;
     [SerializeField] GameObject buildingManager;
     [SerializeField] GameObject menuObject;
-    public float GameExecuteSpeed = 1f;
-    float gameExecuteSpeedTemp = 1f;
+
+    float tempTimeScale = -1;
     [SerializeField] GameObject moneyObject;
     public Transform allAttackBulletCreatePosition;
     public GameObject allAttackCenterTarget;
@@ -53,7 +53,6 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameExecuteSpeedTemp = GameExecuteSpeed;
         switch (gameMode)
         {
             case GameMode.normal:
@@ -68,40 +67,33 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Time.timeScale = GameExecuteSpeed;
+        
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            GameExecuteSpeed = 1;
+            Time.timeScale = 1;
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            GameExecuteSpeed = 2;
+            Time.timeScale = 2;
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            GameExecuteSpeed = 3;
+            Time.timeScale = 3;
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            GameExecuteSpeed = 4;
+            Time.timeScale = 4;
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            GameExecuteSpeed = 5;
+            Time.timeScale = 5;
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            tempTimeScale = Time.timeScale == 0 ? tempTimeScale : Time.timeScale;
             menuObject.SetActive(!menuObject.activeSelf);
-            if (menuObject.activeSelf) 
-            {
-                gameExecuteSpeedTemp = GameExecuteSpeed;
-                GameExecuteSpeed = 0;
-            }
-            else
-            {
-                GameExecuteSpeed = gameExecuteSpeedTemp;
-                gameExecuteSpeedTemp = GameExecuteSpeed;
-            }
+            if (tempTimeScale == -1) tempTimeScale = 0;
+            Time.timeScale = menuObject.activeSelf ? 0 : tempTimeScale;
         }
     }
     IEnumerator NextWave()
@@ -352,7 +344,7 @@ public class GameManager : MonoBehaviour
     public void SetMagicPetBuff(GameAttribute.Attribute attribute, int nums)
     {
         BuildingController[] buildings = buildingManager.transform.GetComponentsInChildren<BuildingController>();
-        //print(buildings.Length);
+        print(buildings.Length);
         for(int i = 0; i<buildings.Length; i++)
         {
             if (buildings[i].buildingSetting.Attribute.attribute == attribute)
@@ -370,6 +362,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void Exit()
