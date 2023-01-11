@@ -27,6 +27,8 @@ public class BulletController : MonoBehaviour
             }
             else
             {
+                Vector3 targetPosition = targetEnemy.transform.position + 
+                    new Vector3(0,targetEnemy.GetComponent<Collider>().bounds.center.y,0);
                 transform.position = Vector3.MoveTowards(transform.position, targetEnemy.transform.position,
                                 bulletSetting.speed * Time.deltaTime);
             }

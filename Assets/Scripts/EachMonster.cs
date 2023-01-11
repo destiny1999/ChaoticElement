@@ -473,8 +473,14 @@ public class Monster : MonsterBase
     public override float CaculateDamage(float damage, GameAttribute bulletAttribute)
     {
         float finalDamage = damage;
-        float weight = 1 + (bulletAttribute.level - this.Attribute.level) * 0.5f;
-        float reverseWeight = 1 - (bulletAttribute.level - this.Attribute.level) * 0.5f;
+        float levelGap = bulletAttribute.level - this.Attribute.level;
+
+        float weight = levelGap < 0 ? 1 : levelGap == 1 ? 2 :
+                                2 + levelGap * 0.5f;
+
+        float reverseWeight = levelGap < 0 ? 0.25f : levelGap == 1 ? 0.5f :
+                                0.5f + levelGap * 0.25f;
+
         switch (bulletAttribute.attribute)
         {
             case GameAttribute.Attribute.水:
@@ -510,23 +516,23 @@ public class Monster : MonsterBase
             case GameAttribute.Attribute.光:
                 if (this.Attribute.attribute == GameAttribute.Attribute.暗)
                 {
-                    finalDamage *= weight / 0.5f + 1f;
+                    finalDamage *= weight;
                 }
                 break;
             case GameAttribute.Attribute.暗:
                 if (this.Attribute.attribute != GameAttribute.Attribute.光 &&
-                    this.Attribute.attribute != GameAttribute.Attribute.暗)
+                    this.Attribute.attribute != GameAttribute.Attribute.暗 &&
+                    this.Attribute.attribute != GameAttribute.Attribute.無)
                 {
-                    finalDamage *= weight / 0.5f + 0.25f;
-                }
-                else if(this.Attribute.attribute == GameAttribute.Attribute.光)
-                {
-                    finalDamage *= weight / 0.5f - 0.5f;
+                    finalDamage *= (weight + 0.25f);
                 }
                 break;
-            
         }
-        
+
+        if(this.Attribute.attribute == GameAttribute.Attribute.無)
+        {
+            finalDamage *= 1.5f;
+        }
         float finalDefense = this.defense - this.SpecialEffectInfluenceValue.defense;
         finalDamage = Mathf.Clamp(finalDamage - finalDefense, 0, finalDamage);
         //finalDamage -= finalDefense;

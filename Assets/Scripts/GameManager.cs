@@ -344,7 +344,7 @@ public class GameManager : MonoBehaviour
     public void SetMagicPetBuff(GameAttribute.Attribute attribute, int nums)
     {
         BuildingController[] buildings = buildingManager.transform.GetComponentsInChildren<BuildingController>();
-        print(buildings.Length);
+        //print(buildings.Length);
         for(int i = 0; i<buildings.Length; i++)
         {
             if (buildings[i].buildingSetting.Attribute.attribute == attribute)

@@ -32,7 +32,7 @@ public class BuildingController : MonoBehaviour
 
     private void Awake()
     {
-        print("initial orignal");
+        //print("initial orignal");
         buildingSetting.originalDamage = buildingSetting.damage;
     }
     private void Start()
@@ -359,16 +359,16 @@ public class BuildingController : MonoBehaviour
     /// </summary>
     public void AddMagicPetBuff(int nums)
     {
-        print("num = " + nums);
+        //print("num = " + nums);
         //print(buildingSetting.originalDamage);
         buildingSetting.magicPetNums = nums;
-        print("before damage = " + buildingSetting.damage);
+        //print("before damage = " + buildingSetting.damage);
 
         buildingSetting.damage = buildingSetting.originalDamage + 
                                     buildingSetting.originalDamage / 2 * 
                                     buildingSetting.magicPetNums;
 
-        print("after damage = " + buildingSetting.damage);
+        //print("after damage = " + buildingSetting.damage);
     }
     public void RemoveStatus(GameSpecialEffect gameSpecialEffect, bool buff)
     {

@@ -24204,10 +24204,10 @@ MonoBehaviour:
     - Level5
     cost:
     - 15
-    - 30
-    - 50
-    - 100
-    - 200
+    - 36
+    - 72
+    - 180
+    - 360
   buildingShowInfo:
     sprite: {fileID: 1435053244}
     nameTMP: {fileID: 1563177356}
@@ -33044,7 +33044,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   areaIndex: 0
   hp: 6
-  mp: 50
+  mp: 100
   buildingCreateInfos:
   - building: {fileID: 1129148004144231783, guid: 2331dc9ea9b1eec479a394e7538a9b2d, type: 3}
     cost: 10

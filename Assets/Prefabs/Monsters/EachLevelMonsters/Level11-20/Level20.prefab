@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3147254459950020375}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.36, z: 0}
-  m_LocalScale: {x: 0.72, y: 0.72, z: 0.72}
+  m_LocalPosition: {x: 0, y: 0.45, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3147254460034786339}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 6551531043320829949}
   - component: {fileID: 986165712118890588}
   m_Layer: 6
-  m_Name: Level13
+  m_Name: Level20
   m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,14 +149,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSetting:
-    hp: 1000
-    name: "\u8F03\u786C\u7684X\u5C6C\u6027\u672A\u77E5\u7403\u9AD4"
-    speed: 0.9
+    hp: 9000
+    name: "X\u5C6C\u6027\u7403\u9AD4"
+    speed: 1
     damage: 1
     attribute:
       attribute: 6
       level: 1
-    killBonus: 2
+    killBonus: 50
     specialEffect:
     - effect: 0
       effectValue: 0
@@ -174,11 +174,11 @@ MonoBehaviour:
       effectValue: 0
       effectKeepTime: 0
       effectLevel: 0
-    elementDropRate: 0
-    defense: 6
+    elementDropRate: 100
+    defense: 9
   dead: 0
   notMove: 0
-  boss: 0
+  boss: 1
   statusList:
   - target: 1
     value: 0
@@ -215,8 +215,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.36
-  m_Center: {x: 0, y: 0.36, z: 0}
+  m_Radius: 0.45
+  m_Center: {x: 0, y: 0.45, z: 0}
 --- !u!1001 &5840048052699081058
 PrefabInstance:
   m_ObjectHideFlags: 0
