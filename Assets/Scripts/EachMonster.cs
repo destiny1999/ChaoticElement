@@ -510,7 +510,9 @@ public class Monster : MonsterBase
                 }
                 else if (this.Attribute.attribute == GameAttribute.Attribute.¤õ)
                 {
+                    Debug.Log("original damage = " + finalDamage);
                     finalDamage *= reverseWeight;
+                    Debug.Log("final damage =" + finalDamage);
                 }
                 break;
             case GameAttribute.Attribute.¥ú:

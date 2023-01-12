@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
 
         if(!combineStatus && !preparePut)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && buildingManager.transform.childCount != 0)
             {
                 changeElement = true;
                 ShowChangeCost(true);
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
     {
         BuildingController[] buildings = buildingManager.transform.
             GetComponentsInChildren<BuildingController>();
-
+        
         foreach(BuildingController building in buildings)
         {
             building.SetChangeCost(status);

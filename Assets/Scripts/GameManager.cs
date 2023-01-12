@@ -14,7 +14,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] List<GameObject> players;
     //[SerializeField] List<GameObject> allBuildings;
+    
     [SerializeField] List<EachLevelBuildings> allElementsBuildings;
+    
+
+
     [SerializeField] GameObject monsterManager;
     public static GameManager Instance;
     int wave = 0;
@@ -189,7 +193,7 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        waveInfoTMP.text = monsterName + "\n" + monsterEffect;
+        waveInfoTMP.text = "²Ä" + wave + "ªi" +"\n" + monsterName + "\n" + monsterEffect;
         waveInfoTMP.gameObject.SetActive(true);
         StartCoroutine(HideGameObject(waveInfoTMP.gameObject, 5f));
     }
@@ -291,6 +295,8 @@ public class GameManager : MonoBehaviour
     }
     public GameObject GetBuildingGameObject(int level, int buildingIndex)
     {
+        //return 
+
         return allElementsBuildings[level].buildings[buildingIndex];
     }
     public GameObject GetSelfPlayer(int areaIndex)

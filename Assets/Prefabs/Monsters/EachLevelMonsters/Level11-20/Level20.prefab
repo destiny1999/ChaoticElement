@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSetting:
-    hp: 9000
+    hp: 15000
     name: "X\u5C6C\u6027\u7403\u9AD4"
     speed: 1
     damage: 1
