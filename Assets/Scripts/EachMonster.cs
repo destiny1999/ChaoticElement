@@ -214,11 +214,6 @@ public class EachMonster : MonoBehaviour
                         statusList[0].time = newStatus.time;
                     }
                 }
-                /*
-                monster.SpecialEffectInfluenceValue.speed = monster.SpecialEffectInfluenceValue.speed >
-                                                        bulletSpecialEffect.effectValue ?
-                                                        monster.SpecialEffectInfluenceValue.speed :
-                                                        bulletSpecialEffect.effectValue;*/
                 break;
             case GameSpecialEffect.SpecialEffect.對攻擊目標造成持續傷害:
                 //print("into hp");
@@ -510,15 +505,15 @@ public class Monster : MonsterBase
                 }
                 else if (this.Attribute.attribute == GameAttribute.Attribute.火)
                 {
-                    Debug.Log("original damage = " + finalDamage);
+                    //Debug.Log("original damage = " + finalDamage);
                     finalDamage *= reverseWeight;
-                    Debug.Log("final damage =" + finalDamage);
+                    //Debug.Log("final damage =" + finalDamage);
                 }
                 break;
             case GameAttribute.Attribute.光:
                 if (this.Attribute.attribute == GameAttribute.Attribute.暗)
                 {
-                    finalDamage *= weight;
+                    finalDamage *= (weight + 2f);
                 }
                 break;
             case GameAttribute.Attribute.暗:

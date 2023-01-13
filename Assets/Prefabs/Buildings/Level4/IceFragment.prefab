@@ -73,13 +73,14 @@ MonoBehaviour:
     attackCD: 0.5
     bulletSpeed: 20
     originalDamage: 0
-    damage: 50
+    damage: 150
     sale: 0
     createTime: 0
     buildingLevel: 4
     areaIndex: 0
     buildingCanCombineCode: 01000000
     bulletColor: {r: 0.1764706, g: 1, b: 1, a: 1}
+    magicPetNums: 0
   attackDetectRange: {fileID: 0}
   bullet: {fileID: 4077745145639377988, guid: ac2f5dc5581c402478fd09cc84aba277, type: 3}
   bulletCreatePosition: {fileID: 8982352339712737866}

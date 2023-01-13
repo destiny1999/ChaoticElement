@@ -55,7 +55,15 @@ MonoBehaviour:
     Attribute:
       attribute: 4
       level: 4
-    SpecialEffects: []
+    SpecialEffects:
+    - effect: 6
+      effectValue: 30
+      effectKeepTime: 5
+      effectLevel: 4
+    - effect: 10
+      effectValue: 50
+      effectKeepTime: 5
+      effectLevel: 4
     SpecialEffectInfluenceValue:
       hp: 0
       defense: 0
@@ -76,6 +84,7 @@ MonoBehaviour:
     areaIndex: 0
     buildingCanCombineCode: 02000000
     bulletColor: {r: 1, g: 0.85426843, b: 0, a: 1}
+    magicPetNums: 0
   attackDetectRange: {fileID: 0}
   bullet: {fileID: 4077745145639377988, guid: ac2f5dc5581c402478fd09cc84aba277, type: 3}
   bulletCreatePosition: {fileID: 1112024944882543901}

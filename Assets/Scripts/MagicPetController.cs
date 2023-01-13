@@ -121,7 +121,7 @@ public class MagicPetController : MonoBehaviour
         magicPowers[selectedIndex].GetComponent<MagicPowerController>().
             SetColor(color, false);
         selectedIndex = -1;
-        print(targetAttribute);
+        //print(targetAttribute);
         GameManager.Instance.SetMagicPetBuff(targetAttribute, powerNums[elementIndex]);
     }
     GameAttribute.Attribute UseIndexGetAttribute(int index)

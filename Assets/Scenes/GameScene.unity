@@ -11652,7 +11652,7 @@ MonoBehaviour:
     monster: {fileID: 3147254460034786337, guid: 86ba092368cd49a4089446642e50e9d6, type: 3}
   - monsterNums: 20
     monster: {fileID: 3147254460034786337, guid: e311e03e61f73df4b910d3390aab1ca5, type: 3}
-  - monsterNums: 15
+  - monsterNums: 3
     monster: {fileID: 3147254460034786337, guid: b0b33f9501dde344faf99eba1ca5643c, type: 3}
   - monsterNums: 5
     monster: {fileID: 3147254460034786337, guid: 8718c7335350a6841a33ae434d0a05ab, type: 3}
@@ -11662,9 +11662,9 @@ MonoBehaviour:
     monster: {fileID: 3147254460034786337, guid: 42826912cb9819142be6d180e5c714c1, type: 3}
   - monsterNums: 20
     monster: {fileID: 3147254460034786337, guid: 313310b100733254a8e397afd5a53740, type: 3}
-  - monsterNums: 15
+  - monsterNums: 3
     monster: {fileID: 3147254460034786337, guid: e1a40044ce5aa3746b3fc8adbc8e6a71, type: 3}
-  - monsterNums: 5
+  - monsterNums: 10
     monster: {fileID: 3147254460034786337, guid: d404e043196bc7540b208b2566da7738, type: 3}
   - monsterNums: 1
     monster: {fileID: 3147254460034786337, guid: d71dff66afc1d1f459e58dfbd03813f3, type: 3}

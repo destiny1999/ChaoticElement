@@ -149,14 +149,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSetting:
-    hp: 15000
+    hp: 30000
     name: "X\u5C6C\u6027\u7403\u9AD4"
     speed: 1
     damage: 1
     attribute:
       attribute: 6
-      level: 1
-    killBonus: 50
+      level: 2
+    killBonus: 60
     specialEffect:
     - effect: 0
       effectValue: 0

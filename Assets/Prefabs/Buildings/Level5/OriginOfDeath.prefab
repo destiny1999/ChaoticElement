@@ -84,6 +84,7 @@ MonoBehaviour:
     areaIndex: 0
     buildingCanCombineCode: 03000000
     bulletColor: {r: 0, g: 0, b: 0, a: 1}
+    magicPetNums: 0
   attackDetectRange: {fileID: 0}
   bullet: {fileID: 4077745145639377988, guid: ac2f5dc5581c402478fd09cc84aba277, type: 3}
   bulletCreatePosition: {fileID: 6878987910284853293}
