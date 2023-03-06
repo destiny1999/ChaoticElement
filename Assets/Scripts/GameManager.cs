@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
 
     GameAttribute waveAttribute = null;
     public bool createMonster = true;
+
+    bool finished = false;
     private void Awake()
     {
         Instance = this;
@@ -92,13 +94,21 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 5;
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !finished)
         {
             tempTimeScale = Time.timeScale == 0 ? tempTimeScale : Time.timeScale;
             menuObject.SetActive(!menuObject.activeSelf);
             if (tempTimeScale == -1) tempTimeScale = 0;
             Time.timeScale = menuObject.activeSelf ? 0 : tempTimeScale;
         }
+    }
+    public void GameFinished()
+    {
+        finished = true;
+        tempTimeScale = Time.timeScale == 0 ? tempTimeScale : Time.timeScale;
+        menuObject.SetActive(!menuObject.activeSelf);
+        if (tempTimeScale == -1) tempTimeScale = 0;
+        Time.timeScale = menuObject.activeSelf ? 0 : tempTimeScale;
     }
     IEnumerator NextWave()
     {

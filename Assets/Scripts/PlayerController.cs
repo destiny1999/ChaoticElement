@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
 
 
     public bool changeElement = false;
+
+    [SerializeField] TMP_Text hpText;
     void Start()
     {
         if (testMode) mp = 100000;
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour
             buildingCreateInfoDictionry.Add(buildingCreateInfos[i].createString,
                                             buildingCreateInfos[i]);
         }
+        hpText.text = hp + "";
     }
 
     // Update is called once per frame
@@ -298,12 +301,14 @@ public class PlayerController : MonoBehaviour
     public void SubHP(int value)
     {
         hp -= value;
-
+        hp = Mathf.Clamp(hp, 0, hp);
+        hpText.text = hp+"";
         //maybe should show some info let player know hp be reduced
 
         // over
         if (hp <= 0)
         {
+            GameManager.Instance.GameFinished();
             Debug.Log("finished");
         }
     }
