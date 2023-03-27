@@ -7,5 +7,5 @@ Random element td.
 利用"W"，選擇兩個防禦塔進行合成升級。  
 利用"E"，來改變防禦塔的屬性。  
 利用數字鍵"1-5"，來改變遊戲速度。  
-利用"ESC"，來重新或是離開遊戲。
+利用"ESC"，來重新或是離開遊戲。  
 Youtube : https://www.youtube.com/watch?v=JfmEk7-iNT8&t=3&ab_channel=ZT
